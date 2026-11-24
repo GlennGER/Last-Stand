@@ -1,0 +1,1327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Last Stand — Nightfall</title>
+<style>
+:root{color-scheme:dark;--bg:#0e1118;--panel:#171d28;--line:#ffffff16;--ink:#f4f6fb;--muted:#9ba6b7;--lime:#c4f36b;--red:#ff6677;--gold:#ffcf70}
+*{box-sizing:border-box}.hidden{display:none!important}body{margin:0;min-height:100vh;color:var(--ink);background:radial-gradient(ellipse at 42% 25%,#263d3d 0,transparent 48%),var(--bg);font:14px/1.45 Inter,ui-sans-serif,system-ui,"Segoe UI",sans-serif}button{font:inherit}
+.shell{max-width:1280px;margin:auto;padding:20px 24px 30px}
+header{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:16px}
+.brand{display:flex;align-items:center;gap:12px}.logo{display:grid;place-items:center;width:44px;height:44px;border:1px solid #c4f36b55;border-radius:13px;color:var(--lime);background:#c4f36b12;font-size:23px}
+h1{margin:0;font-size:clamp(20px,3vw,27px);letter-spacing:-.05em}.eyebrow{color:var(--muted);font-size:10px;font-weight:900;letter-spacing:.19em;text-transform:uppercase}
+.topstats{display:flex;gap:8px}.stat{min-width:82px;padding:8px 11px;border:1px solid var(--line);border-radius:11px;background:#ffffff06;text-align:right}.stat span{display:block;color:var(--muted);font-size:9px;font-weight:850;letter-spacing:.13em;text-transform:uppercase}.stat strong{font-size:17px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 302px;gap:16px;align-items:start}.arena-card,.side{overflow:hidden;border:1px solid var(--line);border-radius:18px;background:#171d28ed;box-shadow:0 20px 60px #0004}.arena-card{position:relative;min-width:0}canvas{display:block;width:100%;aspect-ratio:1.55;min-height:370px;background:#171a1d;touch-action:none}
+.arena-head{position:absolute;z-index:2;top:15px;left:17px;right:17px;display:flex;justify-content:space-between;pointer-events:none}.pill{padding:7px 10px;border:1px solid #ffffff20;border-radius:99px;background:#111720df;color:#dfe6ee;font-size:10px;font-weight:900;letter-spacing:.1em}
+.overlay{position:absolute;z-index:3;inset:0;display:grid;place-items:center;padding:20px;background:#0d1218bc;text-align:center}.overlay.hidden{display:none}.overlay-box{width:min(100%,600px);max-height:90%;overflow:auto;padding:10px}.overlay h2{margin:3px 0 7px;font-size:clamp(29px,5vw,43px);letter-spacing:-.05em}.overlay p{max-width:490px;margin:0 auto 18px;color:#c0cad6}.accent{color:var(--lime)}
+.primary,.shop-btn{border:0;border-radius:10px;font-weight:900;cursor:pointer;transition:transform .15s,filter .15s,opacity .15s}.primary{padding:11px 20px;color:#10140c;background:linear-gradient(100deg,#c4f36b,#e2f79c);box-shadow:0 7px 24px #c4f36b26}.primary:hover,.shop-btn:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.08)}
+.side{padding:16px}.section-title{margin:0 0 3px;font-size:15px}.section-sub{margin:0 0 13px;color:var(--muted);font-size:11px}
+.player-card{padding:12px;border:1px solid var(--line);border-radius:13px;background:#ffffff06}.card-row{display:flex;justify-content:space-between;gap:8px;align-items:center}.player-name{color:var(--lime);font-size:11px;font-weight:950;letter-spacing:.04em}.meter-label{color:var(--muted);font-size:10px;font-weight:800}.meter{height:8px;margin-top:8px;overflow:hidden;border-radius:20px;background:#ffffff14}.meter>i{display:block;width:100%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#a8eb5c,#e2f794);transition:width .15s}.meter.stamina>i{background:linear-gradient(90deg,#51c9e6,#9cecff)}.weapon-line{display:flex;justify-content:space-between;gap:8px;margin-top:12px;padding-top:10px;border-top:1px solid var(--line);font-size:11px}.weapon-line strong{color:var(--gold)}.weapon-line.active{color:var(--lime)}.weapon-line.active strong{color:var(--lime)}.weapon-switch{display:none}
+.divider{height:1px;margin:15px 0;background:var(--line)}.help{padding:11px;border-radius:11px;background:#0003}.help strong{font-size:10px;letter-spacing:.12em;text-transform:uppercase}.help p{margin:5px 0 0;color:var(--muted);font-size:10px}.key{display:inline-block;padding:1px 5px;border:1px solid #ffffff35;border-radius:4px;color:var(--ink);font:inherit;font-size:9px}
+.feed{min-height:36px;margin-top:10px;color:#c5ced8;font-size:11px}.flash{color:var(--gold);font-weight:850}.mobile-note{display:none}
+.shop-tabs{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;margin:15px 0 8px}.shop-tab{padding:8px 3px;border:1px solid var(--line);border-radius:8px;color:var(--muted);background:#ffffff08;font-size:9px;font-weight:900;cursor:pointer;letter-spacing:-.03em}.shop-tab.active{border-color:#c4f36b88;color:var(--lime);background:#c4f36b18}.shop-tab:disabled{opacity:.55;cursor:not-allowed}.shop-note{margin:0 0 8px;color:var(--muted);font-size:10px}
+.shop-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:8px 0 15px;max-height:min(42vh,360px);overflow:auto;padding-right:3px}.shop-item{padding:11px;border:1px solid var(--line);border-radius:11px;background:#ffffff0b;text-align:left}.shop-item strong{display:block;color:var(--ink);font-size:11px}.shop-item small{display:block;min-height:30px;margin:4px 0;color:var(--muted);font-size:10px}.museum-status{font-weight:900;letter-spacing:.08em}.museum-status.unlocked{color:var(--lime)}.museum-status.locked{color:var(--muted)}.shop-btn{width:100%;padding:7px;color:#11170c;background:var(--lime);font-size:10px}.shop-btn:disabled{opacity:.42;cursor:not-allowed;transform:none}.shop-btn.owned{color:#d7dfca;background:#465239}
+.shop-actions{display:flex;justify-content:center;gap:9px}.secondary{padding:9px 13px;border:1px solid var(--line);border-radius:9px;color:var(--ink);background:#ffffff0b;font-size:11px;font-weight:800;cursor:pointer}.mobile-controls,.mobile-gadgets{display:none}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}.side>.section-title,.side>.section-sub,.side>.divider,.side>.help,.side>.feed{grid-column:1/-1}canvas{aspect-ratio:1.35;min-height:330px}}
+@media(max-width:560px){.shell{padding:13px 10px 24px}header{align-items:flex-start}.topstats{gap:4px}.stat{min-width:0;padding:6px 8px}.stat span{font-size:8px}.stat strong{font-size:14px}.logo{width:38px;height:38px}.side{padding:12px}canvas{aspect-ratio:1.05;min-height:300px}.mobile-controls{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:11px}.pad{display:grid;grid-template-columns:repeat(3,38px);grid-template-rows:repeat(2,34px);gap:3px}.pad button,.touch-action,.mobile-gadgets button,.weapon-switch button{border:1px solid #ffffff22;border-radius:9px;color:var(--ink);background:#ffffff10;font-weight:900;touch-action:none;user-select:none}.pad button:active,.touch-action:active,.mobile-gadgets button:active,.weapon-switch button:active{background:#c4f36b44}.pad .up{grid-column:2}.pad .left{grid-column:1;grid-row:2}.pad .down{grid-column:2;grid-row:2}.pad .right{grid-column:3;grid-row:2}.touch-actions{display:flex;gap:7px}.touch-action{min-width:58px;height:48px;color:var(--lime);font-size:9px}.touch-action.dash{color:#8eddf3}.mobile-gadgets{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:5px;margin-top:6px}.mobile-gadgets button{padding:5px 8px;color:var(--gold);font-size:9px}.mobile-gadgets button:disabled{opacity:.4}.weapon-switch{display:flex;gap:6px;margin-top:6px}.weapon-switch button{flex:1;padding:6px;color:var(--muted);font-size:9px}.weapon-switch button.active{border-color:#c4f36b88;color:var(--lime)}.weapon-switch button:disabled{opacity:.45}.mobile-note{display:block;color:var(--muted);font-size:9px}.overlay-box{padding:3px}.shop-grid{gap:6px;margin:8px 0;max-height:38vh}.shop-item{padding:8px}.shop-item small{min-height:38px}.shop-tabs{grid-template-columns:repeat(3,1fr)}}
+.overlay-box{max-height:100%;overflow:hidden}
+#overlay.shop-open #overlayText{display:none}
+#overlay.shop-open #overlayEyebrow{font-size:9px;line-height:1;margin:0}
+#overlay.shop-open #overlayTitle{font-size:clamp(20px,3vw,32px);margin:0 0 4px}
+#overlay.shop-open .shop-actions button{padding:8px 14px}
+#shopArea .shop-tabs{margin:2px 0}
+#shopArea .shop-note{margin:0 0 3px}
+.shop-grid{max-height:none;overflow:visible;margin:2px 0;padding-right:0}
+.shop-item{padding:9px}
+.shop-item small{min-height:0}
+.skin-item{position:relative;padding-left:44px}.skin-swatch{position:absolute;top:11px;left:11px;width:24px;height:24px;border:2px solid #ffffff55;border-radius:50%;box-shadow:0 0 12px #ffffff22}.case-item{grid-column:1/-1;border-color:#ffcf7055;background:linear-gradient(135deg,#ffcf7010,#ffffff0b)}
+.case-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:5px}.case-buttons .shop-btn{padding:8px 4px;font-size:9px}
+.background-item{grid-column:1/-1}.background-presets{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:10px 0}.background-preset{padding:7px 3px;border:1px solid var(--line);border-radius:9px;color:var(--muted);background:#ffffff08;font-size:8px;font-weight:850;cursor:pointer}.background-preset.active{border-color:var(--lime);color:var(--ink);background:#c4f36b12}.background-preset i{display:block;width:23px;height:23px;margin:0 auto 4px;border:1px solid #ffffff66;border-radius:50%;background:var(--preset-color)}.background-picker-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:8px;border-top:1px solid var(--line);color:var(--muted);font-size:10px;font-weight:800}.background-picker-row input{width:44px;height:32px;padding:2px;border:1px solid var(--line);border-radius:7px;background:#ffffff10;cursor:pointer}.background-picker-row strong{color:var(--ink);font-size:10px}
+.achievement-item.achieved{border-color:#c4f36b66;background:#c4f36b0d}.achievement-category{color:var(--lime);font-size:8px;font-weight:900;letter-spacing:.1em}.achievement-progress{display:flex;align-items:center;gap:7px;margin-top:8px}.achievement-progress>span{height:5px;flex:1;overflow:hidden;border-radius:8px;background:#ffffff14}.achievement-progress i{display:block;height:100%;border-radius:inherit;background:var(--lime)}.achievement-progress b{min-width:52px;color:var(--muted);font-size:8px;text-align:right}
+.shop-pagination{display:flex;justify-content:center;align-items:center;gap:12px;margin:0 0 2px}
+.shop-pagination button{padding:6px 11px;border:1px solid var(--line);border-radius:8px;color:var(--ink);background:#ffffff0b;font-size:10px;font-weight:800;cursor:pointer}
+.shop-pagination button:disabled{opacity:.4;cursor:not-allowed}
+.shop-page-label{min-width:66px;color:var(--muted);font-size:10px;font-weight:850}
+@media(max-width:560px){#overlay.shop-open #overlayEyebrow,#shopArea .shop-note{display:none}#overlay.shop-open #overlayTitle{display:none}#overlay.shop-open .case-item{padding:6px}#overlay.shop-open .case-item small{margin:2px 0;font-size:8px;line-height:1.15}#overlay.shop-open .case-item .shop-btn{padding:5px}}
+.case-roll,.case-result{grid-column:1/-1;padding:10px;border:1px solid #ffcf7055;border-radius:12px;background:linear-gradient(135deg,#ffcf7010,#ffffff0b);text-align:center}
+.case-roll>strong,.case-result>strong{display:block;color:var(--gold);font-size:11px;letter-spacing:.08em}
+.case-roll-window{position:relative;overflow:hidden;margin:10px 0 7px;border:1px solid #ffffff20;border-radius:10px;background:#090c12}
+.case-roll-window:after{position:absolute;inset:0 auto 0 50%;width:2px;background:var(--roll-marker-color,var(--gold));box-shadow:0 0 12px var(--roll-marker-color,var(--gold));content:"";pointer-events:none}
+.case-roll-track{display:flex;gap:8px;width:max-content;padding:9px 12px;transform:translateX(0);will-change:transform}
+.case-roll-item{display:flex;flex:0 0 106px;min-height:84px;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:7px;border:1px solid var(--tier-glow);border-radius:9px;background:linear-gradient(160deg,#ffffff10,#10141c);text-align:center}
+.case-roll-swatch{width:24px;height:24px;border:2px solid #ffffff66;border-radius:50%;box-shadow:0 0 12px var(--tier-glow)}
+.case-roll-item strong{display:-webkit-box;overflow:hidden;width:100%;color:var(--ink);font-size:9px;line-height:1.15;-webkit-box-orient:vertical;-webkit-line-clamp:2}
+.case-roll-item small,.case-result small{color:var(--tier-color,var(--muted));font-size:8px;font-weight:900;letter-spacing:.08em}
+.case-result{display:flex;align-items:center;justify-content:center;gap:12px;text-align:left}
+.case-result .case-roll-swatch{flex:0 0 34px;width:34px;height:34px}
+.case-result small{display:block;margin-top:3px}
+@media(max-width:560px){.case-roll-item{flex-basis:82px;min-height:76px;padding:5px}.case-roll-track{gap:6px;padding:8px}}
+@media(prefers-reduced-motion:reduce){.case-roll-track{transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<main class="shell">
+  <header>
+    <div class="brand"><div class="logo">✳</div><div><div class="eyebrow">Nightfall · Survival</div><h1>LAST STAND</h1></div></div>
+    <div class="topstats"><div class="stat"><span>Wave</span><strong id="waveLabel">01</strong></div><div class="stat"><span>Eliminations</span><strong id="killsLabel">0</strong></div><div class="stat"><span>Credits</span><strong id="creditsLabel">0</strong></div></div>
+  </header>
+  <section class="layout">
+    <div class="arena-card">
+      <div class="arena-head"><span class="pill" id="status">READY</span><span class="pill" id="enemyCount">NO ENEMIES</span></div>
+      <canvas id="game" aria-label="Top-down survival game"></canvas>
+      <div class="overlay" id="overlay"><div class="overlay-box">
+        <div class="eyebrow" id="overlayEyebrow">THE CITY WENT QUIET</div><h2 id="overlayTitle">SURVIVE THE NIGHT</h2>
+        <p id="overlayText">Enemies are closing in from every direction. Start with your fists, stay moving, and make it through each wave to earn credits for gear.</p>
+        <div id="shopArea" class="hidden">
+          <div class="shop-tabs" id="shopTabs">
+            <button class="shop-tab active" data-shop-tab="skills">SKILLS</button>
+            <button class="shop-tab" data-shop-tab="weapons">WEAPONS</button>
+            <button class="shop-tab" data-shop-tab="gadgets">GADGETS</button>
+            <button class="shop-tab" data-shop-tab="background">COLOR</button>
+            <button class="shop-tab" data-shop-tab="skins">SKINS</button>
+            <button class="shop-tab" data-shop-tab="inventory">INVENTORY</button>
+            <button class="shop-tab" data-shop-tab="museum">MUSEUM</button>
+            <button class="shop-tab" data-shop-tab="achievements">ACHIEVE</button>
+          </div>
+          <p class="shop-note" id="shopNote"></p>
+          <div id="shopGrid" class="shop-grid"></div>
+          <div class="shop-pagination hidden" id="shopPagination"><button id="shopPrev" type="button">← PREVIOUS</button><span class="shop-page-label" id="shopPageLabel"></span><button id="shopNext" type="button">NEXT →</button></div>
+        </div>
+        <div class="shop-actions"><button class="primary" id="mainButton">START WAVE 1 →</button><button class="secondary hidden" id="continueButton">START NEXT WAVE →</button></div>
+      </div></div>
+    </div>
+    <aside class="side">
+      <h2 class="section-title">YOUR SURVIVOR</h2><p class="section-sub">Keep moving. Enemies don't wait.</p>
+      <div class="player-card">
+        <div class="card-row"><span class="player-name">● PLAYER</span><span class="meter-label" id="healthText">100 / 100 HP</span></div>
+        <div class="meter"><i id="healthBar"></i></div>
+        <div class="card-row" style="margin-top:10px"><span class="meter-label">DASH CHARGE</span><span class="meter-label" id="staminaText">100%</span></div>
+        <div class="meter stamina"><i id="staminaBar"></i></div>
+        <div class="weapon-line active" id="closeSlot"><span>Close range</span><strong id="closeWeaponName">FISTS</strong></div>
+        <div class="weapon-line" id="longSlot" style="margin-top:7px;padding-top:7px"><span>Long range</span><strong id="longWeaponName">EMPTY</strong></div>
+        <div class="weapon-line" style="margin-top:7px;padding-top:7px"><span>Active ammo</span><strong id="ammoText">∞</strong></div>
+        <div class="weapon-line" style="margin-top:7px;padding-top:7px"><span>Gadgets</span><strong id="gadgetInventory">G 0 · E 0 · Q 0</strong></div>
+      </div>
+      <div class="mobile-controls">
+        <div class="pad" aria-label="Movement controls">
+          <button class="up" data-move="up" aria-label="Move up">▲</button><button class="left" data-move="left" aria-label="Move left">◀</button><button class="down" data-move="down" aria-label="Move down">▼</button><button class="right" data-move="right" aria-label="Move right">▶</button>
+        </div>
+        <div class="touch-actions"><button class="touch-action" id="touchAttack">ATTACK</button><button class="touch-action dash" id="touchDash">DASH</button></div>
+      </div>
+      <div class="mobile-gadgets"><button id="touchGrenade" data-gadget="grenade">1 · 0</button><button id="touchWall" data-gadget="wall">2 · 0</button><button id="touchDecoy" data-gadget="decoy">3 · 0</button><button id="touchFlashbang" data-gadget="flashbang">4 · 0</button><button id="touchAdrenaline" data-gadget="adrenaline">5 · 0</button><button id="touchShockwave" data-gadget="shockwave">6 · 0</button></div>
+      <div class="weapon-switch"><button data-slot="close" class="active">CLOSE</button><button data-slot="long" id="touchLong" disabled>LONG</button></div>
+      <div class="mobile-note">Touch controls · tap arena to aim & attack</div>
+      <div class="divider"></div>
+      <div class="help"><strong>Controls</strong><p><span class="key">WASD</span> / <span class="key">↑←↓→</span> move · <span class="key">SHIFT</span> dash</p><p>Tap dash to burst in your movement direction, or toward your aim if standing still. The whole charge is spent and must fully recharge.</p><p>Left-click/hold: long range · right-click: one close swing (0.18s cooldown)</p><p><span class="key">1</span> grenade · <span class="key">2</span> wall · <span class="key">3</span> decoy · <span class="key">4</span> flashbang · <span class="key">5</span> adrenaline · <span class="key">6</span> shockwave</p><p><span class="key">R</span> reload · <span class="key">V</span> +500 credits</p></div>
+      <div class="feed" id="feed">You have fists, grit, and a whole lot of trouble.</div>
+    </aside>
+  </section>
+</main>
+<script>
+(() => {
+  const canvas = document.getElementById("game");
+  const ctx = canvas.getContext("2d");
+  const $ = (id) => document.getElementById(id);
+  const weaponNames = [
+    "Knife","Pipe","Nail Bat","Hatchet","Crowbar","Machete","Spear","Sledgehammer",
+    "Throwing Knives","Slingshot","Recurve Bow","Crossbow","Pocket Pistol","Service Pistol",
+    "Heavy Pistol","Revolver","Burst Pistol","Machine Pistol","Compact SMG","Drum SMG",
+    "Tactical Shotgun","Pump Shotgun","Double-Barrel","Auto Shotgun","Lever Rifle",
+    "Hunting Rifle","Marksman Rifle","Burst Rifle","LMG","AK-47"
+  ];
+  const weapons = weaponNames.map((name,index)=>{
+    const rank=index+1,melee=rank<=8,shotgun=rank>=21&&rank<=24;
+    const rankOffset=melee?rank-1:rank-9;
+    const price=melee?Math.round(45+Math.pow(rankOffset,2)*35):Math.round(100+rankOffset*25+Math.pow(rankOffset,2)*8);
+    if(melee){const damage=21+rank*4;return {id:`weapon-${rank}`,name,kind:"melee",damage,range:55+rank*2.5,rate:Math.max(.24,.43-rank*.015),price,rank,desc:`Melee · ${damage} damage · close range`}}
+    const damage=14+(rank-9)*1.4;
+    return {id:`weapon-${rank}`,name,kind:"gun",damage:shotgun?9+rank*.35:damage,
+      range:shotgun?300:340+rank*15,rate:shotgun?.58-(rank-21)*.07:Math.max(.11,.33-(rank-9)*.009),
+      mag:rank===30?30:shotgun?6:12+Math.floor((rank-9)*.8),reload:Math.max(.85,1.5-index*.018),
+      pellets:shotgun?5:1,spread:shotgun?.28:.035,price,rank,
+      desc:shotgun?`Shotgun · 5-pellet spread · ${Math.round((9+rank*.35)*5)} burst damage`:`Ranged · ${Math.round(damage)} damage · ${340+rank*15} range`};
+  });
+  const skillInfo = {
+    speed:{name:"Quick Feet",description:"Move faster, including while dashing.",icon:"➜",price:40},
+    armor:{name:"Light Armor",description:"Reduce damage taken by 8% per level.",icon:"⬡",price:45},
+    dash:{name:"Dash Training",description:"Dash farther and recharge your dash charge faster.",icon:"◉",price:35}
+  };
+  const gadgetInfo = {
+    grenade:{name:"Frag Grenade",description:"Deal heavy area damage, but it won't kill healthy enemies in one blast. Press 1.",icon:"✹",price:55,charges:2},
+    wall:{name:"Quick-Build Wall",description:"Deploy a barricade across your facing direction for 10 seconds. Press 2.",icon:"▰",price:70,charges:1},
+    decoy:{name:"Holo Decoy",description:"Lure enemies away for 5 seconds. Press 3.",icon:"◇",price:65,charges:1},
+    flashbang:{name:"Flashbang",description:"Stun enemies in a wide area for 1.5 seconds. Press 4.",icon:"☼",price:75,charges:1},
+    adrenaline:{name:"Adrenaline Rush",description:"Restore 50 health, move 50% faster for 5 seconds, and gain 2 seconds of damage immunity. Press 5.",icon:"⚡",price:85,charges:1},
+    shockwave:{name:"Shockwave",description:"Blast nearby enemies backward to make space. Press 6.",icon:"◎",price:80,charges:1}
+  };
+  const skinInfo = [
+    {id:"classic",name:"Street Survivor",description:"A simple lime-green finish.",base:"#c4f36b",style:"solid",tier:"blue"},
+    {id:"ocean",name:"Ocean Blue",description:"A clean, solid blue.",base:"#55b9ff",style:"solid",tier:"blue"},
+    {id:"signal",name:"Signal Red",description:"A bold, solid red.",base:"#ff596b",style:"solid",tier:"blue"},
+    {id:"violet",name:"Violet",description:"A rich, solid purple.",base:"#b77cff",style:"solid",tier:"blue"},
+    {id:"mint",name:"Mint",description:"A bright, solid mint.",base:"#65f0b0",style:"solid",tier:"blue"},
+    {id:"amber",name:"Amber",description:"A warm, solid amber.",base:"#ffbd4a",style:"solid",tier:"blue"},
+    {id:"rose",name:"Rose",description:"A soft, solid pink.",base:"#f184b8",style:"solid",tier:"blue"},
+    {id:"sky",name:"Sky",description:"A light, solid sky blue.",base:"#8ddcff",style:"solid",tier:"blue"},
+    {id:"navy",name:"Midnight Blue",description:"A deep, solid navy.",base:"#3751a5",style:"solid",tier:"blue"},
+    {id:"lime",name:"Lime",description:"A vivid, solid green.",base:"#9ce339",style:"solid",tier:"blue"},
+    {id:"coral",name:"Coral",description:"A bright, solid coral.",base:"#ff7861",style:"solid",tier:"blue"},
+    {id:"silver",name:"Silver",description:"A sleek, solid silver.",base:"#c7d0de",style:"solid",tier:"blue"},
+    {id:"teal",name:"Teal",description:"A cool, solid teal.",base:"#22b8ad",style:"solid",tier:"blue"},
+    {id:"orange",name:"Orange",description:"A punchy, solid orange.",base:"#ff873b",style:"solid",tier:"blue"},
+    {id:"magenta",name:"Magenta",description:"A vivid, solid magenta.",base:"#db56df",style:"solid",tier:"blue"},
+    {id:"ice",name:"Ice",description:"A frosty, solid cyan.",base:"#9af5ed",style:"solid",tier:"blue"},
+    {id:"forest",name:"Forest",description:"A deep, solid forest green.",base:"#38885d",style:"solid",tier:"blue"},
+    {id:"sand",name:"Sand",description:"A warm, solid sandstone.",base:"#d7ad72",style:"solid",tier:"blue"},
+    {id:"lavender",name:"Lavender",description:"A soft, solid lavender.",base:"#bba1f8",style:"solid",tier:"blue"},
+    {id:"charcoal",name:"Charcoal",description:"A matte, solid charcoal.",base:"#5b6573",style:"solid",tier:"blue"},
+    {id:"pearl",name:"Pearl",description:"A clean, solid pearl white.",base:"#edf1f7",style:"solid",tier:"blue"},
+    {id:"electric-blue",name:"Electric Blue",description:"A vivid, solid electric blue.",base:"#4169ff",style:"solid",tier:"blue"},
+    {id:"pine",name:"Pine",description:"A deep, solid pine green.",base:"#276348",style:"solid",tier:"blue"},
+    {id:"bubblegum",name:"Bubblegum",description:"A bright, solid candy pink.",base:"#f261b5",style:"solid",tier:"blue"},
+    {id:"dandelion",name:"Dandelion",description:"A sunny, solid yellow.",base:"#f4d45c",style:"solid",tier:"blue"},
+    {id:"cherry-cola",name:"Cherry Cola",description:"A rich, solid cherry red.",base:"#7f3042",style:"solid",tier:"blue"},
+    {id:"moss",name:"Moss",description:"A muted, solid moss green.",base:"#778c3f",style:"solid",tier:"blue"},
+    {id:"glacier",name:"Glacier",description:"A cool, solid glacier blue.",base:"#a3d8e8",style:"solid",tier:"blue"},
+    {id:"cobalt",name:"Cobalt",description:"A deep, solid cobalt blue.",base:"#2850a4",style:"solid",tier:"blue"},
+    {id:"plum",name:"Plum",description:"A dark, solid plum purple.",base:"#783a72",style:"solid",tier:"blue"},
+    {id:"rust",name:"Rust",description:"A warm, solid rust orange.",base:"#bd6338",style:"solid",tier:"blue"},
+    {id:"lagoon",name:"Lagoon",description:"A fresh, solid lagoon teal.",base:"#42b6a8",style:"solid",tier:"blue"},
+    {id:"peach",name:"Peach",description:"A soft, solid peach.",base:"#ffa980",style:"solid",tier:"blue"},
+    {id:"slate",name:"Slate",description:"A calm, solid blue-gray.",base:"#8292a5",style:"solid",tier:"blue"},
+    {id:"orchid",name:"Orchid",description:"A bright, solid orchid purple.",base:"#d77de8",style:"solid",tier:"blue"},
+    {id:"brick",name:"Brick",description:"A sturdy, solid brick red.",base:"#a84c45",style:"solid",tier:"blue"},
+    {id:"lemon",name:"Lemon",description:"A zesty, solid lemon yellow.",base:"#ffe16a",style:"solid",tier:"blue"},
+    {id:"deep-sea",name:"Deep Sea",description:"A dark, solid ocean blue.",base:"#155b83",style:"solid",tier:"blue"},
+    {id:"pistachio",name:"Pistachio",description:"A light, solid pistachio green.",base:"#b8d77f",style:"solid",tier:"blue"},
+    {id:"smoke",name:"Smoke",description:"A soft, solid smoke gray.",base:"#92979f",style:"solid",tier:"blue"},
+    {id:"berry",name:"Berry",description:"A bold, solid berry pink.",base:"#bd456d",style:"solid",tier:"blue"},
+    {id:"azure",name:"Azure",description:"A bright, solid azure blue.",base:"#4998e8",style:"solid",tier:"blue"},
+    {id:"clay",name:"Clay",description:"A warm, solid clay brown.",base:"#c08060",style:"solid",tier:"blue"},
+    {id:"neon-lime",name:"Neon Lime",description:"A vivid, solid neon lime.",base:"#b5f041",style:"solid",tier:"blue"},
+    {id:"midnight",name:"Midnight",description:"A deep, solid midnight blue.",base:"#282c47",style:"solid",tier:"blue"},
+    {id:"violet-circuit",name:"Violet Circuit",description:"Two-tone violet armor with bright circuit lines.",base:"#6243bc",accent:"#d0a6ff",swatch:"linear-gradient(135deg,#6243bc,#d0a6ff)",style:"duo",pattern:"circuit",tier:"purple"},
+    {id:"amethyst-wave",name:"Amethyst Wave",description:"A flowing purple-and-lilac split.",base:"#713fba",accent:"#d89bff",swatch:"linear-gradient(135deg,#713fba,#d89bff)",style:"duo",pattern:"wave",tier:"purple"},
+    {id:"arctic-split",name:"Arctic Split",description:"Cool blue armor with a bright ice-blue slash.",base:"#287ba7",accent:"#a8edff",swatch:"linear-gradient(135deg,#287ba7,#a8edff)",style:"duo",pattern:"slash",tier:"purple"},
+    {id:"toxic-edge",name:"Toxic Edge",description:"Green armor with a sharp lime stripe.",base:"#397d52",accent:"#caff56",swatch:"linear-gradient(135deg,#397d52,#caff56)",style:"duo",pattern:"slash",tier:"purple"},
+    {id:"ocean-shard",name:"Ocean Shard",description:"Deep teal with angular aqua panels.",base:"#176c77",accent:"#5be3d3",swatch:"linear-gradient(135deg,#176c77,#5be3d3)",style:"duo",pattern:"shards",tier:"purple"},
+    {id:"sunset-fade",name:"Sunset Fade",description:"A warm orange-to-gold two-tone finish.",base:"#cb5b3e",accent:"#ffc96b",swatch:"linear-gradient(135deg,#cb5b3e,#ffc96b)",style:"duo",pattern:"wave",tier:"purple"},
+    {id:"shadow-circuit",name:"Shadow Circuit",description:"Dark slate armor traced with electric blue.",base:"#394055",accent:"#8fa9ff",swatch:"linear-gradient(135deg,#394055,#8fa9ff)",style:"duo",pattern:"circuit",tier:"purple"},
+    {id:"prism-shift",name:"Prism Shift",description:"Violet panels with a cyan diagonal.",base:"#6749bc",accent:"#52d8e6",swatch:"linear-gradient(135deg,#6749bc,#52d8e6)",style:"duo",pattern:"slash",tier:"purple"},
+    {id:"electric-violet",name:"Electric Violet",description:"Purple armor with a vivid magenta streak.",base:"#733bad",accent:"#f077e9",swatch:"linear-gradient(135deg,#733bad,#f077e9)",style:"duo",pattern:"shards",tier:"purple"},
+    {id:"frostfire",name:"Frostfire",description:"Icy blue panels over a cool violet base.",base:"#6477c2",accent:"#c8f5ff",swatch:"linear-gradient(135deg,#6477c2,#c8f5ff)",style:"duo",pattern:"wave",tier:"purple"},
+    {id:"copper-wave",name:"Copper Wave",description:"Copper armor with a polished bronze sweep.",base:"#a35d42",accent:"#f5c27b",swatch:"linear-gradient(135deg,#a35d42,#f5c27b)",style:"duo",pattern:"circuit",tier:"purple"},
+    {id:"stormglass",name:"Stormglass",description:"Stormy blue armor with a glassy silver streak.",base:"#475e7c",accent:"#d1eaff",swatch:"linear-gradient(135deg,#475e7c,#d1eaff)",style:"duo",pattern:"slash",tier:"purple"},
+    {id:"neon-tide",name:"Neon Tide",description:"Teal armor crossed by a bright sea-glass wave.",base:"#126a70",accent:"#78f5dc",swatch:"linear-gradient(135deg,#126a70,#78f5dc)",style:"duo",pattern:"wave",tier:"purple"},
+    {id:"violet-tempest",name:"Violet Tempest",description:"Stormy violet panels with a lavender slash.",base:"#52318c",accent:"#d1a2ff",swatch:"linear-gradient(135deg,#52318c,#d1a2ff)",style:"duo",pattern:"slash",tier:"purple"},
+    {id:"emerald-prism",name:"Emerald Prism",description:"Emerald plating with sharp mint facets.",base:"#176b53",accent:"#8effbf",swatch:"linear-gradient(135deg,#176b53,#8effbf)",style:"duo",pattern:"shards",tier:"purple"},
+    {id:"twilight-glass",name:"Twilight Glass",description:"Blue-violet armor traced with glassy circuitry.",base:"#414b8a",accent:"#9df5ff",swatch:"linear-gradient(135deg,#414b8a,#9df5ff)",style:"duo",pattern:"circuit",tier:"purple"},
+    {id:"solar-split",name:"Solar Split",description:"Amber and violet panels in a flowing split.",base:"#8051a8",accent:"#ffcb60",swatch:"linear-gradient(135deg,#8051a8,#ffcb60)",style:"duo",pattern:"wave",tier:"purple"},
+    {id:"dragonfruit",name:"Dragonfruit",description:"Fuchsia armor split by a vivid lime slash.",base:"#9e347d",accent:"#d7ff70",swatch:"linear-gradient(135deg,#9e347d,#d7ff70)",style:"duo",pattern:"slash",tier:"purple"},
+    {id:"blueprint",name:"Blueprint",description:"Navy plating traced with icy technical lines.",base:"#214c83",accent:"#91dcff",swatch:"linear-gradient(135deg,#214c83,#91dcff)",style:"duo",pattern:"circuit",tier:"purple"},
+    {id:"lava-glass",name:"Lava Glass",description:"Smoky obsidian panels with a molten orange wave.",base:"#542e42",accent:"#ff9252",swatch:"linear-gradient(135deg,#542e42,#ff9252)",style:"duo",pattern:"wave",tier:"purple"},
+    {id:"jade-strike",name:"Jade Strike",description:"Jade armor cut by a bright turquoise slash.",base:"#17624c",accent:"#77f3cc",swatch:"linear-gradient(135deg,#17624c,#77f3cc)",style:"duo",pattern:"slash",tier:"purple"},
+    {id:"ultraviolet",name:"Ultraviolet",description:"Deep purple panels with electric pink facets.",base:"#432477",accent:"#ff71d0",swatch:"linear-gradient(135deg,#432477,#ff71d0)",style:"duo",pattern:"shards",tier:"purple"},
+    {id:"glacier-circuit",name:"Glacier Circuit",description:"Frosted blue armor mapped with bright circuits.",base:"#347995",accent:"#c4fbff",swatch:"linear-gradient(135deg,#347995,#c4fbff)",style:"duo",pattern:"circuit",tier:"purple"},
+    {id:"citrus-current",name:"Citrus Current",description:"Tangerine armor flowing into electric yellow.",base:"#bd5637",accent:"#f5f76c",swatch:"linear-gradient(135deg,#bd5637,#f5f76c)",style:"duo",pattern:"wave",tier:"purple"},
+    {id:"royal-shards",name:"Royal Shards",description:"Royal blue plating with bright violet facets.",base:"#304c9a",accent:"#c39bff",swatch:"linear-gradient(135deg,#304c9a,#c39bff)",style:"duo",pattern:"shards",tier:"purple"},
+    {id:"copper-circuit",name:"Copper Circuit",description:"Burnished copper with glowing golden traces.",base:"#885037",accent:"#ffd17b",swatch:"linear-gradient(135deg,#885037,#ffd17b)",style:"duo",pattern:"circuit",tier:"purple"},
+    {id:"polar-flare",name:"Polar Flare",description:"Aurora green and ice blue in a sweeping split.",base:"#267a75",accent:"#b0f4ff",swatch:"linear-gradient(135deg,#267a75,#b0f4ff)",style:"duo",pattern:"wave",tier:"purple"},
+    {id:"ember",name:"Embercore",description:"Molten red armor with bright orange streaks.",base:"#a82632",accent:"#ffb347",swatch:"linear-gradient(135deg,#8e1726,#ffb347)",style:"ember",tier:"red"},
+    {id:"bloodfang",name:"Bloodfang",description:"Deep red plating with sharp crimson marks.",base:"#791d31",accent:"#ff4d66",swatch:"linear-gradient(135deg,#791d31,#ff4d66)",style:"red",pattern:"fang",tier:"red"},
+    {id:"inferno",name:"Inferno",description:"Scarlet armor with blazing orange vents.",base:"#a42c20",accent:"#ff9a42",swatch:"linear-gradient(135deg,#a42c20,#ff9a42)",style:"red",pattern:"vents",tier:"red"},
+    {id:"redline",name:"Redline",description:"Racing red with crisp white speed stripes.",base:"#ae2637",accent:"#fff0dc",swatch:"linear-gradient(135deg,#ae2637,#fff0dc)",style:"red",pattern:"stripes",tier:"red"},
+    {id:"scarlet-tech",name:"Scarlet Tech",description:"Dark red armor with glowing pink circuitry.",base:"#81243f",accent:"#ff77aa",swatch:"linear-gradient(135deg,#81243f,#ff77aa)",style:"red",pattern:"circuit",tier:"red"},
+    {id:"crimson-reaper",name:"Crimson Reaper",description:"Crimson plating with a bright, jagged crest.",base:"#9e172c",accent:"#ffd278",swatch:"linear-gradient(135deg,#9e172c,#ffd278)",style:"red",pattern:"crest",tier:"red"},
+    {id:"red-viper",name:"Red Viper",description:"Dark crimson armor marked with twin fangs.",base:"#671b2a",accent:"#ff5266",swatch:"linear-gradient(135deg,#671b2a,#ff5266)",style:"red",pattern:"fang",tier:"red"},
+    {id:"molten-steel",name:"Molten Steel",description:"Red-hot armor with glowing furnace vents.",base:"#87301f",accent:"#ffc04f",swatch:"linear-gradient(135deg,#87301f,#ffc04f)",style:"red",pattern:"vents",tier:"red"},
+    {id:"crimson-hex",name:"Crimson Hex",description:"A blood-red finish with jagged gold markings.",base:"#841d34",accent:"#ffcf70",swatch:"linear-gradient(135deg,#841d34,#ffcf70)",style:"red",pattern:"crest",tier:"red"},
+    {id:"scarlet-shock",name:"Scarlet Shock",description:"Bright scarlet plating with white speed lines.",base:"#c02d3f",accent:"#ffffff",swatch:"linear-gradient(135deg,#c02d3f,#ffffff)",style:"red",pattern:"stripes",tier:"red"},
+    {id:"inferno-mark",name:"Inferno Mark",description:"Smoked red armor scored with orange circuits.",base:"#652432",accent:"#ff8146",swatch:"linear-gradient(135deg,#652432,#ff8146)",style:"red",pattern:"circuit",tier:"red"},
+    {id:"red-dragon",name:"Red Dragon",description:"Deep crimson armor with a fierce gold crest.",base:"#741b2a",accent:"#ffd36b",swatch:"linear-gradient(135deg,#741b2a,#ffd36b)",style:"red",pattern:"crest",tier:"red"},
+    {id:"red-phantom",name:"Red Phantom",description:"Shadow-red plating traced with spectral pink circuits.",base:"#4d1e39",accent:"#ff79b7",swatch:"linear-gradient(135deg,#4d1e39,#ff79b7)",style:"red",pattern:"circuit",tier:"red"},
+    {id:"red-comet",name:"Red Comet",description:"Blazing red armor streaked with bright silver lines.",base:"#a42336",accent:"#fff0dc",swatch:"linear-gradient(135deg,#a42336,#fff0dc)",style:"red",pattern:"stripes",tier:"red"},
+    {id:"royal",name:"Royal Gold",description:"Polished gold armor with a champion's crest.",base:"#c58a1c",accent:"#fff0a0",swatch:"linear-gradient(135deg,#fff1a1,#d99a25,#fff0a0)",style:"royal",tier:"gold"},
+    {id:"sunforged",name:"Sunforged",description:"Bright gold plates with radiant sun details.",base:"#d49318",accent:"#fff1a0",swatch:"linear-gradient(135deg,#fff1a0,#d49318,#fff1a0)",style:"gold",pattern:"sun",tier:"gold"},
+    {id:"gilded-comet",name:"Gilded Comet",description:"Metallic gold with a sweeping comet trail.",base:"#b87916",accent:"#ffe89a",swatch:"linear-gradient(135deg,#b87916,#ffe89a,#b87916)",style:"gold",pattern:"comet",tier:"gold"},
+    {id:"auric-crown",name:"Auric Crown",description:"Radiant gold armor with layered crown motifs.",base:"#d9a52a",accent:"#fff4bd",swatch:"linear-gradient(135deg,#fff4bd,#d9a52a,#fff4bd)",style:"gold",pattern:"crown",tier:"gold"},
+    {id:"gilded-serpent",name:"Gilded Serpent",description:"A molten gold finish with a winding serpent trail.",base:"#b37815",accent:"#fff0a0",swatch:"linear-gradient(135deg,#b37815,#fff0a0,#b37815)",style:"gold",pattern:"serpent",tier:"gold"},
+    {id:"midas-mosaic",name:"Midas Mosaic",description:"Polished gold armor tiled with bright facets.",base:"#c18a21",accent:"#ffe8a0",swatch:"linear-gradient(135deg,#c18a21,#ffe8a0,#c18a21)",style:"gold",pattern:"mosaic",tier:"gold"},
+    {id:"solar-empress",name:"Solar Empress",description:"Brilliant gold plating ringed by a sunburst.",base:"#d89c22",accent:"#fff5c2",swatch:"linear-gradient(135deg,#fff5c2,#d89c22,#fff5c2)",style:"gold",pattern:"sun",tier:"gold"},
+    {id:"victory-laurel",name:"Victory Laurel",description:"A champion's gold armor framed by laurel leaves.",base:"#b98525",accent:"#ffedaa",swatch:"linear-gradient(135deg,#b98525,#ffedaa,#b98525)",style:"gold",pattern:"laurel",tier:"gold"},
+    {id:"crown-jewel",name:"Crown Jewel",description:"Bright gold armor crowned with a jeweled crest.",base:"#d3a127",accent:"#fff3b3",swatch:"linear-gradient(135deg,#fff3b3,#d3a127,#fff3b3)",style:"gold",pattern:"crown",tier:"gold"}
+  ].concat([
+    ["germany","Germany Flag","h",["#000000","#dd0000","#ffce00"]],
+    ["france","France Flag","v",["#0055a4","#ffffff","#ef4135"]],
+    ["italy","Italy Flag","v",["#009246","#ffffff","#ce2b37"]],
+    ["netherlands","Netherlands Flag","h",["#ae1c28","#ffffff","#21468b"]],
+    ["belgium","Belgium Flag","v",["#111111","#fdda25","#ef3340"]],
+    ["ireland","Ireland Flag","v",["#169b62","#ffffff","#ff883e"]],
+    ["poland","Poland Flag","h",["#ffffff","#dc143c"]],
+    ["ukraine","Ukraine Flag","h",["#0057b7","#ffd700"]],
+    ["austria","Austria Flag","h",["#ed2939","#ffffff","#ed2939"]],
+    ["russia","Russia Flag","h",["#ffffff","#0039a6","#d52b1e"]],
+    ["romania","Romania Flag","v",["#002b7f","#fcd116","#ce1126"]],
+    ["bulgaria","Bulgaria Flag","h",["#ffffff","#00966e","#d62612"]],
+    ["hungary","Hungary Flag","h",["#ce2939","#ffffff","#477050"]],
+    ["spain","Spain Flag","h",["#aa151b","#f1bf00","#aa151b"]],
+    ["nigeria","Nigeria Flag","v",["#008751","#ffffff","#008751"]],
+    ["argentina","Argentina Flag","h",["#74acdf","#ffffff","#74acdf"]],
+    ["mexico","Mexico Flag","v",["#006847","#ffffff","#ce1126"]],
+    ["egypt","Egypt Flag","h",["#ce1126","#ffffff","#000000"]]
+  ].map(flag=>({
+    id:`flag-${flag[0]}`,name:flag[1],description:`${flag[1].replace(" Flag","")} flag-inspired pattern.`,
+    base:flag[3][0],swatch:`linear-gradient(${flag[2]==="v"?"90deg":"180deg"},${flag[3].join(",")})`,
+    style:"flag",tier:"pink",flag:{type:flag[2],colors:flag[3],bands:flag[4]}
+  })));
+  const SKIN_CASE_PRICE=100;
+  const skinTierInfo={
+    blue:{name:"BLUE",color:"#55b9ff",duplicateCredits:100},
+    purple:{name:"PURPLE",color:"#ba8cff",duplicateCredits:175},
+    pink:{name:"PINK",color:"#ff82bd",duplicateCredits:275},
+    red:{name:"RED",color:"#ff5b67",duplicateCredits:400},
+    gold:{name:"GOLD",color:"#ffcf70",duplicateCredits:500}
+  };
+  const skinTierOrder={blue:0,purple:1,pink:2,red:3,gold:4};
+  const achievementNumerals=["I","II","III","IV","V","VI","VII","VIII","IX","X"];
+  function milestoneAchievements(group,title,category,metric,targets,unit){
+    return targets.map((target,index)=>({
+      id:`${group}-${target}`,title:`${title} ${achievementNumerals[index]}`,category,
+      description:`Reach ${target.toLocaleString()} ${unit}.`,metric,target
+    }));
+  }
+  const achievementInfo=[
+    ...milestoneAchievements("total-kills","Night Watch","COMBAT","totalKills",[10,25,50,100,250,500,1000,2500,5000,10000],"lifetime eliminations"),
+    ...milestoneAchievements("highest-wave","Nightfall Veteran","SURVIVAL","highestWave",[1,2,3,5,10,15,20,25,35,50],"highest wave reached"),
+    {id:"cases-1",title:"First Case","category":"CASES",description:"Open your first case.",metric:"casesOpened",target:1},
+    {id:"cases-5",title:"Case Regular","category":"CASES",description:"Open 5 cases.",metric:"casesOpened",target:5},
+    {id:"cases-10",title:"Case Collector","category":"CASES",description:"Open 10 cases.",metric:"casesOpened",target:10},
+    {id:"cases-25",title:"Case Veteran","category":"CASES",description:"Open 25 cases.",metric:"casesOpened",target:25},
+    {id:"cases-50",title:"Case Expert","category":"CASES",description:"Open 50 cases.",metric:"casesOpened",target:50},
+    {id:"rarity-purple",title:"Purple Pull","category":"CASES",description:"Unbox a purple skin.",metric:"tier-purple",target:1},
+    {id:"rarity-pink",title:"Pink Pull","category":"CASES",description:"Unbox a pink skin.",metric:"tier-pink",target:1},
+    {id:"rarity-red",title:"Red Alert","category":"CASES",description:"Unbox a red skin.",metric:"tier-red",target:1},
+    {id:"rarity-gold",title:"Golden Pull","category":"CASES",description:"Unbox a gold skin.",metric:"tier-gold",target:1},
+    {id:"case-duplicate",title:"Refund Collector","category":"CASES",description:"Receive a duplicate-skin refund.",metric:"duplicateDrops",target:1},
+    ...milestoneAchievements("unique-skins","Style Collector","COLLECTION","uniqueSkinCount",[1,5,10,20,35,50,75,100,110,113],"different skins unboxed"),
+    ...milestoneAchievements("weapons-bought","Arsenal Builder","WEAPONS","weaponsBought",[1,3,5,10,15,20,25,30,50,75],"weapons purchased across runs"),
+    ...milestoneAchievements("gadget-uses","Utility User","GADGETS","gadgetUses",[1,5,10,20,35,50,75,100,150,250],"gadgets used"),
+    ...milestoneAchievements("dash-uses","Dash Dancer","MOVEMENT","dashUses",[1,5,10,25,50,100,250,500,1000,2500],"dashes used"),
+    ...milestoneAchievements("brute-kills","Brute Buster","COMBAT","bruteKills",[1,5,10,25,50,100,250,500,1000,2500],"brutes eliminated"),
+    ...milestoneAchievements("run-kills","One-Night Army","ONE RUN","runKills",[10,25,50,75,100,150,200,300,500,1000],"eliminations in one run"),
+    ...milestoneAchievements("run-waves","Untouchable","ONE RUN","runWavesCleared",[1,2,3,5,10,15,20,25,35,50],"waves cleared in one run")
+  ];
+  const skinCaseOdds={gold:1/175,red:1/75,pink:1/31,purple:1/6};
+  skinCaseOdds.blue=1-skinCaseOdds.gold-skinCaseOdds.red-skinCaseOdds.pink-skinCaseOdds.purple;
+  const skinCaseOddsText=`Blue ~1 in ${(1/skinCaseOdds.blue).toFixed(2)} · Purple 1 in 6 · Pink 1 in 31 · Red 1 in 75 · Gold 1 in 175`;
+  const MAX_GADGET_CHARGES=3;
+  const gadgetKeys={grenade:"1",wall:"2",decoy:"3",flashbang:"4",adrenaline:"5",shockwave:"6"};
+  const MAX_SKILL_LEVEL=8;
+  const SKILL_PRICE_GROWTH=1.5;
+  const SAVE_KEY="last-stand-save-v1";
+  const SAVE_VERSION=1;
+  const state = {
+    phase:"ready", wave:1, credits:0, kills:0, spawned:0, spawnTotal:0, spawnTimer:0,
+    enemies:[], bullets:[], particles:[], grenades:[], barriers:[], decoy:null,
+    keys:new Set(), blockedKeys:new Set(), mouse:{x:0,y:0,longDown:false},
+    last:0, dpr:1, aim:0, attackCooldowns:{close:0,long:0}, attackFlash:0, reloadTime:0,reloadingWeaponId:null,
+    closeWeapon:"fists", longWeapon:null, activeSlot:"close", ownedWeapons:new Set(), ammoByWeapon:{}, ammo:0, maxHealth:100,
+    skillLevels:{speed:0,armor:0,dash:0}, speed:1, damageReduction:0,
+    stamina:100, maxStamina:100, staminaRegen:22, dashing:false,dashTime:0,dashDuration:.2,dashDirection:{x:1,y:0},dashRequested:false,
+    gadgets:{grenade:0,wall:0,decoy:0,flashbang:0,adrenaline:0,shockwave:0}, shopTab:"skills", shopPage:0, invulnerable:0, adrenaline:0,
+    skin:"classic", ownedSkins:new Set(["classic"]), lastCaseDrop:null, caseOpening:false, caseRoll:null, arenaColor:"#171b1c",
+    unlockedAchievements:new Set(), achievementStats:{totalKills:0,highestWave:0,casesOpened:0,uniqueSkins:new Set(),uniqueSkinCount:0,weaponsBought:0,gadgetUses:0,dashUses:0,bruteKills:0,tierDrops:{blue:0,purple:0,pink:0,red:0,gold:0},duplicateDrops:0,runWavesCleared:0},
+    player:{x:0,y:0,vx:0,vy:0,r:15,hp:100}
+  };
+  const enemyDefs = {walker:{hp:34,speed:47,damage:7,color:"#ff6977",r:13,reward:9},runner:{hp:26,speed:77,damage:5,color:"#ffb35f",r:11,reward:8},brute:{hp:100,speed:32,damage:15,color:"#b78cff",r:18,reward:18}};
+  let canvasRect = null;
+  let lastSaveAt=0,saveErrorReported=false;
+
+  function saveGame(){
+    const stats=state.achievementStats;
+    const profile={
+      arenaColor:state.arenaColor,
+      unlockedAchievements:[...state.unlockedAchievements],
+      achievementStats:{
+        totalKills:stats.totalKills,highestWave:stats.highestWave,casesOpened:stats.casesOpened,
+        uniqueSkins:[...stats.uniqueSkins],weaponsBought:stats.weaponsBought,gadgetUses:stats.gadgetUses,
+        dashUses:stats.dashUses,bruteKills:stats.bruteKills,tierDrops:stats.tierDrops,duplicateDrops:stats.duplicateDrops
+      }
+    };
+    const hasRun=state.phase==="fight"||state.phase==="shop"||state.wave>1||state.credits>0||state.kills>0||state.ownedSkins.size>1||state.ownedWeapons.size>0;
+    const run=hasRun&&state.phase!=="gameover"?{
+      phase:state.phase,wave:state.wave,credits:state.credits,kills:state.kills,spawned:state.spawned,
+      spawnTotal:state.spawnTotal,spawnTimer:state.spawnTimer,enemies:state.enemies,bullets:state.bullets,
+      particles:state.particles,grenades:state.grenades,barriers:state.barriers,decoy:state.decoy,
+      closeWeapon:state.closeWeapon,longWeapon:state.longWeapon,activeSlot:state.activeSlot,
+      ownedWeapons:[...state.ownedWeapons],ammoByWeapon:state.ammoByWeapon,ammo:state.ammo,maxHealth:state.maxHealth,
+      skillLevels:state.skillLevels,stamina:state.stamina,gadgets:state.gadgets,dashing:state.dashing,
+      dashTime:state.dashTime,dashDirection:state.dashDirection,invulnerable:state.invulnerable,
+      adrenaline:state.adrenaline,skin:state.skin,ownedSkins:[...state.ownedSkins],lastCaseDrop:state.lastCaseDrop,
+      caseOpening:state.caseOpening,caseRoll:state.caseRoll?{skinId:state.caseRoll.skin.id,duplicate:state.caseRoll.duplicate,refund:state.caseRoll.refund}:null,
+      arenaColor:state.arenaColor,shopTab:state.shopTab,shopPage:state.shopPage,runWavesCleared:stats.runWavesCleared,
+      player:{x:state.player.x,y:state.player.y,vx:state.player.vx,vy:state.player.vy,hp:state.player.hp},
+      attackCooldowns:state.attackCooldowns,attackFlash:state.attackFlash,aim:state.aim,
+      reloadTime:state.reloadTime,reloadingWeaponId:state.reloadingWeaponId
+    }:null;
+    try{
+      localStorage.setItem(SAVE_KEY,JSON.stringify({version:SAVE_VERSION,profile,run}));
+      lastSaveAt=performance.now();saveErrorReported=false;
+    }catch(error){
+      console.error("Could not save game progress.",error);
+      if(!saveErrorReported){$("feed").textContent="Save failed. Browser storage may be unavailable.";saveErrorReported=true}
+    }
+  }
+  function restoreGame(){
+    let data;
+    try{
+      const saved=localStorage.getItem(SAVE_KEY);
+      if(!saved)return false;
+      data=JSON.parse(saved);
+      if(data.version!==SAVE_VERSION)throw new Error("Unsupported save version.");
+    }catch(error){
+      console.error("Could not load saved game progress.",error);
+      $("feed").textContent="Save could not be loaded; starting a fresh run.";
+      return false;
+    }
+    const profile=data.profile||{},savedStats=profile.achievementStats||{},stats=state.achievementStats;
+    const achievementIds=new Set(achievementInfo.map(item=>item.id));
+    state.unlockedAchievements=new Set((Array.isArray(profile.unlockedAchievements)?profile.unlockedAchievements:[]).filter(id=>achievementIds.has(id)));
+    for(const key of ["totalKills","highestWave","casesOpened","weaponsBought","gadgetUses","dashUses","bruteKills","duplicateDrops"]){
+      stats[key]=Number.isFinite(savedStats[key])?Math.max(0,Math.floor(savedStats[key])):0;
+    }
+    stats.uniqueSkins=new Set((Array.isArray(savedStats.uniqueSkins)?savedStats.uniqueSkins:[]).filter(id=>skinInfo.some(skin=>skin.id===id)));
+    stats.uniqueSkinCount=stats.uniqueSkins.size;
+    for(const tier of Object.keys(skinTierInfo))stats.tierDrops[tier]=Number.isFinite(savedStats.tierDrops&&savedStats.tierDrops[tier])?Math.max(0,Math.floor(savedStats.tierDrops[tier])):0;
+    if(typeof profile.arenaColor==="string"&&/^#[0-9a-f]{6}$/i.test(profile.arenaColor))state.arenaColor=profile.arenaColor;
+    const run=data.run;
+    if(!run)return false;
+    const number=(value,fallback,min=0,max=Number.MAX_SAFE_INTEGER)=>Number.isFinite(value)?Math.max(min,Math.min(max,value)):fallback;
+    const array=(value,fallback=[])=>Array.isArray(value)?value:fallback;
+    state.wave=Math.floor(number(run.wave,1,1,100000));
+    state.credits=Math.floor(number(run.credits,0));
+    state.kills=Math.floor(number(run.kills,0));
+    state.spawned=Math.floor(number(run.spawned,0));
+    state.spawnTotal=Math.floor(number(run.spawnTotal,0));
+    state.spawnTimer=number(run.spawnTimer,0,0,60);
+    state.enemies=array(run.enemies);state.bullets=array(run.bullets);state.particles=array(run.particles);
+    state.grenades=array(run.grenades);state.barriers=array(run.barriers);state.decoy=run.decoy&&typeof run.decoy==="object"?run.decoy:null;
+    state.closeWeapon=weaponById(run.closeWeapon)&&run.closeWeapon!=="fists"?run.closeWeapon:"fists";
+    state.longWeapon=weaponById(run.longWeapon)&&run.longWeapon!=="fists"?run.longWeapon:null;
+    state.activeSlot=run.activeSlot==="long"&&state.longWeapon?"long":"close";
+    state.ownedWeapons=new Set(array(run.ownedWeapons).filter(id=>weaponById(id)&&id!=="fists"));
+    state.ammoByWeapon=run.ammoByWeapon&&typeof run.ammoByWeapon==="object"?run.ammoByWeapon:{};
+    state.ammo=number(run.ammo,0);state.maxHealth=number(run.maxHealth,100,1,10000);
+    state.skillLevels={speed:Math.floor(number(run.skillLevels&&run.skillLevels.speed,0,0,MAX_SKILL_LEVEL)),armor:Math.floor(number(run.skillLevels&&run.skillLevels.armor,0,0,MAX_SKILL_LEVEL)),dash:Math.floor(number(run.skillLevels&&run.skillLevels.dash,0,0,MAX_SKILL_LEVEL))};
+    syncSkills();state.stamina=number(run.stamina,state.maxStamina,0,state.maxStamina);
+    for(const id of Object.keys(gadgetInfo))state.gadgets[id]=Math.floor(number(run.gadgets&&run.gadgets[id],0,0,MAX_GADGET_CHARGES));
+    state.dashing=run.dashing===true;state.dashTime=number(run.dashTime,0,0,10);
+    state.dashDirection=run.dashDirection&&Number.isFinite(run.dashDirection.x)&&Number.isFinite(run.dashDirection.y)?run.dashDirection:{x:1,y:0};
+    state.invulnerable=number(run.invulnerable,0,0,10);state.adrenaline=number(run.adrenaline,0,0,60);
+    state.ownedSkins=new Set(["classic",...array(run.ownedSkins).filter(id=>skinInfo.some(skin=>skin.id===id))]);
+    state.skin=state.ownedSkins.has(run.skin)?run.skin:"classic";
+    const lastDropSkin=run.lastCaseDrop&&skinInfo.find(skin=>skin.id===run.lastCaseDrop.skinId);
+    state.lastCaseDrop=lastDropSkin?{
+      tier:lastDropSkin.tier,name:lastDropSkin.name,skinId:lastDropSkin.id,duplicate:run.lastCaseDrop.duplicate===true,
+      refund:number(run.lastCaseDrop.refund,0)
+    }:null;
+    state.caseOpening=run.caseOpening===true;
+    const pendingSkin=run.caseRoll&&skinInfo.find(skin=>skin.id===run.caseRoll.skinId);
+    const pendingCase=pendingSkin?{skin:pendingSkin,duplicate:run.caseRoll.duplicate===true,refund:number(run.caseRoll.refund,0)}:null;
+    state.caseOpening=false;state.caseRoll=null;
+    state.arenaColor=typeof run.arenaColor==="string"&&/^#[0-9a-f]{6}$/i.test(run.arenaColor)?run.arenaColor:"#171b1c";
+    const shopTabs=["skills","weapons","gadgets","background","skins","museum","achievements","inventory"];
+    state.shopTab=shopTabs.includes(run.shopTab)?run.shopTab:"skills";
+    state.shopPage=Math.floor(number(run.shopPage,0));
+    stats.runWavesCleared=Math.floor(number(run.runWavesCleared,0));
+    state.player.x=number(run.player&&run.player.x,canvas.clientWidth/2,0,canvas.clientWidth);
+    state.player.y=number(run.player&&run.player.y,canvas.clientHeight/2,0,canvas.clientHeight);
+    state.player.vx=number(run.player&&run.player.vx,0,-10000,10000);
+    state.player.vy=number(run.player&&run.player.vy,0,-10000,10000);
+    state.player.hp=number(run.player&&run.player.hp,state.maxHealth,0,state.maxHealth);
+    state.attackCooldowns={close:number(run.attackCooldowns&&run.attackCooldowns.close,0,0,10),long:number(run.attackCooldowns&&run.attackCooldowns.long,0,0,10)};
+    state.attackFlash=number(run.attackFlash,0,0,1);state.aim=number(run.aim,0,-Math.PI*2,Math.PI*2);
+    state.reloadTime=number(run.reloadTime,0,0,60);
+    state.reloadingWeaponId=typeof run.reloadingWeaponId==="string"?run.reloadingWeaponId:null;
+    state.keys.clear();state.mouse={x:0,y:0,longDown:false};state.dashRequested=false;state.last=0;
+    state.phase=run.phase==="shop"?"shop":run.phase==="fight"?"fight":"ready";
+    if(state.phase==="shop"){
+      $("overlayEyebrow").textContent="RUN RESTORED";$("overlayTitle").textContent="PICK UP WHERE YOU LEFT OFF";
+      $("overlayText").textContent="Your saved run is ready. Continue when you are ready.";
+      $("mainButton").classList.add("hidden");$("continueButton").classList.remove("hidden");
+      renderShop();$("shopArea").classList.remove("hidden");$("overlay").classList.add("shop-open");$("overlay").classList.remove("hidden");
+      $("status").textContent="WAVE CLEARED";
+    }else if(state.phase==="fight"){
+      $("overlay").classList.add("hidden");$("status").textContent=`WAVE ${state.wave} · INCOMING`;
+      $("feed").innerHTML=`<span class="flash">Run restored.</span> Wave ${state.wave} continues.`;
+    }else{
+      showOverlay("RUN RESTORED",`WAVE ${state.wave}`,"Your saved progress is ready.","RESUME WAVE →");
+    }
+    if(pendingCase)applyCaseDrop(pendingCase);
+    return true;
+  }
+
+  function resize(){
+    const box=canvas.getBoundingClientRect();canvasRect=box;state.dpr=Math.min(window.devicePixelRatio||1,2);
+    canvas.width=Math.round(box.width*state.dpr);canvas.height=Math.round(box.height*state.dpr);
+    ctx.setTransform(state.dpr,0,0,state.dpr,0,0);
+    if(state.phase==="ready"){state.player.x=box.width/2;state.player.y=box.height/2}
+    draw();
+    if(state.phase==="shop")renderShop();
+  }
+  const fists={id:"fists",name:"Fists",kind:"melee",damage:18,range:52,rate:.38};
+  function weaponById(id){return id==="fists"?fists:weapons.find(w=>w.id===id)||null}
+  function weaponForSlot(slot){return weaponById(slot==="close"?state.closeWeapon:state.longWeapon)}
+  function currentWeapon(){return weaponForSlot(state.activeSlot)||fists}
+  function setActiveSlot(slot){
+    if(slot==="long"&&!state.longWeapon){$("feed").innerHTML='<span class="flash">No long-range weapon equipped.</span> Buy one from the weapons shop.';return}
+    if(slot===state.activeSlot)return;
+    const previous=currentWeapon();
+    if(previous.kind==="gun")state.ammoByWeapon[previous.id]=state.ammo;
+    state.activeSlot=slot;
+    const next=currentWeapon();
+    state.ammo=next.kind==="gun"?(state.ammoByWeapon[next.id]??next.mag):0;
+    updateUI();
+    saveGame();
+  }
+  function equipWeapon(weapon,slot){
+    const previous=currentWeapon();
+    if(state.activeSlot===slot&&previous.kind==="gun")state.ammoByWeapon[previous.id]=state.ammo;
+    const oldSlotWeapon=slot==="close"?state.closeWeapon:state.longWeapon;
+    if(slot==="close")state.closeWeapon=weapon.id;
+    else state.longWeapon=weapon.id;
+    if(slot==="long"&&oldSlotWeapon!==weapon.id){state.reloadTime=0;state.reloadingWeaponId=null}
+    if(state.activeSlot===slot){
+      state.ammo=weapon.kind==="gun"?(state.ammoByWeapon[weapon.id]??weapon.mag):0;
+    }
+  }
+  function updateUI(){
+    const p=state.player,w=currentWeapon(),close=weaponForSlot("close")||fists,long=weaponForSlot("long");
+    $("waveLabel").textContent=String(state.wave).padStart(2,"0");
+    $("killsLabel").textContent=state.kills;
+    $("creditsLabel").textContent=state.credits;
+    $("healthText").textContent=`${Math.ceil(p.hp)} / ${state.maxHealth} HP`;
+    $("healthBar").style.width=`${Math.max(0,p.hp/state.maxHealth*100)}%`;
+    $("staminaText").textContent=`${Math.round(state.stamina)}/${state.maxStamina}`;
+    $("staminaBar").style.width=`${Math.max(0,state.stamina/state.maxStamina*100)}%`;
+    $("closeWeaponName").textContent=close.name.toUpperCase();
+    $("longWeaponName").textContent=long?long.name.toUpperCase():"EMPTY";
+    $("closeSlot").classList.toggle("active",state.activeSlot==="close");
+    $("longSlot").classList.toggle("active",state.activeSlot==="long");
+    const reloadingActive=state.reloadTime>0&&state.reloadingWeaponId===w.id;
+    $("ammoText").textContent=w.kind==="melee"?"∞":reloadingActive?"RELOADING…":`${state.ammo} / ${w.mag}`;
+    document.querySelectorAll("[data-slot]").forEach(button=>{
+      button.classList.toggle("active",button.dataset.slot===state.activeSlot);
+      button.disabled=button.dataset.slot==="long"&&!state.longWeapon;
+    });
+    $("enemyCount").textContent=state.phase==="fight"?`${state.enemies.length} NEARBY`:"NIGHTFALL";
+    $("gadgetInventory").textContent=Object.keys(gadgetInfo).map(id=>`${gadgetKeys[id]} ${state.gadgets[id]}/${MAX_GADGET_CHARGES}`).join(" · ");
+    for(const id of Object.keys(gadgetInfo)){
+      const button=$(`touch${id[0].toUpperCase()+id.slice(1)}`);
+      button.textContent=`${gadgetKeys[id]} · ${state.gadgets[id]}/${MAX_GADGET_CHARGES}`;
+      button.disabled=state.phase!=="fight"||state.gadgets[id]===0;
+    }
+  }
+  function showOverlay(eyebrow,title,text,buttonText){
+    $("overlayEyebrow").textContent=eyebrow;$("overlayTitle").textContent=title;$("overlayText").textContent=text;
+    $("mainButton").textContent=buttonText;$("overlay").classList.remove("hidden","shop-open");
+    $("shopArea").classList.add("hidden");$("continueButton").classList.add("hidden");
+  }
+  function startWave(){
+    if(state.phase==="fight")return;
+    for(const key of state.keys){
+      if(["KeyW","KeyA","KeyS","KeyD","ArrowUp","ArrowDown","ArrowLeft","ArrowRight","ShiftLeft","ShiftRight"].includes(key))state.blockedKeys.add(key);
+    }
+    state.keys.clear();state.mouse.longDown=false;state.dashRequested=false;
+    state.phase="fight";state.spawned=0;state.spawnTotal=6+state.wave*3;state.spawnTimer=.25;
+    state.achievementStats.highestWave=Math.max(state.achievementStats.highestWave,state.wave);
+    state.enemies=[];state.bullets=[];state.player.hp=Math.min(state.maxHealth,state.player.hp);
+    $("overlay").classList.add("hidden");$("status").textContent=`WAVE ${state.wave} · INCOMING`;
+    $("feed").innerHTML=`<span class="flash">Wave ${state.wave}</span> — they're coming from every side!`;
+    checkAchievements();
+    updateUI();
+    saveGame();
+  }
+  function enterShop(){
+    if(state.phase!=="fight")return;
+    state.phase="shop";state.achievementStats.runWavesCleared++;const bonus=18+state.wave*7;state.credits+=bonus;
+    state.shopPage=0;
+    $("status").textContent="WAVE CLEARED";$("overlayEyebrow").textContent="WAVE COMPLETE · BONUS +"+bonus;
+    $("overlayTitle").textContent="CATCH YOUR BREATH";
+    $("overlayText").textContent="Pick a shop tab to buy gear, open a skin case, equip unlocked skins, or browse every case skin in the museum. Enemies return stronger each wave.";
+    $("mainButton").classList.add("hidden");$("continueButton").classList.remove("hidden");
+    renderShop();$("shopArea").classList.remove("hidden");$("overlay").classList.add("shop-open");$("overlay").classList.remove("hidden");
+    $("feed").innerHTML=`<span class="flash">Wave cleared!</span> Shop is open.`;
+    checkAchievements();
+    updateUI();
+    saveGame();
+  }
+  function endGame(){
+    state.phase="gameover";$("status").textContent="RUN ENDED";
+    showOverlay("YOU WERE OVERRUN",`WAVE ${state.wave} · ${state.kills} ELIMINATIONS`,"The city is still crawling. Start over and see how many waves you can survive.","PLAY AGAIN ↻");
+    $("mainButton").classList.remove("hidden");
+    $("feed").textContent="Take a breath, re-arm, and try again.";
+    saveGame();
+  }
+  function renderShop(){
+    const box=$("shopGrid");box.replaceChildren();
+    const pageSize=shopPageSize(),start=state.shopPage*pageSize;
+    let totalItems=0;
+    document.querySelectorAll("[data-shop-tab]").forEach(button=>{
+      button.classList.toggle("active",button.dataset.shopTab===state.shopTab);
+      button.disabled=state.caseOpening;
+    });
+    $("continueButton").disabled=state.caseOpening;
+    if(state.shopTab==="skills"){
+      $("shopNote").textContent="Permanent upgrades last for the whole run.";
+      const skills=Object.entries(skillInfo);
+      totalItems=skills.length+1;
+      for(const [id,skill] of skills.slice(start,start+pageSize)){
+        const level=state.skillLevels[id],price=skillPrice(id),maxed=level>=MAX_SKILL_LEVEL;
+        const card=document.createElement("div");card.className="shop-item";
+        const effect=maxed?"Maximum level reached.":`Next: ${skillEffect(id,level+1)}`;
+        card.innerHTML=`<strong>${skill.icon} ${skill.name} · LV ${level}/${MAX_SKILL_LEVEL}</strong><small>${skill.description} ${effect}</small><button class="shop-btn" ${maxed||state.credits<price?"disabled":""}>${maxed?"MAX LEVEL":`UPGRADE · ◈ ${price}`}</button>`;
+        if(!maxed)card.querySelector("button").addEventListener("click",()=>buySkill(id));
+        box.appendChild(card);
+      }
+      if(start<=skills.length&&start+pageSize>skills.length){
+        const medkit=document.createElement("div");medkit.className="shop-item";
+        medkit.innerHTML=`<strong>✚ Medkit</strong><small>Restore 45 health immediately. No level; buy one when you need it.</small><button class="shop-btn" ${state.credits<35||state.player.hp>=state.maxHealth?"disabled":""}>BUY · ◈ 35</button>`;
+        medkit.querySelector("button").addEventListener("click",buyMedkit);box.appendChild(medkit);
+      }
+    }else if(state.shopTab==="weapons"){
+      $("shopNote").textContent=`Higher ranks cost more. Save for strong weapons. Credits: ◈ ${state.credits}`;
+      totalItems=weapons.length;
+      for(const w of weapons.slice(start,start+pageSize)){
+        const slot=w.kind==="melee"?"close":"long";
+        const owned=state.ownedWeapons.has(w.id),equipped=(slot==="close"?state.closeWeapon:state.longWeapon)===w.id;
+        const card=document.createElement("div");card.className="shop-item";
+        card.innerHTML=`<strong>${String(w.rank).padStart(2,"0")} · ${w.name}</strong><small>${w.desc} · ${slot.toUpperCase()} SLOT</small><button class="shop-btn ${owned?"owned":""}" ${equipped||!owned&&state.credits<w.price?"disabled":""}>${equipped?"EQUIPPED":owned?`EQUIP → ${slot.toUpperCase()}`:`BUY · ◈ ${w.price} → ${slot.toUpperCase()}`}</button>`;
+        if(!equipped)card.querySelector("button").addEventListener("click",()=>buyWeapon(w));
+        box.appendChild(card);
+      }
+    }else if(state.shopTab==="gadgets"){
+      $("shopNote").textContent="Buy utility packs and save charges for tough fights.";
+      const gadgets=Object.entries(gadgetInfo);
+      totalItems=gadgets.length;
+      for(const [id,gadget] of gadgets.slice(start,start+pageSize)){
+        const price=gadgetPrice(id),chargesToAdd=gadgetPackAmount(id),maxed=chargesToAdd===0;
+        const card=document.createElement("div");card.className="shop-item";
+        card.innerHTML=`<strong>${gadget.icon} ${gadget.name} · ${state.gadgets[id]}/${MAX_GADGET_CHARGES}</strong><small>${gadget.description} ${maxed?`Maximum ${MAX_GADGET_CHARGES} charges.`:`Pack adds ${chargesToAdd} charge${chargesToAdd===1?"":"s"}.`}</small><button class="shop-btn" ${maxed||state.credits<price?"disabled":""}>${maxed?"MAX STOCK":`BUY PACK · ◈ ${price}`}</button>`;
+        card.querySelector("button").addEventListener("click",()=>buyGadget(id));box.appendChild(card);
+      }
+    }else if(state.shopTab==="background"){
+      $("shopNote").textContent="Customize your arena for free.";
+      const colors=[
+        {name:"NIGHT",value:"#171b1c"},{name:"OCEAN",value:"#142c43"},
+        {name:"FOREST",value:"#17372d"},{name:"VIOLET",value:"#30213f"},
+        {name:"EMBER",value:"#45241e"},{name:"SLATE",value:"#343c48"},
+        {name:"SAND",value:"#51422d"},{name:"LIGHT",value:"#778696"}
+      ];
+      totalItems=1;
+      const card=document.createElement("div");card.className="shop-item background-item";
+      card.innerHTML=`<strong>ARENA BACKGROUND · FREE</strong><small>Choose a preset or pick any color. Changes apply immediately.</small><div class="background-presets">${colors.map(color=>`<button class="background-preset" type="button" data-color="${color.value}" aria-label="${color.name.toLowerCase()} background"><i style="--preset-color:${color.value}"></i>${color.name}</button>`).join("")}</div><label class="background-picker-row" for="arenaColorPicker"><span>Custom color · FREE</span><input id="arenaColorPicker" type="color" value="${state.arenaColor}" aria-label="Choose custom arena color"><strong id="arenaColorLabel">${state.arenaColor.toUpperCase()}</strong></label>`;
+      card.querySelectorAll(".background-preset").forEach(button=>{
+        button.classList.toggle("active",button.dataset.color===state.arenaColor);
+        button.addEventListener("click",()=>setArenaColor(button.dataset.color));
+      });
+      card.querySelector("#arenaColorPicker").addEventListener("input",event=>setArenaColor(event.currentTarget.value));
+      box.appendChild(card);
+    }else if(state.shopTab==="skins"){
+      $("shopNote").textContent="Open cases to unlock skins; equip any drop from your inventory.";
+      totalItems=1;
+      const currentSkin=skinInfo.find(skin=>skin.id===state.skin)||skinInfo[0];
+      const caseCard=document.createElement("div");caseCard.className="shop-item case-item";
+      const caseSummary=state.caseOpening?"Case is rolling…":state.lastCaseDrop
+        ?state.lastCaseDrop.duplicate?`Duplicate: ${state.lastCaseDrop.name} · +${state.lastCaseDrop.refund} credits.`:`Last drop: ${skinTierInfo[state.lastCaseDrop.tier].name} · ${state.lastCaseDrop.name}.`
+        :"No case opened yet.";
+      const caseButtonsDisabled=state.caseOpening||state.credits<SKIN_CASE_PRICE;
+      caseCard.innerHTML=`<strong>🎁 Mystery Skin Case · ◈ ${SKIN_CASE_PRICE}</strong><small title="${skinCaseOddsText}">Collection: ${state.ownedSkins.size}/${skinInfo.length} · Equipped: ${currentSkin.name}. ${caseSummary}<br>${skinCaseOddsText}</small><div class="case-buttons"><button class="shop-btn case-open-button" ${caseButtonsDisabled?"disabled":""}>${state.caseOpening?"CASE OPENING…":`OPEN CASE · ◈ ${SKIN_CASE_PRICE}`}</button><button class="shop-btn case-quick-button" ${caseButtonsDisabled?"disabled":""}>QUICK OPEN · ◈ ${SKIN_CASE_PRICE}</button></div>`;
+      caseCard.querySelector(".case-open-button").addEventListener("click",()=>openSkinCase(true));
+      caseCard.querySelector(".case-quick-button").addEventListener("click",()=>openSkinCase(false));box.appendChild(caseCard);
+      if(state.caseOpening)renderCaseRoll(box);
+      else if(state.lastCaseDrop)renderCaseResult(box);
+    }else if(state.shopTab==="museum"){
+      const museumSkins=skinInfo.slice()
+        .sort((a,b)=>skinTierOrder[a.tier]-skinTierOrder[b.tier]||a.name.localeCompare(b.name));
+      $("shopNote").textContent=`${state.ownedSkins.size} of ${museumSkins.length} unlocked · every possible case skin, sorted by rarity.`;
+      totalItems=museumSkins.length;
+      for(const skin of museumSkins.slice(start,start+pageSize)){
+        const tier=skinTierInfo[skin.tier],unlocked=state.ownedSkins.has(skin.id);
+        const card=document.createElement("div");card.className="shop-item skin-item museum-item";
+        card.innerHTML=`<span class="skin-swatch" style="background:${skin.swatch||skin.base}"></span><strong><span style="color:${tier.color}">${tier.name}</span> · ${skin.name}</strong><small>${skin.description}<br><span class="museum-status ${unlocked?"unlocked":"locked"}">${unlocked?"UNLOCKED":"IN CASE POOL"}</span></small>`;
+        box.appendChild(card);
+      }
+    }else if(state.shopTab==="achievements"){
+      $("shopNote").textContent=`${state.unlockedAchievements.size} of ${achievementInfo.length} achievements unlocked.`;
+      totalItems=achievementInfo.length;
+      for(const achievement of achievementInfo.slice(start,start+pageSize)){
+        const progress=achievementProgress(achievement),unlocked=state.unlockedAchievements.has(achievement.id);
+        const percent=Math.max(0,Math.min(100,progress/achievement.target*100));
+        let progressLabel=unlocked?"UNLOCKED":`${Math.min(progress,achievement.target)}/${achievement.target}`;
+        const card=document.createElement("div");card.className=`shop-item achievement-item ${unlocked?"achieved":""}`;
+        card.innerHTML=`<span class="achievement-category">${achievement.category}</span><strong>${unlocked?"✓":"◇"} ${achievement.title}</strong><small>${achievement.description}</small><div class="achievement-progress"><span><i style="width:${percent}%"></i></span><b>${progressLabel}</b></div>`;
+        box.appendChild(card);
+      }
+    }else{
+      const owned=skinInfo.filter(skin=>state.ownedSkins.has(skin.id))
+        .sort((a,b)=>skinTierOrder[a.tier]-skinTierOrder[b.tier]||a.name.localeCompare(b.name));
+      $("shopNote").textContent=`${owned.length} of ${skinInfo.length} skins unlocked. Select a skin to equip it.`;
+      totalItems=owned.length;
+      for(const skin of owned.slice(start,start+pageSize)){
+        const equipped=state.skin===skin.id,tier=skinTierInfo[skin.tier];
+        const card=document.createElement("div");card.className="shop-item skin-item";
+        card.innerHTML=`<span class="skin-swatch" style="background:${skin.swatch||skin.base}"></span><strong><span style="color:${tier.color}">${tier.name}</span> · ${skin.name}</strong><small>${skin.description}</small><button class="shop-btn ${equipped?"owned":""}" ${equipped?"disabled":""}>${equipped?"EQUIPPED":"EQUIP"}</button>`;
+        if(!equipped)card.querySelector("button").addEventListener("click",()=>equipSkin(skin));
+        box.appendChild(card);
+      }
+    }
+    renderShopPagination(totalItems);
+  }
+  function shopPageSize(){
+    if(window.matchMedia("(max-width:560px)").matches)return state.shopTab==="gadgets"?1:2;
+    return 4;
+  }
+  function renderShopPagination(totalItems){
+    const pageCount=Math.max(1,Math.ceil(totalItems/shopPageSize()));
+    state.shopPage=Math.min(state.shopPage,pageCount-1);
+    $("shopPagination").classList.toggle("hidden",pageCount<=1);
+    $("shopPageLabel").textContent=`PAGE ${state.shopPage+1} / ${pageCount}`;
+    $("shopPrev").disabled=state.shopPage===0;
+    $("shopNext").disabled=state.shopPage===pageCount-1;
+  }
+  function achievementProgress(achievement){
+    if(achievement.metric==="uniqueSkinCount")return state.achievementStats.uniqueSkinCount;
+    if(achievement.metric==="runKills")return state.kills;
+    if(achievement.metric.startsWith("tier-"))return state.achievementStats.tierDrops[achievement.metric.slice(5)]||0;
+    return state.achievementStats[achievement.metric]||0;
+  }
+  function checkAchievements(){
+    const newlyUnlocked=[];
+    for(const achievement of achievementInfo){
+      if(state.unlockedAchievements.has(achievement.id))continue;
+      if(achievementProgress(achievement)>=achievement.target){
+        state.unlockedAchievements.add(achievement.id);newlyUnlocked.push(achievement);
+      }
+    }
+    if(newlyUnlocked.length){
+      const last=newlyUnlocked[newlyUnlocked.length-1];
+      $("feed").innerHTML=`<span class="flash">Achievement unlocked${newlyUnlocked.length===1?"":" · "+newlyUnlocked.length}!</span> ${last.title}`;
+      saveGame();
+    }
+    if(state.phase==="shop"&&state.shopTab==="achievements")renderShop();
+  }
+  function setArenaColor(color){
+    if(!/^#[0-9a-f]{6}$/i.test(color))return;
+    state.arenaColor=color.toLowerCase();
+    const picker=$("arenaColorPicker"),label=$("arenaColorLabel");
+    if(picker)picker.value=state.arenaColor;
+    if(label)label.textContent=state.arenaColor.toUpperCase();
+    document.querySelectorAll(".background-preset").forEach(button=>button.classList.toggle("active",button.dataset.color===state.arenaColor));
+    draw();
+    saveGame();
+  }
+  function renderCaseRoll(box){
+    const roll=document.createElement("div");roll.className="case-roll";
+    roll.innerHTML='<strong>CASE ROLLING · GOOD LUCK</strong><div class="case-roll-window"><div class="case-roll-track" id="caseRollTrack"></div></div><small>Watch the marker to see your drop.</small>';
+    roll.querySelector(".case-roll-window").style.setProperty("--roll-marker-color",skinTierInfo[state.caseRoll.skin.tier].color);
+    box.appendChild(roll);
+  }
+  function renderCaseResult(box){
+    const drop=state.lastCaseDrop,skin=skinInfo.find(item=>item.id===drop.skinId);
+    if(!skin)return;
+    const tier=skinTierInfo[skin.tier],result=document.createElement("div");result.className="case-result";
+    result.innerHTML=`<span class="case-roll-swatch" style="--tier-color:${tier.color};--tier-glow:${tier.color}66;background:${skin.swatch||skin.base}"></span><div><strong style="color:${tier.color}">${drop.duplicate?"DUPLICATE":"NEW SKIN"} · ${skin.name}</strong><small style="--tier-color:${tier.color}">${drop.duplicate?`Duplicate converted to ◈ ${drop.refund}.`:"Unlocked and equipped!"}</small></div>`;
+    box.appendChild(result);
+  }
+  function animateCaseRoll(){
+    const reel=$("caseRollTrack"),roll=state.caseRoll;
+    if(!reel||!roll)return;
+    const winningIndex=30,itemCount=36;
+    for(let i=0;i<itemCount;i++){
+      const skin=i===winningIndex?roll.skin:rollCaseDrop().skin;
+      const tier=skinTierInfo[skin.tier],item=document.createElement("div");item.className="case-roll-item";
+      item.style.setProperty("--tier-color",tier.color);item.style.setProperty("--tier-glow",`${tier.color}66`);
+      item.innerHTML=`<span class="case-roll-swatch" style="background:${skin.swatch||skin.base}"></span><strong>${skin.name}</strong><small>${tier.name}</small>`;
+      reel.appendChild(item);
+    }
+    const track=reel,windowBox=reel.parentElement,target=reel.children[winningIndex];
+    const offset=target.getBoundingClientRect().left+target.getBoundingClientRect().width/2-(windowBox.getBoundingClientRect().left+windowBox.getBoundingClientRect().width/2);
+    let completed=false,fallback;
+    const finish=()=>{
+      if(completed)return;
+      completed=true;window.clearTimeout(fallback);
+      finishCaseOpening();
+    };
+    track.addEventListener("transitionend",event=>{if(event.target===track)finish()},{once:true});
+    fallback=window.setTimeout(finish,4800);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      if(!state.caseOpening)return;
+      track.style.transition="transform 4.2s cubic-bezier(.08,.72,.08,1)";
+      track.style.transform=`translateX(${-offset}px)`;
+    }));
+  }
+  function gadgetPrice(id){return Math.ceil(gadgetInfo[id].price*(1+(state.wave-1)*.2))}
+  function gadgetPackAmount(id){return Math.min(gadgetInfo[id].charges,MAX_GADGET_CHARGES-state.gadgets[id])}
+  function skillPrice(id){return Math.ceil(skillInfo[id].price*Math.pow(SKILL_PRICE_GROWTH,state.skillLevels[id]))}
+  function skillEffect(id,nextLevel){
+    if(id==="speed")return `+${Math.round(nextLevel*10)}% move speed`;
+    if(id==="armor")return `${nextLevel*8}% less damage taken`;
+    return `${(.2+nextLevel*.04).toFixed(2)}s dash · ${22+nextLevel*4} charge/s recharge`;
+  }
+  function syncSkills(){
+    state.speed=1+state.skillLevels.speed*.1;
+    state.damageReduction=state.skillLevels.armor*.08;
+    state.maxStamina=100;
+    state.staminaRegen=22+state.skillLevels.dash*4;
+    state.dashDuration=.2+state.skillLevels.dash*.04;
+    state.stamina=Math.min(state.stamina,state.maxStamina);
+  }
+  function buySkill(id){
+    const level=state.skillLevels[id],price=skillPrice(id);
+    if(state.phase!=="shop"||level>=MAX_SKILL_LEVEL||state.credits<price)return;
+    state.credits-=price;state.skillLevels[id]++;
+    syncSkills();
+    $("feed").innerHTML=`<span class="flash">${skillInfo[id].name} · level ${state.skillLevels[id]}.</span>`;
+    renderShop();updateUI();
+    saveGame();
+  }
+  function buyMedkit(){
+    if(state.phase!=="shop"||state.credits<35||state.player.hp>=state.maxHealth)return;
+    state.credits-=35;state.player.hp=Math.min(state.maxHealth,state.player.hp+45);
+    $("feed").innerHTML='<span class="flash">Medkit used.</span> Health restored.';
+    renderShop();updateUI();
+    saveGame();
+  }
+  function buyWeapon(w){
+    if(state.phase!=="shop")return;
+    const slot=w.kind==="melee"?"close":"long";
+    if(!state.ownedWeapons.has(w.id)){
+      if(state.credits<w.price)return;
+      state.credits-=w.price;state.ownedWeapons.add(w.id);
+      if(w.kind==="gun")state.ammoByWeapon[w.id]=w.mag;
+      state.achievementStats.weaponsBought++;
+    }
+    equipWeapon(w,slot);
+    $("feed").innerHTML=`<span class="flash">${w.name} equipped in your ${slot}-range slot.</span>`;
+    checkAchievements();
+    renderShop();updateUI();
+    saveGame();
+  }
+  function buyGadget(id){
+    const gadget=gadgetInfo[id];
+    const price=gadgetPrice(id),chargesToAdd=gadgetPackAmount(id);
+    if(state.phase!=="shop"||state.credits<price||chargesToAdd<=0)return;
+    state.credits-=price;state.gadgets[id]+=chargesToAdd;
+    $("feed").innerHTML=`<span class="flash">${gadget.name} stocked.</span> ${state.gadgets[id]}/${MAX_GADGET_CHARGES} charges ready.`;
+    renderShop();updateUI();
+    saveGame();
+  }
+  function equipSkin(skin){
+    if(state.phase!=="shop"||!state.ownedSkins.has(skin.id))return;
+    state.skin=skin.id;
+    $("feed").innerHTML=`<span class="flash">${skin.name} equipped.</span>`;
+    renderShop();updateUI();draw();
+    saveGame();
+  }
+  function rollCaseDrop(){
+    const roll=Math.random();
+    let tier;
+    if(roll<skinCaseOdds.gold)tier="gold";
+    else if(roll<skinCaseOdds.gold+skinCaseOdds.red)tier="red";
+    else if(roll<skinCaseOdds.gold+skinCaseOdds.red+skinCaseOdds.pink)tier="pink";
+    else if(roll<skinCaseOdds.gold+skinCaseOdds.red+skinCaseOdds.pink+skinCaseOdds.purple)tier="purple";
+    else tier="blue";
+    const tierSkins=skinInfo.filter(skin=>skin.tier===tier);
+    const unowned=tierSkins.filter(skin=>!state.ownedSkins.has(skin.id));
+    const pool=unowned.length?unowned:tierSkins;
+    const skin=pool[Math.floor(Math.random()*pool.length)];
+    const duplicate=unowned.length===0;
+    const refund=duplicate?skinTierInfo[tier].duplicateCredits:0;
+    return {skin,duplicate,refund};
+  }
+  function openSkinCase(animate=true){
+    if(state.phase!=="shop"||state.credits<SKIN_CASE_PRICE||state.caseOpening)return;
+    const drop=rollCaseDrop();
+    state.credits-=SKIN_CASE_PRICE;
+    if(!animate){applyCaseDrop(drop);return}
+    state.caseOpening=true;state.caseRoll=drop;
+    renderShop();updateUI();saveGame();animateCaseRoll();
+  }
+  function finishCaseOpening(){
+    if(!state.caseOpening||!state.caseRoll)return;
+    const drop=state.caseRoll;
+    state.caseOpening=false;state.caseRoll=null;
+    applyCaseDrop(drop);
+  }
+  function applyCaseDrop({skin,duplicate,refund}){
+    state.lastCaseDrop={tier:skin.tier,name:skin.name,skinId:skin.id,duplicate,refund};
+    state.achievementStats.casesOpened++;
+    state.achievementStats.tierDrops[skin.tier]++;
+    if(duplicate)state.achievementStats.duplicateDrops++;
+    else if(!state.achievementStats.uniqueSkins.has(skin.id)){
+      state.achievementStats.uniqueSkins.add(skin.id);
+      state.achievementStats.uniqueSkinCount=state.achievementStats.uniqueSkins.size;
+    }
+    if(duplicate){
+      state.credits+=refund;
+      $("feed").innerHTML=`<span class="flash">${skinTierInfo[skin.tier].name} duplicate · ${skin.name}.</span> +${refund} credits`;
+    }else{
+      state.ownedSkins.add(skin.id);state.skin=skin.id;
+      $("feed").innerHTML=`<span class="flash">${skinTierInfo[skin.tier].name} drop · ${skin.name} unlocked and equipped!</span>`;
+    }
+    checkAchievements();
+    renderShop();updateUI();draw();
+    saveGame();
+  }
+  function spawnEnemy(){
+    const w=canvas.clientWidth,h=canvas.clientHeight,side=Math.floor(Math.random()*4),pad=28;
+    let x,y;if(side===0){x=Math.random()*w;y=-pad}else if(side===1){x=w+pad;y=Math.random()*h}else if(side===2){x=Math.random()*w;y=h+pad}else{x=-pad;y=Math.random()*h}
+    const n=state.spawned+1,wave=state.wave;
+    let type=n%6===0?"brute":n%4===0?"runner":"walker",base=enemyDefs[type];
+    const hpScale=1+(wave-1)*.16,speedScale=1+(wave-1)*.075;
+    state.enemies.push({x,y,vx:0,vy:0,r:base.r,hp:base.hp*hpScale,maxHp:base.hp*hpScale,stun:0,knockback:0,
+      speed:base.speed*speedScale,damage:base.damage*(1+(wave-1)*.1),color:base.color,type,
+      reward:base.reward+Math.floor(wave*.8),attack:Math.random()*.7,flash:0,id:Math.random()});
+    state.spawned++;
+  }
+  function addBurst(x,y,color,count=8){
+    for(let i=0;i<count;i++){const a=Math.random()*Math.PI*2,v=35+Math.random()*150;state.particles.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,life:.22+Math.random()*.36,max:.58,color,size:2+Math.random()*3})}
+  }
+  function takeDamage(amount){
+    if(state.invulnerable>0)return;
+    const damage=amount*(1-state.damageReduction);
+    state.player.hp=Math.max(0,state.player.hp-damage);state.invulnerable=.18;
+    $("feed").innerHTML='<span class="flash">Hit!</span> Dash away and keep moving.';
+    if(state.player.hp<=0)endGame();
+    else saveGame();
+  }
+  function useGadget(id){
+    if(state.phase!=="fight"||state.gadgets[id]<=0)return;
+    state.gadgets[id]--;
+    state.achievementStats.gadgetUses++;
+    const p=state.player,c=Math.cos(state.aim),sine=Math.sin(state.aim);
+    if(id==="grenade")state.grenades.push({x:p.x,y:p.y,vx:c*260,vy:sine*260,fuse:.75});
+    if(id==="wall"){
+      state.barriers.push({x:p.x+c*78,y:p.y+sine*78,w:92,h:18,angle:state.aim+Math.PI/2,life:10,maxLife:10});
+    }
+    if(id==="decoy")state.decoy={x:p.x+c*105,y:p.y+sine*105,life:5,maxLife:5};
+    if(id==="flashbang"){
+      let stunned=0;
+      for(const enemy of state.enemies){
+        if(Math.hypot(enemy.x-p.x,enemy.y-p.y)<175){enemy.stun=Math.max(enemy.stun,1.5);enemy.vx=0;enemy.vy=0;stunned++}
+      }
+      $("feed").innerHTML=`<span class="flash">Flashbang!</span> ${stunned} enemies stunned.`;
+    }
+    if(id==="adrenaline"){
+      p.hp=Math.min(state.maxHealth,p.hp+50);state.adrenaline=5;state.invulnerable=Math.max(state.invulnerable,2);
+      $("feed").innerHTML='<span class="flash">Adrenaline Rush!</span> +50 health · speed boost · 2 seconds immune.';
+    }
+    if(id==="shockwave"){
+      let pushed=0;
+      for(const enemy of state.enemies){
+        const dx=enemy.x-p.x,dy=enemy.y-p.y,distance=Math.hypot(dx,dy);
+        if(distance<155){
+          const direction=distance||1;
+          enemy.knockback=.45;enemy.vx=dx/direction*300;enemy.vy=dy/direction*300;pushed++;
+        }
+      }
+      $("feed").innerHTML=`<span class="flash">Shockwave!</span> ${pushed} enemies blasted back.`;
+    }
+    if(id==="grenade"||id==="wall"||id==="decoy")$("feed").innerHTML=`<span class="flash">${gadgetInfo[id].name} deployed.</span>`;
+    checkAchievements();
+    updateUI();
+    saveGame();
+  }
+  function explode(grenade){
+    const radius=128;
+    let kills=0,reward=0;
+    for(const enemy of [...state.enemies]){
+      const distance=Math.hypot(enemy.x-grenade.x,enemy.y-grenade.y);
+      if(distance<radius){
+        enemy.hp-=enemy.maxHp*(.55-.3*(distance/radius));enemy.flash=.18;
+        if(enemy.hp<=0){reward+=killEnemy(enemy,false);kills++}
+      }
+    }
+    addBurst(grenade.x,grenade.y,"#ffc46b",28);
+    if(kills){$("feed").innerHTML=`<span class="flash">Grenade: ${kills} eliminated · +${reward} credits</span>`;updateUI()}
+  }
+  function keepActorOutOfBarrier(actor,barrier){
+    const c=Math.cos(barrier.angle),sine=Math.sin(barrier.angle),dx=actor.x-barrier.x,dy=actor.y-barrier.y;
+    const localX=dx*c+dy*sine,localY=-dx*sine+dy*c;
+    const x=Math.max(-barrier.w/2,Math.min(localX,barrier.w/2));
+    const y=Math.max(-barrier.h/2,Math.min(localY,barrier.h/2));
+    const offsetX=localX-x,offsetY=localY-y,distance=Math.hypot(offsetX,offsetY);
+    if(distance>=actor.r)return;
+    let resolvedX=localX,resolvedY=localY;
+    if(distance>0){
+      const push=actor.r-distance+.01;
+      resolvedX+=offsetX/distance*push;resolvedY+=offsetY/distance*push;
+    }else{
+      const sides=[
+        {distance:Math.abs(localX+barrier.w/2),x:-barrier.w/2-actor.r,y:localY},
+        {distance:Math.abs(barrier.w/2-localX),x:barrier.w/2+actor.r,y:localY},
+        {distance:Math.abs(localY+barrier.h/2),x:localX,y:-barrier.h/2-actor.r},
+        {distance:Math.abs(barrier.h/2-localY),x:localX,y:barrier.h/2+actor.r}
+      ].sort((a,b)=>a.distance-b.distance)[0];
+      resolvedX=sides.x;resolvedY=sides.y;
+    }
+    actor.x=barrier.x+resolvedX*c-resolvedY*sine;
+    actor.y=barrier.y+resolvedX*sine+resolvedY*c;
+  }
+  function dashCrossesBarrier(startX,startY,endX,endY,barrier,radius){
+    const c=Math.cos(barrier.angle),s=Math.sin(barrier.angle);
+    const dx1=startX-barrier.x,dy1=startY-barrier.y,dx2=endX-barrier.x,dy2=endY-barrier.y;
+    const x1=dx1*c+dy1*s,y1=-dx1*s+dy1*c;
+    const x2=dx2*c+dy2*s,y2=-dx2*s+dy2*c;
+    const axes=[
+      [x1,x2-x1,-barrier.w/2-radius,barrier.w/2+radius],
+      [y1,y2-y1,-barrier.h/2-radius,barrier.h/2+radius]
+    ];
+    let enter=0,exit=1;
+    for(const [start,delta,min,max] of axes){
+      if(Math.abs(delta)<1e-9){if(start<min||start>max)return false;continue}
+      let near=(min-start)/delta,far=(max-start)/delta;
+      if(near>far)[near,far]=[far,near];
+      enter=Math.max(enter,near);exit=Math.min(exit,far);
+      if(enter>exit)return false;
+    }
+    return true;
+  }
+  function killEnemy(enemy,announce=true){
+    const i=state.enemies.indexOf(enemy);if(i<0)return 0;
+    state.enemies.splice(i,1);state.kills++;state.credits+=enemy.reward;addBurst(enemy.x,enemy.y,enemy.color,12);
+    state.achievementStats.totalKills++;
+    if(enemy.type==="brute")state.achievementStats.bruteKills++;
+    if(announce)$("feed").innerHTML=`<span class="flash">+${enemy.reward} credits</span> — ${state.kills} eliminated`;
+    checkAchievements();
+    updateUI();
+    saveGame();
+    return enemy.reward;
+  }
+  function attack(slot=state.activeSlot){
+    const w=weaponForSlot(slot)||(slot==="close"?fists:null);
+    if(state.phase!=="fight"||!w||state.attackCooldowns[slot]>0)return;
+    if(w.kind==="gun"&&state.reloadTime>0&&state.reloadingWeaponId===w.id)return;
+    const p=state.player;
+    state.attackCooldowns[slot]=w.kind==="melee" ? .18 : w.rate;
+    if(w.kind==="melee"){
+      state.attackFlash=.15;
+      const reach=w.range+p.r,arc=Math.cos(.95),targets=state.enemies.filter(e=>{
+        const dx=e.x-p.x,dy=e.y-p.y,d=Math.hypot(dx,dy)||1;
+        return d<reach+e.r&&(dx/d*Math.cos(state.aim)+dy/d*Math.sin(state.aim))>arc;
+      }).sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y));
+      const target=targets[0];
+      if(target){target.hp-=w.damage;target.flash=.12;const k=Math.atan2(target.y-p.y,target.x-p.x);target.vx+=Math.cos(k)*145;target.vy+=Math.sin(k)*145;addBurst(target.x,target.y,"#f8e394",5);if(target.hp<=0)killEnemy(target)}
+    }else{
+      const ammo=state.ammoByWeapon[w.id]??w.mag;
+      if(ammo<=0){reload(slot);return}
+      if(state.activeSlot===slot)state.ammo=ammo;
+      const count=w.pellets||1;
+      state.ammoByWeapon[w.id]=ammo-1;
+      if(state.activeSlot===slot)state.ammo=ammo-1;
+      for(let i=0;i<count;i++){
+        const spread=(Math.random()-.5)*(w.spread||.035),a=state.aim+spread;
+        state.bullets.push({x:p.x+Math.cos(a)*20,y:p.y+Math.sin(a)*20,vx:Math.cos(a)*590,vy:Math.sin(a)*590,damage:w.damage,life:w.range/590,r:3,color:w.pellets?"#ffd58a":"#d6ff78"});
+      }
+      if(state.ammoByWeapon[w.id]===0)reload(slot);
+    }
+    updateUI();
+  }
+  function reload(slot=state.activeSlot){
+    const w=weaponForSlot(slot);if(!w||w.kind!=="gun"||state.reloadTime>0||state.ammoByWeapon[w.id]===w.mag)return;
+    state.reloadTime=w.reload;state.reloadingWeaponId=w.id;$("feed").textContent="Reloading… keep moving!";
+  }
+  function setAim(clientX,clientY){
+    canvasRect=canvas.getBoundingClientRect();state.mouse.x=clientX-canvasRect.left;state.mouse.y=clientY-canvasRect.top;
+    state.aim=Math.atan2(state.mouse.y-state.player.y,state.mouse.x-state.player.x);
+  }
+  function update(dt){
+    const p=state.player;
+    for(const slot of ["close","long"])state.attackCooldowns[slot]=Math.max(0,state.attackCooldowns[slot]-dt);
+    state.attackFlash=Math.max(0,state.attackFlash-dt);
+    state.invulnerable=Math.max(0,state.invulnerable-dt);
+    state.adrenaline=Math.max(0,state.adrenaline-dt);
+    if(state.reloadTime>0){
+      state.reloadTime=Math.max(0,state.reloadTime-dt);
+      if(state.reloadTime===0){
+        const reloaded=weaponById(state.reloadingWeaponId);
+        if(reloaded){state.ammoByWeapon[reloaded.id]=reloaded.mag;if(currentWeapon().id===reloaded.id)state.ammo=reloaded.mag}
+        state.reloadingWeaponId=null;
+      }
+    }
+    if(state.phase==="fight"){
+      let ix=(state.keys.has("KeyD")||state.keys.has("ArrowRight")?1:0)-(state.keys.has("KeyA")||state.keys.has("ArrowLeft")?1:0);
+      let iy=(state.keys.has("KeyS")||state.keys.has("ArrowDown")?1:0)-(state.keys.has("KeyW")||state.keys.has("ArrowUp")?1:0);
+      for(const key of state.keys){if(key.startsWith("touch:")){const d=key.slice(6);if(d==="left")ix--;if(d==="right")ix++;if(d==="up")iy--;if(d==="down")iy++}}
+      const len=Math.hypot(ix,iy)||1,moving=ix!==0||iy!==0;
+      if(moving){ix/=len;iy/=len}
+      if(state.dashRequested){
+        state.dashRequested=false;
+        if(state.dashTime<=0&&state.stamina>=state.maxStamina){
+          state.dashDirection=moving?{x:ix,y:iy}:{x:Math.cos(state.aim),y:Math.sin(state.aim)};
+          state.dashTime=state.dashDuration;state.stamina=0;
+          state.achievementStats.dashUses++;checkAchievements();
+          saveGame();
+        }else{
+          $("feed").innerHTML='<span class="flash">Dash recharging.</span> Wait until the charge is full.';
+        }
+      }
+      state.dashing=state.dashTime>0;
+      if(state.dashing){
+        const dashStep=Math.min(dt,state.dashTime),dashPace=state.speed*(state.adrenaline>0?1.5:1);
+        const nextX=p.x+state.dashDirection.x*520*dashPace*dashStep;
+        const nextY=p.y+state.dashDirection.y*520*dashPace*dashStep;
+        const broken=state.barriers.filter(barrier=>dashCrossesBarrier(p.x,p.y,nextX,nextY,barrier,p.r));
+        if(broken.length){
+          state.barriers=state.barriers.filter(barrier=>!broken.includes(barrier));
+          $("feed").innerHTML=`<span class="flash">Dash smashed through ${broken.length===1?"the wall":`${broken.length} walls`}!</span>`;
+        }
+        p.vx=0;p.vy=0;p.x=nextX;p.y=nextY;
+        state.dashTime-=dashStep;
+      }else{
+        state.stamina=Math.min(state.maxStamina,state.stamina+state.staminaRegen*dt);
+        const pace=state.speed*(state.adrenaline>0?1.5:1);
+        if(moving){p.vx+=ix*780*pace*dt;p.vy+=iy*780*pace*dt}
+        p.vx*=Math.pow(.001,dt);p.vy*=Math.pow(.001,dt);p.x+=p.vx*dt;p.y+=p.vy*dt;
+      }
+      p.x=Math.max(p.r,Math.min(canvas.clientWidth-p.r,p.x));p.y=Math.max(p.r,Math.min(canvas.clientHeight-p.r,p.y));
+      if(!state.dashing)for(const barrier of state.barriers)keepActorOutOfBarrier(p,barrier);
+      if(state.mouse.longDown)attack("long");
+      for(const barrier of state.barriers)barrier.life-=dt;
+      state.barriers=state.barriers.filter(barrier=>barrier.life>0);
+      if(state.decoy){state.decoy.life-=dt;if(state.decoy.life<=0)state.decoy=null}
+      state.spawnTimer-=dt;
+      if(state.spawned<state.spawnTotal&&state.spawnTimer<=0){spawnEnemy();state.spawnTimer=Math.max(.35,1.05-(state.wave-1)*.045)}
+      for(const e of [...state.enemies]){
+        const target=state.decoy||p;
+        let dx=target.x-e.x,dy=target.y-e.y,d=Math.hypot(dx,dy)||1,nx=dx/d,ny=dy/d;
+        e.attack-=dt;e.flash=Math.max(0,e.flash-dt);
+        if(e.stun>0){e.stun=Math.max(0,e.stun-dt);e.vx=0;e.vy=0;continue}
+        if(e.knockback>0)e.knockback=Math.max(0,e.knockback-dt);
+        else if(d>p.r+e.r+3){e.vx+=nx*e.speed*3*dt;e.vy+=ny*e.speed*3*dt}
+        e.vx*=Math.pow(.08,dt);e.vy*=Math.pow(.08,dt);const ev=Math.hypot(e.vx,e.vy);if(e.knockback<=0&&ev>e.speed){e.vx=e.vx/ev*e.speed;e.vy=e.vy/ev*e.speed}
+        e.x+=e.vx*dt;e.y+=e.vy*dt;
+        for(const barrier of state.barriers)keepActorOutOfBarrier(e,barrier);
+        if(e.knockback<=0&&!state.decoy&&d<p.r+e.r+5&&e.attack<=0){takeDamage(e.damage);e.attack=Math.max(.48,1.0-(state.wave-1)*.025);const push=Math.atan2(e.y-p.y,e.x-p.x);e.vx+=Math.cos(push)*95;e.vy+=Math.sin(push)*95}
+        else if(e.knockback<=0&&state.decoy&&d<e.r+18&&e.attack<=0)e.attack=.8;
+        e.x=Math.max(-30,Math.min(canvas.clientWidth+30,e.x));e.y=Math.max(-30,Math.min(canvas.clientHeight+30,e.y));
+      }
+      for(const b of state.bullets){
+        b.x+=b.vx*dt;b.y+=b.vy*dt;b.life-=dt;
+        for(const e of [...state.enemies]){if(Math.hypot(b.x-e.x,b.y-e.y)<e.r+b.r){e.hp-=b.damage;e.flash=.1;addBurst(b.x,b.y,b.color,3);b.life=0;if(e.hp<=0)killEnemy(e);break}}
+      }
+      state.bullets=state.bullets.filter(b=>b.life>0&&b.x>-20&&b.x<canvas.clientWidth+20&&b.y>-20&&b.y<canvas.clientHeight+20);
+      for(const grenade of state.grenades){
+        grenade.x+=grenade.vx*dt;grenade.y+=grenade.vy*dt;grenade.vx*=Math.pow(.08,dt);grenade.vy*=Math.pow(.08,dt);grenade.fuse-=dt;
+        if(grenade.fuse<=0){explode(grenade);grenade.fuse=-1}
+      }
+      state.grenades=state.grenades.filter(grenade=>grenade.fuse>0);
+      if(state.spawned>=state.spawnTotal&&state.enemies.length===0)enterShop();
+    }else{
+      state.dashing=false;
+      state.dashTime=0;
+      state.stamina=Math.min(state.maxStamina,state.stamina+state.staminaRegen*dt);
+    }
+    for(const q of state.particles){q.x+=q.vx*dt;q.y+=q.vy*dt;q.vx*=Math.pow(.08,dt);q.vy*=Math.pow(.08,dt);q.life-=dt}
+    state.particles=state.particles.filter(q=>q.life>0);
+    updateUI();
+  }
+  function drawBackground(w,h){
+    ctx.fillStyle=state.arenaColor;ctx.fillRect(0,0,w,h);
+    ctx.strokeStyle="#ffffff08";ctx.lineWidth=1;
+    for(let x=0;x<w;x+=42){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}
+    for(let y=0;y<h;y+=42){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+    for(let i=0;i<16;i++){const x=(i*173+57)%w,y=(i*251+31)%h;ctx.fillStyle=i%2?"#9fb58d08":"#d6d2a808";ctx.fillRect(x,y,3,3)}
+    const g=ctx.createRadialGradient(w/2,h/2,20,w/2,h/2,Math.max(w,h)*.68);g.addColorStop(0,"#0000");g.addColorStop(1,"#070b10aa");ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+  }
+  function drawFlagSkin(flag,r){
+    let offset=-r;
+    for(const color of flag.colors){
+      const size=2*r/flag.colors.length;
+      if(flag.type==="v"){ctx.fillStyle=color;ctx.fillRect(offset,-r,size,2*r)}
+      else{ctx.fillStyle=color;ctx.fillRect(-r,offset,2*r,size)}
+      offset+=size;
+    }
+  }
+  function drawPlayer(){
+    const p=state.player,skin=skinInfo.find(item=>item.id===state.skin)||skinInfo[0];
+    ctx.save();ctx.translate(p.x,p.y);ctx.rotate(state.aim);
+    ctx.globalAlpha=.25;ctx.beginPath();ctx.ellipse(2,7,p.r+3,p.r*.72,0,0,Math.PI*2);ctx.fillStyle="#000";ctx.fill();ctx.globalAlpha=1;
+    if(state.dashing){ctx.strokeStyle="#9cecff";ctx.lineWidth=3;ctx.globalAlpha=.75;ctx.beginPath();ctx.moveTo(-p.r,0);ctx.lineTo(-p.r-15,0);ctx.moveTo(-p.r,-7);ctx.lineTo(-p.r-11,-7);ctx.moveTo(-p.r,7);ctx.lineTo(-p.r-11,7);ctx.stroke();ctx.globalAlpha=1}
+    const skinGradient=["ember","royal","duo","red","gold"].includes(skin.style)?ctx.createLinearGradient(-p.r,-p.r,p.r,p.r):null;
+    if(skinGradient){
+      if(skin.style==="ember"){skinGradient.addColorStop(0,skin.accent);skinGradient.addColorStop(.5,skin.base);skinGradient.addColorStop(1,"#551722")}
+      else if(skin.style==="royal"||skin.style==="gold"){skinGradient.addColorStop(0,"#fff4bd");skinGradient.addColorStop(.5,skin.base);skinGradient.addColorStop(1,"#80500d")}
+      else{skinGradient.addColorStop(0,skin.base);skinGradient.addColorStop(.52,skin.accent);skinGradient.addColorStop(1,skin.base)}
+    }
+    ctx.fillStyle=state.invulnerable>0?"#fff":skinGradient||skin.base;
+    if(skin.style!=="solid"){ctx.shadowColor=skin.accent||skin.base;ctx.shadowBlur=skin.tier==="gold"?17:skin.tier==="red"?12:8}
+    ctx.beginPath();ctx.arc(0,0,p.r,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+    if(skin.style!=="solid"){
+      ctx.save();ctx.beginPath();ctx.arc(0,0,p.r-1,0,Math.PI*2);ctx.clip();
+      if(skin.style==="flag"){
+        drawFlagSkin(skin.flag,p.r);
+      }else if(skin.style==="duo"){
+        ctx.fillStyle=skin.accent;
+        if(skin.pattern==="slash"){ctx.save();ctx.translate(0,0);ctx.rotate(-.65);ctx.fillRect(-p.r*1.5,-p.r*.22,p.r*3,p.r*.44);ctx.restore()}
+        else if(skin.pattern==="wave"){ctx.strokeStyle=skin.accent;ctx.lineWidth=5;ctx.beginPath();ctx.arc(-p.r*.2,p.r*.22,p.r*.72,-1.15,.85);ctx.stroke()}
+        else if(skin.pattern==="shards"){
+          ctx.beginPath();ctx.moveTo(-p.r,-p.r*.2);ctx.lineTo(-p.r*.15,-p.r);ctx.lineTo(p.r*.2,-p.r*.16);ctx.lineTo(p.r,-p.r*.42);ctx.lineTo(p.r*.2,p.r);ctx.closePath();ctx.fill();
+        }else{
+          ctx.strokeStyle=skin.accent;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-p.r,-p.r*.38);ctx.lineTo(-p.r*.35,-p.r*.38);ctx.lineTo(-p.r*.05,-p.r*.08);ctx.lineTo(p.r*.5,-p.r*.08);ctx.moveTo(-p.r*.65,p.r*.42);ctx.lineTo(-p.r*.15,p.r*.42);ctx.lineTo(p.r*.12,p.r*.15);ctx.lineTo(p.r,p.r*.15);ctx.stroke();
+          ctx.fillStyle="#ffffff";ctx.beginPath();ctx.arc(p.r*.5,-p.r*.08,2,0,Math.PI*2);ctx.arc(p.r,p.r*.15,2,0,Math.PI*2);ctx.fill();
+        }
+      }else if(skin.style==="ember"){
+        ctx.strokeStyle=skin.accent;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-12,-12);ctx.lineTo(-4,-4);ctx.moveTo(-15,0);ctx.lineTo(-5,10);ctx.moveTo(2,-13);ctx.lineTo(12,-3);ctx.stroke();
+      }else if(skin.style==="red"){
+        ctx.strokeStyle=skin.accent;ctx.lineWidth=skin.pattern==="stripes"?3:2;
+        if(skin.pattern==="fang"||skin.pattern==="crest"){
+          ctx.beginPath();ctx.moveTo(-p.r*.78,-p.r*.45);ctx.lineTo(-p.r*.18,p.r*.05);ctx.lineTo(-p.r*.5,p.r*.64);ctx.moveTo(p.r*.78,-p.r*.45);ctx.lineTo(p.r*.18,p.r*.05);ctx.lineTo(p.r*.5,p.r*.64);
+          if(skin.pattern==="crest"){ctx.moveTo(-p.r*.38,-p.r*.52);ctx.lineTo(0,-p.r*.82);ctx.lineTo(p.r*.38,-p.r*.52)}
+          ctx.stroke();
+        }else if(skin.pattern==="vents"){
+          for(let i=-1;i<=1;i++){ctx.beginPath();ctx.moveTo(-p.r*.7,i*p.r*.42);ctx.lineTo(p.r*.7,i*p.r*.42);ctx.stroke()}
+        }else if(skin.pattern==="stripes"){
+          ctx.save();ctx.rotate(-.65);for(let i=-1;i<=1;i++){ctx.beginPath();ctx.moveTo(-p.r*1.3,i*p.r*.42);ctx.lineTo(p.r*1.3,i*p.r*.42);ctx.stroke()}ctx.restore();
+        }else{
+          ctx.beginPath();ctx.moveTo(-p.r*.8,-p.r*.2);ctx.lineTo(-p.r*.28,-p.r*.2);ctx.lineTo(0,-p.r*.58);ctx.lineTo(p.r*.48,-p.r*.58);ctx.moveTo(-p.r*.62,p.r*.48);ctx.lineTo(-p.r*.15,p.r*.48);ctx.lineTo(p.r*.15,p.r*.1);ctx.lineTo(p.r*.8,p.r*.1);ctx.stroke();
+        }
+      }else if(skin.style==="gold"){
+        ctx.strokeStyle=skin.accent;ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,0,p.r*.72,0,Math.PI*2);ctx.stroke();
+        if(skin.pattern==="sun"){
+          for(let i=0;i<8;i++){const a=i*Math.PI/4;ctx.beginPath();ctx.moveTo(Math.cos(a)*p.r*.44,Math.sin(a)*p.r*.44);ctx.lineTo(Math.cos(a)*p.r*.82,Math.sin(a)*p.r*.82);ctx.stroke()}
+          ctx.fillStyle="#fff4bd";ctx.beginPath();ctx.arc(0,0,p.r*.18,0,Math.PI*2);ctx.fill();
+        }else if(skin.pattern==="comet"){
+          ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(-p.r*.72,p.r*.5);ctx.quadraticCurveTo(-p.r*.2,-p.r*.65,p.r*.76,-p.r*.36);ctx.stroke();
+          ctx.fillStyle="#fff4bd";ctx.beginPath();ctx.moveTo(p.r*.35,-p.r*.5);ctx.lineTo(p.r*.48,-p.r*.2);ctx.lineTo(p.r*.8,-p.r*.16);ctx.lineTo(p.r*.55,p.r*.03);ctx.lineTo(p.r*.62,p.r*.35);ctx.lineTo(p.r*.35,p.r*.18);ctx.lineTo(p.r*.08,p.r*.35);ctx.lineTo(p.r*.15,p.r*.03);ctx.lineTo(-p.r*.08,-p.r*.16);ctx.lineTo(p.r*.22,-p.r*.2);ctx.closePath();ctx.fill();
+        }else if(skin.pattern==="serpent"){
+          ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-p.r*.7,p.r*.55);ctx.bezierCurveTo(p.r*.75,p.r*.5,-p.r*.75,-p.r*.4,p.r*.68,-p.r*.45);ctx.stroke();
+          ctx.fillStyle="#fff4bd";ctx.beginPath();ctx.arc(p.r*.68,-p.r*.45,p.r*.13,0,Math.PI*2);ctx.fill();
+        }else if(skin.pattern==="mosaic"){
+          ctx.fillStyle=skin.accent;
+          for(let y=-1;y<=1;y++)for(let x=-1;x<=1;x++){
+            ctx.save();ctx.translate(x*p.r*.58,y*p.r*.58);ctx.rotate(Math.PI/4);ctx.fillRect(-p.r*.13,-p.r*.13,p.r*.26,p.r*.26);ctx.restore();
+          }
+        }else if(skin.pattern==="laurel"){
+          ctx.lineWidth=2;ctx.beginPath();ctx.arc(-p.r*.1,0,p.r*.7,-2.15,2.15);ctx.arc(-p.r*.1,0,p.r*.7,.99,5.3);ctx.stroke();
+          for(let i=0;i<4;i++)for(const side of [-1,1]){
+            ctx.beginPath();ctx.ellipse(-p.r*.1+side*p.r*.64,(-1.5+i)*p.r*.3,p.r*.12,p.r*.22,side*.6,0,Math.PI*2);ctx.stroke();
+          }
+        }else{
+          ctx.fillStyle="#fff4bd";ctx.beginPath();ctx.moveTo(-p.r*.58,-p.r*.22);ctx.lineTo(-p.r*.28,-p.r*.22);ctx.lineTo(-p.r*.18,-p.r*.58);ctx.lineTo(0,-p.r*.32);ctx.lineTo(p.r*.18,-p.r*.58);ctx.lineTo(p.r*.28,-p.r*.22);ctx.lineTo(p.r*.58,-p.r*.22);ctx.lineTo(p.r*.35,p.r*.2);ctx.lineTo(0,p.r*.58);ctx.lineTo(-p.r*.35,p.r*.2);ctx.closePath();ctx.fill();
+        }
+      }else{
+        ctx.strokeStyle=skin.accent;ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,0,p.r-4,0,Math.PI*2);ctx.stroke();
+        ctx.fillStyle="#fff3ba";ctx.beginPath();ctx.moveTo(-5,-10);ctx.lineTo(-2,-4);ctx.lineTo(4,-4);ctx.lineTo(0,0);ctx.lineTo(4,6);ctx.lineTo(-3,4);ctx.lineTo(-7,9);ctx.lineTo(-7,2);ctx.lineTo(-12,-2);ctx.lineTo(-6,-3);ctx.closePath();ctx.fill();
+      }
+      ctx.restore();
+    }
+    ctx.fillStyle="#26311d";ctx.beginPath();ctx.arc(5,-3,2,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(5,4,2,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle="#eaf7d4";ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(7,0);ctx.lineTo(22,0);ctx.stroke();
+    if(state.attackFlash>0){ctx.beginPath();ctx.arc(0,0,38,-.75,.75);ctx.strokeStyle="#ffe596";ctx.lineWidth=5;ctx.globalAlpha=state.attackFlash/.15;ctx.stroke()}
+    ctx.restore();
+  }
+  function drawEnemy(e){
+    ctx.save();ctx.translate(e.x,e.y);ctx.globalAlpha=.22;ctx.beginPath();ctx.ellipse(2,5,e.r+3,e.r*.7,0,0,Math.PI*2);ctx.fillStyle="#000";ctx.fill();ctx.globalAlpha=1;
+    ctx.fillStyle=e.flash>0?"#fff":e.color;ctx.beginPath();ctx.arc(0,0,e.r,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle="#251a20";ctx.beginPath();ctx.arc(4,-3,2,0,Math.PI*2);ctx.arc(4,4,2,0,Math.PI*2);ctx.fill();
+    if(e.type==="brute"){ctx.strokeStyle="#e1cfff";ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,0,e.r-3,0,Math.PI*2);ctx.stroke()}
+    ctx.restore();
+    if(e.hp<e.maxHp){ctx.fillStyle="#0009";ctx.fillRect(e.x-e.r,e.y-e.r-8,e.r*2,3);ctx.fillStyle=e.color;ctx.fillRect(e.x-e.r,e.y-e.r-8,e.r*2*Math.max(0,e.hp/e.maxHp),3)}
+  }
+  function drawGadgets(){
+    for(const barrier of state.barriers){
+      ctx.save();ctx.globalAlpha=.45+.35*(barrier.life/barrier.maxLife);ctx.fillStyle="#91ddff";ctx.shadowColor="#6acfff";ctx.shadowBlur=13;
+      ctx.translate(barrier.x,barrier.y);ctx.rotate(barrier.angle);ctx.fillRect(-barrier.w/2,-barrier.h/2,barrier.w,barrier.h);ctx.restore();
+    }
+    if(state.decoy){
+      ctx.save();ctx.globalAlpha=.55+.25*Math.sin(performance.now()*.012);ctx.strokeStyle="#79f5e1";ctx.fillStyle="#79f5e144";ctx.lineWidth=2;ctx.beginPath();ctx.arc(state.decoy.x,state.decoy.y,17,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.beginPath();ctx.moveTo(state.decoy.x-11,state.decoy.y);ctx.lineTo(state.decoy.x+11,state.decoy.y);ctx.moveTo(state.decoy.x,state.decoy.y-11);ctx.lineTo(state.decoy.x,state.decoy.y+11);ctx.stroke();ctx.restore();
+      ctx.save();ctx.fillStyle="#cafff5";ctx.font="800 11px system-ui";ctx.textAlign="center";ctx.textBaseline="bottom";ctx.fillText(`${Math.ceil(state.decoy.life)}s`,state.decoy.x,state.decoy.y-22);ctx.restore();
+    }
+    for(const grenade of state.grenades){ctx.fillStyle="#ffb45e";ctx.beginPath();ctx.arc(grenade.x,grenade.y,5,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#fff0b0";ctx.lineWidth=2;ctx.stroke()}
+  }
+  function draw(){
+    const w=canvas.clientWidth,h=canvas.clientHeight;if(!w||!h)return;
+    ctx.clearRect(0,0,w,h);drawBackground(w,h);
+    drawGadgets();
+    for(const b of state.bullets){ctx.fillStyle=b.color;ctx.shadowColor=b.color;ctx.shadowBlur=9;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0}
+    for(const q of state.particles){ctx.globalAlpha=Math.max(0,q.life/q.max);ctx.fillStyle=q.color;ctx.fillRect(q.x,q.y,q.size,q.size)}ctx.globalAlpha=1;
+    for(const e of state.enemies)drawEnemy(e);
+    drawPlayer();
+  }
+  function frame(time){
+    const dt=Math.min(.033,state.last?(time-state.last)/1000:.016);state.last=time;update(dt);draw();
+    if((state.phase==="fight"||state.phase==="shop")&&time-lastSaveAt>=1500)saveGame();
+    requestAnimationFrame(frame);
+  }
+  canvas.addEventListener("pointermove",e=>setAim(e.clientX,e.clientY));
+  canvas.addEventListener("pointerdown",e=>{
+    setAim(e.clientX,e.clientY);
+    if(state.phase!=="fight")return;
+    if(e.pointerType==="touch"){attack(state.activeSlot);return}
+    if(e.button===0){
+      if(!state.longWeapon){$("feed").innerHTML='<span class="flash">No long-range weapon equipped.</span> Buy one from the weapons shop.';return}
+      setActiveSlot("long");state.mouse.longDown=true;attack("long");
+    }else if(e.button===2){state.mouse.longDown=false;setActiveSlot("close");attack("close")}
+  });
+  window.addEventListener("pointerup",e=>{if(e.button===0)state.mouse.longDown=false});
+  document.addEventListener("contextmenu",e=>e.preventDefault());
+  window.addEventListener("keydown",e=>{
+    if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.code))e.preventDefault();
+    if(state.blockedKeys.has(e.code))return;
+    state.keys.add(e.code);
+    if(!e.repeat&&(e.code==="ShiftLeft"||e.code==="ShiftRight")&&state.phase==="fight")state.dashRequested=true;
+    if(e.code==="KeyR")reload();
+    if(e.code==="KeyV"&&!e.repeat&&state.phase!=="gameover"&&!state.caseOpening){
+      state.credits+=500;
+      $("feed").innerHTML='<span class="flash">+500 credits</span> added.';
+      updateUI();
+      if(state.phase==="shop")renderShop();
+      saveGame();
+    }
+    for(const [id,key] of Object.entries(gadgetKeys))if(!e.repeat&&(e.code===`Digit${key}`||e.code===`Numpad${key}`))useGadget(id);
+  });
+  window.addEventListener("keyup",e=>{state.keys.delete(e.code);state.blockedKeys.delete(e.code)});
+  window.addEventListener("blur",()=>{state.keys.clear();state.mouse.longDown=false});
+  document.querySelectorAll("[data-move]").forEach(button=>{
+    const dir=button.dataset.move,key=`touch:${dir}`;
+    button.addEventListener("pointerdown",e=>{e.preventDefault();button.setPointerCapture(e.pointerId);state.keys.add(key)});
+    for(const type of ["pointerup","pointercancel","lostpointercapture"])button.addEventListener(type,()=>state.keys.delete(key));
+  });
+  $("touchAttack").addEventListener("pointerdown",e=>{e.preventDefault();$("touchAttack").setPointerCapture(e.pointerId);if(state.phase==="fight")attack(state.activeSlot)});
+  $("touchDash").addEventListener("click",()=>{if(state.phase==="fight")state.dashRequested=true});
+  document.querySelectorAll("[data-gadget]").forEach(button=>button.addEventListener("click",()=>useGadget(button.dataset.gadget)));
+  document.querySelectorAll("[data-slot]").forEach(button=>button.addEventListener("click",()=>setActiveSlot(button.dataset.slot)));
+  document.querySelectorAll("[data-shop-tab]").forEach(button=>button.addEventListener("click",()=>{state.shopTab=button.dataset.shopTab;state.shopPage=0;renderShop();saveGame()}));
+  $("shopPrev").addEventListener("click",()=>{if(state.shopPage>0){state.shopPage--;renderShop();saveGame()}});
+  $("shopNext").addEventListener("click",()=>{state.shopPage++;renderShop();saveGame()});
+  $("mainButton").addEventListener("click",()=>{if(state.phase==="gameover")reset();startWave()});
+  $("continueButton").addEventListener("click",()=>{state.wave++;startWave()});
+  function reset(){
+    state.phase="ready";state.wave=1;state.credits=0;state.kills=0;state.spawned=0;state.spawnTotal=0;state.spawnTimer=0;
+    state.enemies=[];state.bullets=[];state.particles=[];state.grenades=[];state.barriers=[];state.decoy=null;
+    for(const key of state.keys){
+      if(["KeyW","KeyA","KeyS","KeyD","ArrowUp","ArrowDown","ArrowLeft","ArrowRight","ShiftLeft","ShiftRight"].includes(key))state.blockedKeys.add(key);
+    }
+    state.closeWeapon="fists";state.longWeapon=null;state.activeSlot="close";state.ownedWeapons.clear();state.ammoByWeapon={};state.ammo=0;state.maxHealth=100;
+    state.skillLevels={speed:0,armor:0,dash:0};syncSkills();state.stamina=state.maxStamina;
+    state.gadgets={grenade:0,wall:0,decoy:0,flashbang:0,adrenaline:0,shockwave:0};
+    state.dashing=false;state.dashTime=0;state.dashDirection={x:1,y:0};state.dashRequested=false;
+    state.invulnerable=0;state.adrenaline=0;state.attackFlash=0;state.aim=0;
+    state.skin="classic";state.ownedSkins=new Set(["classic"]);state.lastCaseDrop=null;state.caseOpening=false;state.caseRoll=null;
+    state.achievementStats.runWavesCleared=0;
+    state.player.hp=100;state.player.vx=0;state.player.vy=0;state.player.x=canvas.clientWidth/2;state.player.y=canvas.clientHeight/2;
+    state.attackCooldowns={close:0,long:0};state.reloadTime=0;state.reloadingWeaponId=null;state.last=0;state.mouse={x:0,y:0,longDown:false};
+    $("mainButton").classList.remove("hidden");$("continueButton").disabled=false;$("status").textContent="READY";
+    state.shopTab="skills";state.shopPage=0;showOverlay("THE CITY WENT QUIET","SURVIVE THE NIGHT","Enemies are closing in from every direction. Start with your fists, stay moving, and make it through each wave to earn credits for gear.","START WAVE 1 →");updateUI();draw();saveGame();
+  }
+  window.addEventListener("pagehide",saveGame);
+  document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")saveGame()});
+  window.addEventListener("resize",resize);
+  restoreGame();resize();updateUI();requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
