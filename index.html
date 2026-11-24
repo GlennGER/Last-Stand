@@ -58,13 +58,103 @@ h1{margin:0;font-size:clamp(20px,3vw,27px);letter-spacing:-.05em}.eyebrow{color:
 .case-result small{display:block;margin-top:3px}
 @media(max-width:560px){.case-roll-item{flex-basis:82px;min-height:76px;padding:5px}.case-roll-track{gap:6px;padding:8px}}
 @media(prefers-reduced-motion:reduce){.case-roll-track{transition-duration:.01ms!important}}
+.header-tools{display:flex;align-items:center;gap:8px}
+.settings-launch{min-height:38px;padding:0 12px;border:1px solid var(--line);border-radius:10px;color:var(--ink);background:#ffffff0b;font-size:10px;font-weight:900;cursor:pointer}
+.settings-launch:hover,.settings-close:hover,.fullscreen-button:hover{border-color:#c4f36b88;color:var(--lime)}
+.settings-shade{position:fixed;z-index:50;inset:0;display:grid;place-items:center;padding:18px;background:#070a10d9}
+.settings-sheet{width:min(100%,460px);max-height:min(90vh,700px);overflow:auto;padding:20px;border:1px solid #ffffff20;border-radius:18px;background:linear-gradient(145deg,#1c2531,#111720);box-shadow:0 24px 80px #000b;text-align:left}
+.settings-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.settings-head h2{margin:0;font-size:20px;letter-spacing:-.04em}
+.settings-close{width:36px;height:36px;border:1px solid var(--line);border-radius:9px;color:var(--ink);background:#ffffff0b;font-size:18px;cursor:pointer}
+.settings-row{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 0;border-top:1px solid var(--line)}
+.settings-copy strong{display:block;font-size:12px}.settings-copy small{display:block;margin-top:3px;color:var(--muted);font-size:10px}
+.settings-row select{max-width:155px;padding:9px;border:1px solid var(--line);border-radius:9px;color:var(--ink);background:#111720}
+.settings-row input[type=checkbox]{width:21px;height:21px;accent-color:var(--lime)}
+.fullscreen-button{width:100%;margin-top:12px;padding:11px;border:1px solid var(--line);border-radius:10px;color:var(--ink);background:#ffffff0b;font-size:11px;font-weight:900;cursor:pointer}
+.settings-hint{margin:14px 0 0;color:var(--muted);font-size:10px;line-height:1.5}
+html[data-touch-size="compact"]{--touch-control-size:42px}
+html[data-touch-size="comfortable"]{--touch-control-size:52px}
+html[data-touch-size="large"]{--touch-control-size:62px}
+@media(max-width:680px){
+  .shell{padding:10px 9px max(16px,env(safe-area-inset-bottom))}
+  header{align-items:center;gap:6px;margin-bottom:9px}
+  .brand{gap:8px}.logo{width:36px;height:36px;border-radius:11px;font-size:19px}
+  .eyebrow{font-size:8px;letter-spacing:.13em}h1{font-size:19px}
+  .header-tools{flex-wrap:wrap;justify-content:flex-end;gap:5px}
+  .topstats{gap:4px}.stat{min-width:0;padding:5px 7px;border-radius:8px}.stat span{font-size:7px}.stat strong{font-size:13px}
+  .settings-launch{min-height:32px;padding:0 8px;font-size:9px}
+  .layout{grid-template-columns:minmax(0,1fr);gap:8px}
+  .arena-card{border-radius:14px}
+  .arena-card canvas{height:min(50svh,420px);min-height:240px;aspect-ratio:auto}
+  .arena-head{top:9px;left:9px;right:9px}.pill{padding:6px 8px;font-size:8px}
+  .overlay{padding:10px}
+  .overlay.shop-open{position:fixed;z-index:30;overflow-y:auto;overscroll-behavior:contain;align-items:start;padding:max(10px,env(safe-area-inset-top)) 10px max(12px,env(safe-area-inset-bottom))}
+  .overlay.shop-open .overlay-box{width:min(100%,560px);max-height:none;overflow:visible;margin:auto}
+  .overlay.shop-open #shopArea{display:block}
+  .overlay.shop-open #shopArea .shop-tabs{position:sticky;z-index:2;top:0;padding:5px 0;background:#111720f2}
+  .overlay.shop-open #shopArea .shop-grid{overflow:visible}
+  .shop-tabs{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+  .shop-tab{min-height:36px;padding:7px 3px;font-size:8px}
+  .shop-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  .shop-item{min-width:0;padding:8px}.shop-item strong{font-size:10px}.shop-item small{font-size:9px}
+  .shop-pagination{position:sticky;bottom:0;padding:6px 0;background:#111720f2}
+  .side{grid-template-columns:minmax(0,1fr);gap:0;padding:10px}
+  .side>.section-title,.side>.section-sub,.side>.divider,.side>.help,.side>.feed{grid-column:1}
+  .section-sub{margin-bottom:8px}
+  .player-card{display:grid;grid-template-columns:1fr 1fr;gap:0 10px;padding:9px}
+  .player-card>.card-row:first-child,.player-card>.meter:first-of-type{grid-column:1/-1}
+  .player-card .weapon-line{margin-top:7px!important;padding-top:7px!important;font-size:10px}
+  .mobile-controls{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin-top:10px}
+  .pad{display:grid;grid-template-columns:repeat(3,var(--touch-control-size));grid-template-rows:repeat(2,var(--touch-control-size));gap:3px}
+  .pad button,.touch-action,.mobile-gadgets button,.weapon-switch button{min-height:var(--touch-control-size);border:1px solid #ffffff26;border-radius:12px;color:var(--ink);background:#ffffff10;font-weight:900;touch-action:none;user-select:none;-webkit-tap-highlight-color:transparent}
+  .pad button{font-size:18px}
+  .pad button:active,.touch-action:active,.mobile-gadgets button:active,.weapon-switch button:active{border-color:#c4f36b88;background:#c4f36b36}
+  .pad .up{grid-column:2}.pad .left{grid-column:1;grid-row:2}.pad .down{grid-column:2;grid-row:2}.pad .right{grid-column:3;grid-row:2}
+  .touch-actions{display:flex;gap:7px}
+  .touch-action{min-width:clamp(64px,19vw,90px);height:calc(var(--touch-control-size) + 10px);color:var(--lime);font-size:10px}
+  .touch-action.dash{color:#8eddf3}
+  .mobile-gadgets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-top:7px}
+  .mobile-gadgets button{padding:5px 3px;color:var(--gold);font-size:9px}
+  .mobile-gadgets button:disabled{opacity:.42}
+  .weapon-switch{display:flex;gap:6px;margin-top:7px}
+  .weapon-switch button{flex:1;padding:7px;color:var(--muted);font-size:10px}
+  .weapon-switch button.active{border-color:#c4f36b88;color:var(--lime)}
+  .weapon-switch button:disabled{opacity:.45}
+  .mobile-note{display:block;margin-top:5px;color:var(--muted);font-size:9px;text-align:center}
+  .divider{margin:10px 0}
+  .help{padding:9px}.help p{font-size:9px}
+  .settings-sheet{max-height:calc(100svh - 28px);padding:16px}
+}
+@media(max-width:380px){
+  .topstats .stat:nth-child(2){display:none}
+  .brand .eyebrow{display:none}
+  .shop-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .shop-grid{grid-template-columns:minmax(0,1fr)}
+  .background-presets{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media(max-height:500px) and (max-width:900px){
+  .shell{padding-top:5px}
+  header{margin-bottom:5px}
+  .arena-card canvas{height:56svh;min-height:190px}
+  .side{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 10px}
+  .side>.section-title,.side>.section-sub,.side>.divider,.side>.help,.side>.feed{grid-column:1/-1}
+  .side>.player-card,.side>.mobile-controls,.side>.mobile-gadgets,.side>.weapon-switch,.side>.mobile-note{grid-column:1/-1}
+  .mobile-controls{display:flex}.mobile-gadgets{display:grid}.weapon-switch{display:flex}.mobile-note{display:block}
+  .mobile-controls{margin-top:6px}.pad{grid-template-columns:repeat(3,40px);grid-template-rows:repeat(2,36px)}
+  html[data-touch-size="compact"] .pad{grid-template-columns:repeat(3,34px);grid-template-rows:repeat(2,31px)}
+  html[data-touch-size="large"] .pad{grid-template-columns:repeat(3,48px);grid-template-rows:repeat(2,43px)}
+  .pad button,.touch-action,.mobile-gadgets button,.weapon-switch button{min-height:0}
+  .touch-action{height:44px}
+  .mobile-gadgets{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .mobile-gadgets button{padding:5px 1px;font-size:8px}
+}
 </style>
 </head>
 <body>
 <main class="shell">
   <header>
     <div class="brand"><div class="logo">✳</div><div><div class="eyebrow">Nightfall · Survival</div><h1>LAST STAND</h1></div></div>
-    <div class="topstats"><div class="stat"><span>Wave</span><strong id="waveLabel">01</strong></div><div class="stat"><span>Eliminations</span><strong id="killsLabel">0</strong></div><div class="stat"><span>Credits</span><strong id="creditsLabel">0</strong></div></div>
+    <div class="header-tools"><div class="topstats"><div class="stat"><span>Wave</span><strong id="waveLabel">01</strong></div><div class="stat"><span>Eliminations</span><strong id="killsLabel">0</strong></div><div class="stat"><span>Credits</span><strong id="creditsLabel">0</strong></div></div><button class="settings-launch" id="settingsOpen" type="button" aria-label="Open settings">⚙ SETTINGS</button></div>
   </header>
   <section class="layout">
     <div class="arena-card">
@@ -111,12 +201,23 @@ h1{margin:0;font-size:clamp(20px,3vw,27px);letter-spacing:-.05em}.eyebrow{color:
       </div>
       <div class="mobile-gadgets"><button id="touchGrenade" data-gadget="grenade">1 · 0</button><button id="touchWall" data-gadget="wall">2 · 0</button><button id="touchDecoy" data-gadget="decoy">3 · 0</button><button id="touchFlashbang" data-gadget="flashbang">4 · 0</button><button id="touchAdrenaline" data-gadget="adrenaline">5 · 0</button><button id="touchShockwave" data-gadget="shockwave">6 · 0</button></div>
       <div class="weapon-switch"><button data-slot="close" class="active">CLOSE</button><button data-slot="long" id="touchLong" disabled>LONG</button></div>
-      <div class="mobile-note">Touch controls · tap arena to aim & attack</div>
+      <div class="mobile-note">Touch: tap arena to aim · hold attack to auto-fire when enabled</div>
       <div class="divider"></div>
-      <div class="help"><strong>Controls</strong><p><span class="key">WASD</span> / <span class="key">↑←↓→</span> move · <span class="key">SHIFT</span> dash</p><p>Tap dash to burst in your movement direction, or toward your aim if standing still. The whole charge is spent and must fully recharge.</p><p>Left-click/hold: long range · right-click: one close swing (0.18s cooldown)</p><p><span class="key">1</span> grenade · <span class="key">2</span> wall · <span class="key">3</span> decoy · <span class="key">4</span> flashbang · <span class="key">5</span> adrenaline · <span class="key">6</span> shockwave</p><p><span class="key">R</span> reload · <span class="key">V</span> +500 credits</p></div>
+      <div class="help" id="help"><strong>Controls</strong><p><span class="key">WASD</span> / <span class="key">↑←↓→</span> move · <span class="key">SHIFT</span> dash</p><p>Tap dash to burst in your movement direction, or toward your aim if standing still. The whole charge is spent and must fully recharge.</p><p>Left-click/hold: long range · right-click: one close swing (0.18s cooldown)</p><p><span class="key">1</span> grenade · <span class="key">2</span> wall · <span class="key">3</span> decoy · <span class="key">4</span> flashbang · <span class="key">5</span> adrenaline · <span class="key">6</span> shockwave</p><p><span class="key">R</span> reload · <span class="key">V</span> +500 credits</p></div>
       <div class="feed" id="feed">You have fists, grit, and a whole lot of trouble.</div>
     </aside>
   </section>
+  <div class="settings-shade hidden" id="settingsShade" aria-hidden="true">
+    <section class="settings-sheet" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="settings-head"><h2 id="settingsTitle">SETTINGS</h2><button class="settings-close" id="settingsClose" type="button" aria-label="Close settings">×</button></div>
+      <label class="settings-row" for="touchSizeSetting"><span class="settings-copy"><strong>Touch control size</strong><small>Resize the movement pad and action buttons.</small></span><select id="touchSizeSetting"><option value="compact">Compact</option><option value="comfortable">Comfortable</option><option value="large">Large</option></select></label>
+      <label class="settings-row" for="holdFireSetting"><span class="settings-copy"><strong>Hold attack to auto-fire</strong><small>For ranged weapons on touchscreen.</small></span><input id="holdFireSetting" type="checkbox"></label>
+      <label class="settings-row" for="hintsSetting"><span class="settings-copy"><strong>Show control hints</strong><small>Keep the keyboard and gameplay guide visible.</small></span><input id="hintsSetting" type="checkbox"></label>
+      <button class="fullscreen-button" id="fullscreenToggle" type="button">ENTER FULLSCREEN</button>
+      <p class="settings-hint" id="settingsStatus" aria-live="polite"></p>
+      <p class="settings-hint">Settings are saved on this device. All shops, skins, gadgets, achievements, and wave progress remain available on mobile.</p>
+    </section>
+  </div>
 </main>
 <script>
 (() => {
@@ -331,6 +432,7 @@ h1{margin:0;font-size:clamp(20px,3vw,27px);letter-spacing:-.05em}.eyebrow{color:
     stamina:100, maxStamina:100, staminaRegen:22, dashing:false,dashTime:0,dashDuration:.2,dashDirection:{x:1,y:0},dashRequested:false,
     gadgets:{grenade:0,wall:0,decoy:0,flashbang:0,adrenaline:0,shockwave:0}, shopTab:"skills", shopPage:0, invulnerable:0, adrenaline:0,
     skin:"classic", ownedSkins:new Set(["classic"]), lastCaseDrop:null, caseOpening:false, caseRoll:null, arenaColor:"#171b1c",
+    settings:{touchSize:"comfortable",holdFire:true,showHints:true},
     unlockedAchievements:new Set(), achievementStats:{totalKills:0,highestWave:0,casesOpened:0,uniqueSkins:new Set(),uniqueSkinCount:0,weaponsBought:0,gadgetUses:0,dashUses:0,bruteKills:0,tierDrops:{blue:0,purple:0,pink:0,red:0,gold:0},duplicateDrops:0,runWavesCleared:0},
     player:{x:0,y:0,vx:0,vy:0,r:15,hp:100}
   };
@@ -342,6 +444,7 @@ h1{margin:0;font-size:clamp(20px,3vw,27px);letter-spacing:-.05em}.eyebrow{color:
     const stats=state.achievementStats;
     const profile={
       arenaColor:state.arenaColor,
+      settings:{...state.settings},
       unlockedAchievements:[...state.unlockedAchievements],
       achievementStats:{
         totalKills:stats.totalKills,highestWave:stats.highestWave,casesOpened:stats.casesOpened,
@@ -386,6 +489,10 @@ h1{margin:0;font-size:clamp(20px,3vw,27px);letter-spacing:-.05em}.eyebrow{color:
       return false;
     }
     const profile=data.profile||{},savedStats=profile.achievementStats||{},stats=state.achievementStats;
+    const savedSettings=profile.settings||{};
+    if(["compact","comfortable","large"].includes(savedSettings.touchSize))state.settings.touchSize=savedSettings.touchSize;
+    if(typeof savedSettings.holdFire==="boolean")state.settings.holdFire=savedSettings.holdFire;
+    if(typeof savedSettings.showHints==="boolean")state.settings.showHints=savedSettings.showHints;
     const achievementIds=new Set(achievementInfo.map(item=>item.id));
     state.unlockedAchievements=new Set((Array.isArray(profile.unlockedAchievements)?profile.unlockedAchievements:[]).filter(id=>achievementIds.has(id)));
     for(const key of ["totalKills","highestWave","casesOpened","weaponsBought","gadgetUses","dashUses","bruteKills","duplicateDrops"]){
@@ -1037,7 +1144,52 @@ h1{margin:0;font-size:clamp(20px,3vw,27px);letter-spacing:-.05em}.eyebrow{color:
     canvasRect=canvas.getBoundingClientRect();state.mouse.x=clientX-canvasRect.left;state.mouse.y=clientY-canvasRect.top;
     state.aim=Math.atan2(state.mouse.y-state.player.y,state.mouse.x-state.player.x);
   }
+  function applySettings(){
+    document.documentElement.dataset.touchSize=state.settings.touchSize;
+    $("help").classList.toggle("hidden",!state.settings.showHints);
+    $("touchSizeSetting").value=state.settings.touchSize;
+    $("holdFireSetting").checked=state.settings.holdFire;
+    $("hintsSetting").checked=state.settings.showHints;
+  }
+  function closeSettings(){
+    $("settingsShade").classList.add("hidden");
+    $("settingsShade").setAttribute("aria-hidden","true");
+    $("settingsOpen").focus();
+  }
+  function openSettings(){
+    state.keys.clear();state.mouse.longDown=false;state.dashRequested=false;
+    $("settingsShade").classList.remove("hidden");
+    $("settingsShade").setAttribute("aria-hidden","false");
+    $("settingsClose").focus();
+  }
+  function attackFromTouch(){
+    if(state.phase!=="fight")return;
+    if(state.settings.holdFire&&state.activeSlot==="long"&&state.longWeapon){
+      state.mouse.longDown=true;
+      attack("long");
+    }else{
+      attack(state.activeSlot);
+    }
+  }
+  async function toggleFullscreen(){
+    const button=$("fullscreenToggle"),status=$("settingsStatus");
+    try{
+      if(document.fullscreenElement){
+        await document.exitFullscreen();
+      }else if(document.documentElement.requestFullscreen){
+        await document.documentElement.requestFullscreen();
+      }else{
+        throw new Error("Fullscreen is not supported by this browser.");
+      }
+      status.textContent="";
+    }catch(error){
+      console.error("Could not change fullscreen mode.",error);
+      status.textContent="Fullscreen is unavailable in this browser or page context.";
+    }
+    button.textContent=document.fullscreenElement?"EXIT FULLSCREEN":"ENTER FULLSCREEN";
+  }
   function update(dt){
+    if(!$("settingsShade").classList.contains("hidden"))return;
     const p=state.player;
     for(const slot of ["close","long"])state.attackCooldowns[slot]=Math.max(0,state.attackCooldowns[slot]-dt);
     state.attackFlash=Math.max(0,state.attackFlash-dt);
@@ -1260,15 +1412,16 @@ h1{margin:0;font-size:clamp(20px,3vw,27px);letter-spacing:-.05em}.eyebrow{color:
   canvas.addEventListener("pointerdown",e=>{
     setAim(e.clientX,e.clientY);
     if(state.phase!=="fight")return;
-    if(e.pointerType==="touch"){attack(state.activeSlot);return}
+    if(e.pointerType==="touch"){e.preventDefault();attackFromTouch();return}
     if(e.button===0){
       if(!state.longWeapon){$("feed").innerHTML='<span class="flash">No long-range weapon equipped.</span> Buy one from the weapons shop.';return}
       setActiveSlot("long");state.mouse.longDown=true;attack("long");
     }else if(e.button===2){state.mouse.longDown=false;setActiveSlot("close");attack("close")}
   });
-  window.addEventListener("pointerup",e=>{if(e.button===0)state.mouse.longDown=false});
+  window.addEventListener("pointerup",e=>{if(e.button===0||e.pointerType==="touch")state.mouse.longDown=false});
   document.addEventListener("contextmenu",e=>e.preventDefault());
   window.addEventListener("keydown",e=>{
+    if(!$("settingsShade").classList.contains("hidden"))return;
     if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.code))e.preventDefault();
     if(state.blockedKeys.has(e.code))return;
     state.keys.add(e.code);
@@ -1290,11 +1443,21 @@ h1{margin:0;font-size:clamp(20px,3vw,27px);letter-spacing:-.05em}.eyebrow{color:
     button.addEventListener("pointerdown",e=>{e.preventDefault();button.setPointerCapture(e.pointerId);state.keys.add(key)});
     for(const type of ["pointerup","pointercancel","lostpointercapture"])button.addEventListener(type,()=>state.keys.delete(key));
   });
-  $("touchAttack").addEventListener("pointerdown",e=>{e.preventDefault();$("touchAttack").setPointerCapture(e.pointerId);if(state.phase==="fight")attack(state.activeSlot)});
+  $("touchAttack").addEventListener("pointerdown",e=>{e.preventDefault();$("touchAttack").setPointerCapture(e.pointerId);attackFromTouch()});
+  for(const type of ["pointerup","pointercancel","lostpointercapture"])$("touchAttack").addEventListener(type,()=>{state.mouse.longDown=false});
   $("touchDash").addEventListener("click",()=>{if(state.phase==="fight")state.dashRequested=true});
   document.querySelectorAll("[data-gadget]").forEach(button=>button.addEventListener("click",()=>useGadget(button.dataset.gadget)));
   document.querySelectorAll("[data-slot]").forEach(button=>button.addEventListener("click",()=>setActiveSlot(button.dataset.slot)));
   document.querySelectorAll("[data-shop-tab]").forEach(button=>button.addEventListener("click",()=>{state.shopTab=button.dataset.shopTab;state.shopPage=0;renderShop();saveGame()}));
+  $("settingsOpen").addEventListener("click",openSettings);
+  $("settingsClose").addEventListener("click",closeSettings);
+  $("settingsShade").addEventListener("click",e=>{if(e.target===$("settingsShade"))closeSettings()});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("settingsShade").classList.contains("hidden"))closeSettings()});
+  $("touchSizeSetting").addEventListener("change",()=>{state.settings.touchSize=$("touchSizeSetting").value;applySettings();saveGame()});
+  $("holdFireSetting").addEventListener("change",()=>{state.settings.holdFire=$("holdFireSetting").checked;saveGame()});
+  $("hintsSetting").addEventListener("change",()=>{state.settings.showHints=$("hintsSetting").checked;applySettings();saveGame()});
+  $("fullscreenToggle").addEventListener("click",toggleFullscreen);
+  document.addEventListener("fullscreenchange",()=>{$("fullscreenToggle").textContent=document.fullscreenElement?"EXIT FULLSCREEN":"ENTER FULLSCREEN"});
   $("shopPrev").addEventListener("click",()=>{if(state.shopPage>0){state.shopPage--;renderShop();saveGame()}});
   $("shopNext").addEventListener("click",()=>{state.shopPage++;renderShop();saveGame()});
   $("mainButton").addEventListener("click",()=>{if(state.phase==="gameover")reset();startWave()});
@@ -1320,7 +1483,7 @@ h1{margin:0;font-size:clamp(20px,3vw,27px);letter-spacing:-.05em}.eyebrow{color:
   window.addEventListener("pagehide",saveGame);
   document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")saveGame()});
   window.addEventListener("resize",resize);
-  restoreGame();resize();updateUI();requestAnimationFrame(frame);
+  restoreGame();applySettings();resize();updateUI();requestAnimationFrame(frame);
 })();
 </script>
 </body>
