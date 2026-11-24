@@ -448,7 +448,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     base:flag[3][0],swatch:`linear-gradient(${flag[2]==="v"?"90deg":"180deg"},${flag[3].join(",")})`,
     style:"flag",tier:"pink",flag:{type:flag[2],colors:flag[3],bands:flag[4]}
   })));
-  const SKIN_CASE_PRICE=100;
+  const SKIN_CASE_PRICE=150;
   const skinTierInfo={
     blue:{name:"BLUE",color:"#55b9ff",duplicateCredits:100},
     purple:{name:"PURPLE",color:"#ba8cff",duplicateCredits:175},
@@ -1137,7 +1137,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     state.gadgets[id]--;
     state.achievementStats.gadgetUses++;
     const p=state.player,c=Math.cos(state.aim),sine=Math.sin(state.aim);
-    if(id==="grenade")state.grenades.push({x:p.x,y:p.y,vx:c*260,vy:sine*260,fuse:.75});
+    if(id==="grenade")state.grenades.push({x:p.x,y:p.y,vx:c*260,vy:sine*260,fuse:.4});
     if(id==="wall"){
       state.barriers.push({x:p.x+c*78,y:p.y+sine*78,w:92,h:18,angle:state.aim+Math.PI/2,life:10,maxLife:10});
     }
