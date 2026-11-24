@@ -76,6 +76,9 @@ h1{margin:0;font-size:clamp(20px,3vw,27px);letter-spacing:-.05em}.eyebrow{color:
 html[data-touch-size="compact"]{--touch-control-size:42px}
 html[data-touch-size="comfortable"]{--touch-control-size:52px}
 html[data-touch-size="large"]{--touch-control-size:62px}
+html[data-joystick-size="compact"]{--joystick-size:72px}
+html[data-joystick-size="comfortable"]{--joystick-size:84px}
+html[data-joystick-size="large"]{--joystick-size:96px}
 @media(max-width:680px){
   .shell{padding:10px 9px max(16px,env(safe-area-inset-bottom))}
   header{align-items:center;gap:6px;margin-bottom:9px}
@@ -172,7 +175,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
   .mobile-cash strong{max-width:65px;overflow:hidden;text-overflow:ellipsis}
   .mobile-play-controls{position:absolute;z-index:3;right:auto;bottom:6px;left:50%;display:flex;width:min(calc(100% - 12px),560px);flex-direction:column;gap:5px;padding:6px;border:1px solid #ffffff1a;border-radius:14px;background:linear-gradient(180deg,#151c27e8,#111720f5);box-shadow:0 4px 18px #0006;transform:translateX(-50%);touch-action:pan-x pan-y}
   .mobile-primary-controls{display:grid;grid-template-columns:minmax(72px,1fr) minmax(0,1.65fr);align-items:center;gap:8px;min-width:0}
-  .joystick{display:grid;width:clamp(72px,calc(var(--touch-control-size) + 32px),96px);height:clamp(72px,calc(var(--touch-control-size) + 32px),96px);place-items:center;justify-self:center;touch-action:none;user-select:none;-webkit-tap-highlight-color:transparent}
+  .joystick{display:grid;width:var(--joystick-size);height:var(--joystick-size);place-items:center;justify-self:center;touch-action:none;user-select:none;-webkit-tap-highlight-color:transparent}
   .joystick-base{position:relative;display:block;width:100%;height:100%;border:2px solid #ffffff35;border-radius:50%;background:radial-gradient(circle,#ffffff14,#ffffff06 68%,#0002)}
   .joystick-base:before{position:absolute;inset:23%;border:1px solid #ffffff16;border-radius:50%;content:""}
   .joystick-thumb{position:absolute;top:50%;left:50%;width:44%;height:44%;border:1px solid #ffffff50;border-radius:50%;background:linear-gradient(145deg,#c4f36bdd,#8db64be0);box-shadow:0 3px 10px #0008;transform:translate(-50%,-50%);pointer-events:none}
@@ -203,7 +206,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
   .mobile-hud{top:30px;padding:4px 7px}
   .mobile-play-controls{gap:4px;padding:4px}
   .mobile-primary-controls{grid-template-columns:minmax(64px,1fr) minmax(0,1.8fr);gap:6px}
-  .joystick{width:clamp(64px,calc(var(--touch-control-size) + 18px),82px);height:clamp(64px,calc(var(--touch-control-size) + 18px),82px)}
+  .joystick{width:min(var(--joystick-size),82px);height:min(var(--joystick-size),82px)}
   .touch-action{height:34px;min-height:0}
   .mobile-gadgets button{height:28px}
 }
@@ -290,10 +293,12 @@ html[data-touch-size="large"]{--touch-control-size:62px}
   <div class="settings-shade hidden" id="settingsShade" aria-hidden="true">
     <section class="settings-sheet" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
       <div class="settings-head"><h2 id="settingsTitle">SETTINGS</h2><button class="settings-close" id="settingsClose" type="button" aria-label="Close settings">×</button></div>
-      <label class="settings-row mobile-only-setting" for="touchSizeSetting"><span class="settings-copy"><strong>Touch control size</strong><small>Resize the joystick and action buttons.</small></span><select id="touchSizeSetting"><option value="compact">Compact</option><option value="comfortable">Comfortable</option><option value="large">Large</option></select></label>
+      <label class="settings-row mobile-only-setting" for="touchSizeSetting"><span class="settings-copy"><strong>Touch control size</strong><small>Resize the action and utility buttons.</small></span><select id="touchSizeSetting"><option value="compact">Compact</option><option value="comfortable">Comfortable</option><option value="large">Large</option></select></label>
+      <label class="settings-row mobile-only-setting" for="joystickSizeSetting"><span class="settings-copy"><strong>Joystick size</strong><small>Resize only the movement joystick.</small></span><select id="joystickSizeSetting"><option value="compact">Small</option><option value="comfortable">Medium</option><option value="large">Large</option></select></label>
       <label class="settings-row" for="holdFireSetting"><span class="settings-copy"><strong>Hold attack to auto-fire</strong><small>For ranged weapons on touchscreen.</small></span><input id="holdFireSetting" type="checkbox"></label>
       <label class="settings-row" for="hintsSetting"><span class="settings-copy"><strong>Show control hints</strong><small>Keep the keyboard and gameplay guide visible.</small></span><input id="hintsSetting" type="checkbox"></label>
       <div class="settings-row"><span class="settings-copy"><strong>Reset unlocked skins</strong><small>Keep only the default skin. This cannot be undone.</small></span><button class="reset-skins-button" id="resetSkinsButton" type="button">RESET</button></div>
+      <div class="settings-row"><span class="settings-copy"><strong>Reset skin achievements</strong><small>Clear case and collection achievements. Unlocked skins stay safe.</small></span><button class="reset-skins-button" id="resetSkinAchievementsButton" type="button">RESET</button></div>
       <button class="fullscreen-button" id="fullscreenToggle" type="button">ENTER FULLSCREEN</button>
       <p class="settings-hint" id="settingsStatus" aria-live="polite"></p>
       <p class="settings-hint">Settings are saved on this device. All shops, skins, gadgets, achievements, and wave progress remain available on mobile.</p>
@@ -474,8 +479,8 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     }));
   }
   const achievementInfo=[
-    ...milestoneAchievements("total-kills","Night Watch","COMBAT","totalKills",[10,25,50,100,250,500,1000,2500,5000,10000],"lifetime eliminations"),
-    ...milestoneAchievements("highest-wave","Nightfall Veteran","SURVIVAL","highestWave",[1,2,3,5,10,15,20,25,35,50],"highest wave reached"),
+    ...milestoneAchievements("total-kills","Night Watch","COMBAT","totalKills",[10,25,50,100,250,500,1000,2500,5000,10000],"eliminations in one run"),
+    ...milestoneAchievements("highest-wave","Nightfall Veteran","SURVIVAL","highestWave",[1,2,3,5,10,15,20,25,35,50],"highest wave reached in one run"),
     {id:"cases-1",title:"First Case","category":"CASES",description:"Open your first case.",metric:"casesOpened",target:1},
     {id:"cases-5",title:"Case Regular","category":"CASES",description:"Open 5 cases.",metric:"casesOpened",target:5},
     {id:"cases-10",title:"Case Collector","category":"CASES",description:"Open 10 cases.",metric:"casesOpened",target:10},
@@ -486,8 +491,8 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     {id:"rarity-red",title:"Red Alert","category":"CASES",description:"Unbox a red skin.",metric:"tier-red",target:1},
     {id:"rarity-gold",title:"Golden Pull","category":"CASES",description:"Unbox a gold skin.",metric:"tier-gold",target:1},
     {id:"case-duplicate",title:"Refund Collector","category":"CASES",description:"Receive a duplicate-skin refund.",metric:"duplicateDrops",target:1},
-    ...milestoneAchievements("unique-skins","Style Collector","COLLECTION","uniqueSkinCount",[1,5,10,20,35,50,75,100,110,113],"different skins unboxed"),
-    ...milestoneAchievements("weapons-bought","Arsenal Builder","WEAPONS","weaponsBought",[1,3,5,10,15,20,25,30,50,75],"weapons purchased across runs"),
+    ...milestoneAchievements("unique-skins","Style Collector","COLLECTION","uniqueSkinCount",[1,5,10,20,35,50,75,100,110,113],"different skins unboxed in one run"),
+    ...milestoneAchievements("weapons-bought","Arsenal Builder","WEAPONS","weaponsBought",[1,3,5,10,15,20,25,30,50,75],"weapons purchased in one run"),
     ...milestoneAchievements("gadget-uses","Utility User","GADGETS","gadgetUses",[1,5,10,20,35,50,75,100,150,250],"gadgets used"),
     ...milestoneAchievements("dash-uses","Dash Dancer","MOVEMENT","dashUses",[1,5,10,25,50,100,250,500,1000,2500],"dashes used"),
     ...milestoneAchievements("brute-kills","Brute Buster","COMBAT","bruteKills",[1,5,10,25,50,100,250,500,1000,2500],"brutes eliminated"),
@@ -514,7 +519,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     stamina:100, maxStamina:100, staminaRegen:22, dashing:false,dashTime:0,dashDuration:.2,dashDirection:{x:1,y:0},dashRequested:false,
     gadgets:{grenade:0,wall:0,decoy:0,flashbang:0,adrenaline:0,shockwave:0}, shopTab:"skills", shopPage:0, invulnerable:0, adrenaline:0,
     skin:"classic", ownedSkins:new Set(["classic"]), lastCaseDrop:null, caseOpening:false, caseRoll:null, arenaColor:"#171b1c",
-    settings:{touchSize:"comfortable",holdFire:true,showHints:true},
+    settings:{touchSize:"comfortable",joystickSize:"comfortable",holdFire:true,showHints:true},
     unlockedAchievements:new Set(), achievementStats:{totalKills:0,highestWave:0,casesOpened:0,uniqueSkins:new Set(),uniqueSkinCount:0,weaponsBought:0,gadgetUses:0,dashUses:0,bruteKills:0,tierDrops:{blue:0,purple:0,pink:0,red:0,gold:0},duplicateDrops:0,runWavesCleared:0},
     player:{x:0,y:0,vx:0,vy:0,r:15,hp:100}
   };
@@ -576,6 +581,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     const profile=data.profile||{},savedStats=profile.achievementStats||{},stats=state.achievementStats;
     const savedSettings=profile.settings||{};
     if(["compact","comfortable","large"].includes(savedSettings.touchSize))state.settings.touchSize=savedSettings.touchSize;
+    if(["compact","comfortable","large"].includes(savedSettings.joystickSize))state.settings.joystickSize=savedSettings.joystickSize;
     if(typeof savedSettings.holdFire==="boolean")state.settings.holdFire=savedSettings.holdFire;
     if(typeof savedSettings.showHints==="boolean")state.settings.showHints=savedSettings.showHints;
     const achievementIds=new Set(achievementInfo.map(item=>item.id));
@@ -808,7 +814,8 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     state.phase="gameover";$("status").textContent="RUN ENDED";
     showOverlay("YOU WERE OVERRUN",`WAVE ${state.wave} · ${state.kills} ELIMINATIONS`,"The city is still crawling. Start over and see how many waves you can survive.","PLAY AGAIN ↻");
     $("mainButton").classList.remove("hidden");
-    $("feed").textContent="Take a breath, re-arm, and try again.";
+    resetAchievements();
+    $("feed").textContent="Run achievements reset after death. Skin achievements and unlocked skins are safe.";
     saveGame();
   }
   function renderShop(){
@@ -941,7 +948,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
   }
   function achievementProgress(achievement){
     if(achievement.metric==="uniqueSkinCount")return state.achievementStats.uniqueSkinCount;
-    if(achievement.metric==="runKills")return state.kills;
+    if(achievement.metric==="runKills")return state.phase==="gameover"?0:state.kills;
     if(achievement.metric.startsWith("tier-"))return state.achievementStats.tierDrops[achievement.metric.slice(5)]||0;
     return state.achievementStats[achievement.metric]||0;
   }
@@ -959,6 +966,26 @@ html[data-touch-size="large"]{--touch-control-size:62px}
       saveGame();
     }
     if(state.phase==="shop"&&state.shopTab==="achievements")renderShop();
+  }
+  function resetAchievements(){
+    const skinAchievementIds=new Set(achievementInfo.filter(item=>item.category==="CASES"||item.category==="COLLECTION").map(item=>item.id));
+    state.unlockedAchievements=new Set([...state.unlockedAchievements].filter(id=>skinAchievementIds.has(id)));
+    const stats=state.achievementStats;
+    stats.totalKills=0;stats.highestWave=0;
+    stats.weaponsBought=0;stats.gadgetUses=0;stats.dashUses=0;stats.bruteKills=0;
+    stats.runWavesCleared=0;
+  }
+  function resetSkinAchievements(){
+    if($("settingsShade").classList.contains("hidden"))return;
+    if(!window.confirm("Reset case and skin collection achievements and progress? Your unlocked skins and other achievements will stay safe."))return;
+    const skinAchievementIds=new Set(achievementInfo.filter(item=>item.category==="CASES"||item.category==="COLLECTION").map(item=>item.id));
+    state.unlockedAchievements=new Set([...state.unlockedAchievements].filter(id=>!skinAchievementIds.has(id)));
+    const stats=state.achievementStats;
+    stats.casesOpened=0;stats.uniqueSkins.clear();stats.uniqueSkinCount=0;
+    stats.tierDrops={blue:0,purple:0,pink:0,red:0,gold:0};stats.duplicateDrops=0;
+    if(state.phase==="shop"&&state.shopTab==="achievements")renderShop();
+    $("feed").textContent="Skin achievements and progress reset. Your unlocked skins are safe.";
+    saveGame();
   }
   function setArenaColor(color){
     if(!/^#[0-9a-f]{6}$/i.test(color))return;
@@ -1297,8 +1324,10 @@ html[data-touch-size="large"]{--touch-control-size:62px}
   }
   function applySettings(){
     document.documentElement.dataset.touchSize=state.settings.touchSize;
+    document.documentElement.dataset.joystickSize=state.settings.joystickSize;
     $("help").classList.toggle("hidden",!state.settings.showHints);
     $("touchSizeSetting").value=state.settings.touchSize;
+    $("joystickSizeSetting").value=state.settings.joystickSize;
     $("holdFireSetting").checked=state.settings.holdFire;
     $("hintsSetting").checked=state.settings.showHints;
   }
@@ -1621,10 +1650,12 @@ html[data-touch-size="large"]{--touch-control-size:62px}
   $("settingsShade").addEventListener("click",e=>{if(e.target===$("settingsShade"))closeSettings()});
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("settingsShade").classList.contains("hidden"))closeSettings()});
   $("touchSizeSetting").addEventListener("change",()=>{state.settings.touchSize=$("touchSizeSetting").value;applySettings();saveGame()});
+  $("joystickSizeSetting").addEventListener("change",()=>{state.settings.joystickSize=$("joystickSizeSetting").value;applySettings();saveGame()});
   $("holdFireSetting").addEventListener("change",()=>{state.settings.holdFire=$("holdFireSetting").checked;saveGame()});
   $("hintsSetting").addEventListener("change",()=>{state.settings.showHints=$("hintsSetting").checked;applySettings();saveGame()});
   $("fullscreenToggle").addEventListener("click",toggleFullscreen);
   $("resetSkinsButton").addEventListener("click",resetSkins);
+  $("resetSkinAchievementsButton").addEventListener("click",resetSkinAchievements);
   document.addEventListener("fullscreenchange",()=>{$("fullscreenToggle").textContent=document.fullscreenElement?"EXIT FULLSCREEN":"ENTER FULLSCREEN"});
   $("shopPrev").addEventListener("click",()=>{if(state.shopPage>0){state.shopPage--;renderShop();saveGame()}});
   $("shopNext").addEventListener("click",()=>{state.shopPage++;renderShop();saveGame()});
