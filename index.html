@@ -216,6 +216,32 @@ html[data-joystick-size="large"]{--joystick-size:104px}
   .joystick{grid-column:1;grid-row:1;justify-self:start}
   .mobile-actions-column{grid-column:2;grid-row:1}
 }
+html[data-theme="light"]{color-scheme:light;--bg:#edf2f7;--panel:#fff;--line:#24364b24;--ink:#1e2937;--muted:#5b6878;--lime:#547d0c;--red:#bd3449;--gold:#9b6500}
+html[data-theme="light"] body{background:radial-gradient(ellipse at 42% 25%,#dcebd4 0,transparent 48%),var(--bg)}
+html[data-theme="light"] .arena-card,html[data-theme="light"] .side{background:#fff;box-shadow:0 14px 40px #17203314}
+html[data-theme="light"] .stat,html[data-theme="light"] .player-card,html[data-theme="light"] .shop-item,html[data-theme="light"] .shop-tab,html[data-theme="light"] .background-preset,html[data-theme="light"] .shop-pagination button,html[data-theme="light"] .secondary,html[data-theme="light"] .settings-launch,html[data-theme="light"] .settings-close,html[data-theme="light"] .fullscreen-button,html[data-theme="light"] .settings-row select{background-color:#f1f4f8}
+html[data-theme="light"] .pill{border-color:#24364b24;background:#f7f9fc;color:var(--ink)}
+html[data-theme="light"] .overlay{background:#f2f5f8d9}
+html[data-theme="light"] .overlay p,html[data-theme="light"] .feed{color:var(--muted)}
+html[data-theme="light"] .help{background:#e8edf3}
+html[data-theme="light"] .key{border-color:#24364b38}
+html[data-theme="light"] .meter{background:#24364b18}
+html[data-theme="light"] .shop-tab.active{border-color:#7da63d;color:#3e6500;background:#e8f2d8}
+html[data-theme="light"] .shop-btn.owned{color:#31520b;background:#dce9c8}
+html[data-theme="light"] .achievement-progress>span{background:#24364b18}
+html[data-theme="light"] .case-roll-window{border-color:#24364b24;background:#e4e9ef}
+html[data-theme="light"] .case-roll-item{background:linear-gradient(160deg,#fff,#edf1f5)}
+html[data-theme="light"] .settings-shade{background:#26344955}
+html[data-theme="light"] .settings-sheet{border-color:#24364b24;background:linear-gradient(145deg,#fff,#f1f4f8);box-shadow:0 24px 80px #17203330}
+html[data-theme="light"] .settings-row select{border-color:#24364b24;color:var(--ink)}
+html[data-theme="light"] .mobile-hud{border-color:#24364b24;background:#f8faf2e8}
+html[data-theme="light"] .mobile-play-controls{border-color:#24364b24;background:linear-gradient(180deg,#f8faf2ed,#e9eef5f5);box-shadow:0 4px 18px #17203320}
+html[data-theme="light"] .pad button,html[data-theme="light"] .touch-action,html[data-theme="light"] .mobile-gadgets button,html[data-theme="light"] .weapon-switch button,html[data-theme="light"] .reload-button{border-color:#24364b24;background:#24364b0b;color:var(--ink)}
+html[data-theme="light"] .touch-action{color:var(--lime)}
+html[data-theme="light"] .touch-action.dash{color:#087d9a}
+html[data-theme="light"] .mobile-gadgets button{color:var(--gold)}
+html[data-theme="light"] .joystick-base{border-color:#24364b40;background:radial-gradient(circle,#24364b18,#24364b08 68%,#0001)}
+html[data-theme="light"] .overlay.shop-open #shopArea .shop-tabs,html[data-theme="light"] .shop-pagination{background:#f1f4f8f2}
 </style>
 </head>
 <body>
@@ -293,12 +319,13 @@ html[data-joystick-size="large"]{--joystick-size:104px}
   <div class="settings-shade hidden" id="settingsShade" aria-hidden="true">
     <section class="settings-sheet" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
       <div class="settings-head"><h2 id="settingsTitle">SETTINGS</h2><button class="settings-close" id="settingsClose" type="button" aria-label="Close settings">×</button></div>
+      <div class="settings-row"><span class="settings-copy"><strong>Reset skin achievements and progress</strong><small>Clear all case and collection achievements. Unlocked skins stay safe.</small></span><button class="reset-skins-button" id="resetSkinAchievementsButton" type="button">RESET ACHIEVEMENTS</button></div>
       <label class="settings-row mobile-only-setting" for="touchSizeSetting"><span class="settings-copy"><strong>Touch control size</strong><small>Resize the action and utility buttons.</small></span><select id="touchSizeSetting"><option value="compact">Compact</option><option value="comfortable">Comfortable</option><option value="large">Large</option></select></label>
       <label class="settings-row mobile-only-setting" for="joystickSizeSetting"><span class="settings-copy"><strong>Joystick size</strong><small>Resize only the movement joystick.</small></span><select id="joystickSizeSetting"><option value="compact">Small</option><option value="comfortable">Medium</option><option value="large">Large</option></select></label>
+      <label class="settings-row" for="lightModeSetting"><span class="settings-copy"><strong>Light mode</strong><small>Use a brighter game interface.</small></span><input id="lightModeSetting" type="checkbox"></label>
       <label class="settings-row" for="holdFireSetting"><span class="settings-copy"><strong>Hold attack to auto-fire</strong><small>For ranged weapons on touchscreen.</small></span><input id="holdFireSetting" type="checkbox"></label>
       <label class="settings-row" for="hintsSetting"><span class="settings-copy"><strong>Show control hints</strong><small>Keep the keyboard and gameplay guide visible.</small></span><input id="hintsSetting" type="checkbox"></label>
       <div class="settings-row"><span class="settings-copy"><strong>Reset unlocked skins</strong><small>Keep only the default skin. This cannot be undone.</small></span><button class="reset-skins-button" id="resetSkinsButton" type="button">RESET</button></div>
-      <div class="settings-row"><span class="settings-copy"><strong>Reset skin achievements and progress</strong><small>Clear all case and collection achievements. Unlocked skins stay safe.</small></span><button class="reset-skins-button" id="resetSkinAchievementsButton" type="button">RESET</button></div>
       <button class="fullscreen-button" id="fullscreenToggle" type="button">ENTER FULLSCREEN</button>
       <p class="settings-hint" id="settingsStatus" aria-live="polite"></p>
       <p class="settings-hint">Settings are saved on this device. All shops, skins, gadgets, achievements, and wave progress remain available on mobile.</p>
@@ -339,7 +366,7 @@ html[data-joystick-size="large"]{--joystick-size:104px}
     wall:{name:"Quick-Build Wall",description:"Deploy a barricade across your facing direction for 10 seconds. Press 2.",icon:"▰",price:70,charges:1},
     decoy:{name:"Holo Decoy",description:"Lure enemies away for 5 seconds. Press 3.",icon:"◇",price:65,charges:1},
     flashbang:{name:"Flashbang",description:"Stun enemies in a wide area for 1.5 seconds. Press 4.",icon:"☼",price:75,charges:1},
-    adrenaline:{name:"Adrenaline Rush",description:"Restore 50 health, move 50% faster for 5 seconds, and gain 2 seconds of damage immunity. Press 5.",icon:"⚡",price:85,charges:1},
+    adrenaline:{name:"Adrenaline Rush",description:"Move 4x faster for 5 seconds and gain 2 seconds of damage immunity. Press 5.",icon:"⚡",price:85,charges:1},
     shockwave:{name:"Shockwave",description:"Blast nearby enemies backward to make space. Press 6.",icon:"◎",price:80,charges:1}
   };
   const skinInfo = [
@@ -519,7 +546,7 @@ html[data-joystick-size="large"]{--joystick-size:104px}
     stamina:100, maxStamina:100, staminaRegen:22, dashing:false,dashTime:0,dashDuration:.2,dashDirection:{x:1,y:0},dashRequested:false,
     gadgets:{grenade:0,wall:0,decoy:0,flashbang:0,adrenaline:0,shockwave:0}, shopTab:"skills", shopPage:0, invulnerable:0, adrenaline:0,
     skin:"classic", ownedSkins:new Set(["classic"]), lastCaseDrop:null, caseOpening:false, caseRoll:null, arenaColor:"#171b1c",
-    settings:{touchSize:"comfortable",joystickSize:"comfortable",holdFire:true,showHints:true},
+    settings:{touchSize:"comfortable",joystickSize:"comfortable",lightMode:false,holdFire:true,showHints:true},
     unlockedAchievements:new Set(), achievementStats:{totalKills:0,highestWave:0,casesOpened:0,uniqueSkins:new Set(),uniqueSkinCount:0,weaponsBought:0,gadgetUses:0,dashUses:0,bruteKills:0,tierDrops:{blue:0,purple:0,pink:0,red:0,gold:0},duplicateDrops:0,runWavesCleared:0},
     player:{x:0,y:0,vx:0,vy:0,r:15,hp:100}
   };
@@ -582,6 +609,7 @@ html[data-joystick-size="large"]{--joystick-size:104px}
     const savedSettings=profile.settings||{};
     if(["compact","comfortable","large"].includes(savedSettings.touchSize))state.settings.touchSize=savedSettings.touchSize;
     if(["compact","comfortable","large"].includes(savedSettings.joystickSize))state.settings.joystickSize=savedSettings.joystickSize;
+    if(typeof savedSettings.lightMode==="boolean")state.settings.lightMode=savedSettings.lightMode;
     if(typeof savedSettings.holdFire==="boolean")state.settings.holdFire=savedSettings.holdFire;
     if(typeof savedSettings.showHints==="boolean")state.settings.showHints=savedSettings.showHints;
     const achievementIds=new Set(achievementInfo.map(item=>item.id));
@@ -840,8 +868,9 @@ html[data-joystick-size="large"]{--joystick-size:104px}
         box.appendChild(card);
       }
       if(start<=skills.length&&start+pageSize>skills.length){
+        const price=medkitPrice();
         const medkit=document.createElement("div");medkit.className="shop-item";
-        medkit.innerHTML=`<strong>✚ Medkit</strong><small>Restore 45 health immediately. No level; buy one when you need it.</small><button class="shop-btn" ${state.credits<35||state.player.hp>=state.maxHealth?"disabled":""}>BUY · ◈ 35</button>`;
+        medkit.innerHTML=`<strong>✚ Medkit</strong><small>Restore 45 health immediately. No level; buy one when you need it.</small><button class="shop-btn" ${state.credits<price||state.player.hp>=state.maxHealth?"disabled":""}>BUY · ◈ ${price}</button>`;
         medkit.querySelector("button").addEventListener("click",buyMedkit);box.appendChild(medkit);
       }
     }else if(state.shopTab==="weapons"){
@@ -1041,6 +1070,7 @@ html[data-joystick-size="large"]{--joystick-size:104px}
     }));
   }
   function gadgetPrice(id){return Math.ceil(gadgetInfo[id].price*(1+(state.wave-1)*.2))}
+  function medkitPrice(){return Math.ceil(200*(1+(state.wave-1)*.2))}
   function gadgetPackAmount(id){return Math.min(gadgetInfo[id].charges,MAX_GADGET_CHARGES-state.gadgets[id])}
   function skillPrice(id){return Math.ceil(skillInfo[id].price*Math.pow(SKILL_PRICE_GROWTH,state.skillLevels[id]))}
   function skillEffect(id,nextLevel){
@@ -1066,8 +1096,9 @@ html[data-joystick-size="large"]{--joystick-size:104px}
     saveGame();
   }
   function buyMedkit(){
-    if(state.phase!=="shop"||state.credits<35||state.player.hp>=state.maxHealth)return;
-    state.credits-=35;state.player.hp=Math.min(state.maxHealth,state.player.hp+45);
+    const price=medkitPrice();
+    if(state.phase!=="shop"||state.credits<price||state.player.hp>=state.maxHealth)return;
+    state.credits-=price;state.player.hp=Math.min(state.maxHealth,state.player.hp+45);
     $("feed").innerHTML='<span class="flash">Medkit used.</span> Health restored.';
     renderShop();updateUI();
     saveGame();
@@ -1203,8 +1234,8 @@ html[data-joystick-size="large"]{--joystick-size:104px}
       $("feed").innerHTML=`<span class="flash">Flashbang!</span> ${stunned} enemies stunned.`;
     }
     if(id==="adrenaline"){
-      p.hp=Math.min(state.maxHealth,p.hp+50);state.adrenaline=5;state.invulnerable=Math.max(state.invulnerable,2);
-      $("feed").innerHTML='<span class="flash">Adrenaline Rush!</span> +50 health · speed boost · 2 seconds immune.';
+      state.adrenaline=5;state.invulnerable=Math.max(state.invulnerable,2);
+      $("feed").innerHTML='<span class="flash">Adrenaline Rush!</span> 4x speed · 2 seconds immune.';
     }
     if(id==="shockwave"){
       let pushed=0;
@@ -1328,9 +1359,11 @@ html[data-joystick-size="large"]{--joystick-size:104px}
   function applySettings(){
     document.documentElement.dataset.touchSize=state.settings.touchSize;
     document.documentElement.dataset.joystickSize=state.settings.joystickSize;
+    document.documentElement.dataset.theme=state.settings.lightMode?"light":"dark";
     $("help").classList.toggle("hidden",!state.settings.showHints);
     $("touchSizeSetting").value=state.settings.touchSize;
     $("joystickSizeSetting").value=state.settings.joystickSize;
+    $("lightModeSetting").checked=state.settings.lightMode;
     $("holdFireSetting").checked=state.settings.holdFire;
     $("hintsSetting").checked=state.settings.showHints;
   }
@@ -1421,7 +1454,7 @@ html[data-joystick-size="large"]{--joystick-size:104px}
       state.dashing=state.dashTime>0;
       if(state.dashing){
         if(moving)state.dashDirection={x:ix,y:iy};
-        const dashStep=Math.min(dt,state.dashTime),dashPace=state.speed*(state.adrenaline>0?1.5:1);
+        const dashStep=Math.min(dt,state.dashTime),dashPace=state.speed*(state.adrenaline>0?4:1);
         const nextX=p.x+state.dashDirection.x*520*dashPace*dashStep;
         const nextY=p.y+state.dashDirection.y*520*dashPace*dashStep;
         const broken=state.barriers.filter(barrier=>dashCrossesBarrier(p.x,p.y,nextX,nextY,barrier,p.r));
@@ -1433,7 +1466,7 @@ html[data-joystick-size="large"]{--joystick-size:104px}
         state.dashTime-=dashStep;
       }else{
         state.stamina=Math.min(state.maxStamina,state.stamina+state.staminaRegen*dt);
-        const pace=state.speed*(state.adrenaline>0?1.5:1);
+        const pace=state.speed*(state.adrenaline>0?4:1);
         if(moving){p.vx+=ix*780*pace*dt;p.vy+=iy*780*pace*dt}
         p.vx*=Math.pow(.001,dt);p.vy*=Math.pow(.001,dt);p.x+=p.vx*dt;p.y+=p.vy*dt;
       }
@@ -1654,6 +1687,7 @@ html[data-joystick-size="large"]{--joystick-size:104px}
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("settingsShade").classList.contains("hidden"))closeSettings()});
   $("touchSizeSetting").addEventListener("change",()=>{state.settings.touchSize=$("touchSizeSetting").value;applySettings();saveGame()});
   $("joystickSizeSetting").addEventListener("change",()=>{state.settings.joystickSize=$("joystickSizeSetting").value;applySettings();saveGame()});
+  $("lightModeSetting").addEventListener("change",()=>{state.settings.lightMode=$("lightModeSetting").checked;applySettings();saveGame()});
   $("holdFireSetting").addEventListener("change",()=>{state.settings.holdFire=$("holdFireSetting").checked;saveGame()});
   $("hintsSetting").addEventListener("change",()=>{state.settings.showHints=$("hintsSetting").checked;applySettings();saveGame()});
   $("fullscreenToggle").addEventListener("click",toggleFullscreen);
