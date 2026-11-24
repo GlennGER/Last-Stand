@@ -22,7 +22,7 @@ h1{margin:0;font-size:clamp(20px,3vw,27px);letter-spacing:-.05em}.eyebrow{color:
 .feed{min-height:36px;margin-top:10px;color:#c5ced8;font-size:11px}.flash{color:var(--gold);font-weight:850}.mobile-note{display:none}
 .shop-tabs{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;margin:15px 0 8px}.shop-tab{padding:8px 3px;border:1px solid var(--line);border-radius:8px;color:var(--muted);background:#ffffff08;font-size:9px;font-weight:900;cursor:pointer;letter-spacing:-.03em}.shop-tab.active{border-color:#c4f36b88;color:var(--lime);background:#c4f36b18}.shop-tab:disabled{opacity:.55;cursor:not-allowed}.shop-note{margin:0 0 8px;color:var(--muted);font-size:10px}
 .shop-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:8px 0 15px;max-height:min(42vh,360px);overflow:auto;padding-right:3px}.shop-item{padding:11px;border:1px solid var(--line);border-radius:11px;background:#ffffff0b;text-align:left}.shop-item strong{display:block;color:var(--ink);font-size:11px}.shop-item small{display:block;min-height:30px;margin:4px 0;color:var(--muted);font-size:10px}.museum-status{font-weight:900;letter-spacing:.08em}.museum-status.unlocked{color:var(--lime)}.museum-status.locked{color:var(--muted)}.shop-btn{width:100%;padding:7px;color:#11170c;background:var(--lime);font-size:10px}.shop-btn:disabled{opacity:.42;cursor:not-allowed;transform:none}.shop-btn.owned{color:#d7dfca;background:#465239}
-.shop-actions{display:flex;justify-content:center;gap:9px}.secondary{padding:9px 13px;border:1px solid var(--line);border-radius:9px;color:var(--ink);background:#ffffff0b;font-size:11px;font-weight:800;cursor:pointer}.mobile-controls,.mobile-gadgets{display:none}
+.shop-actions{display:flex;justify-content:center;gap:9px}.secondary{padding:9px 13px;border:1px solid var(--line);border-radius:9px;color:var(--ink);background:#ffffff0b;font-size:11px;font-weight:800;cursor:pointer}.mobile-controls,.mobile-gadgets,.mobile-hud,.mobile-play-controls{display:none}
 @media(max-width:850px){.layout{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}.side>.section-title,.side>.section-sub,.side>.divider,.side>.help,.side>.feed{grid-column:1/-1}canvas{aspect-ratio:1.35;min-height:330px}}
 @media(max-width:560px){.shell{padding:13px 10px 24px}header{align-items:flex-start}.topstats{gap:4px}.stat{min-width:0;padding:6px 8px}.stat span{font-size:8px}.stat strong{font-size:14px}.logo{width:38px;height:38px}.side{padding:12px}canvas{aspect-ratio:1.05;min-height:300px}.mobile-controls{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:11px}.pad{display:grid;grid-template-columns:repeat(3,38px);grid-template-rows:repeat(2,34px);gap:3px}.pad button,.touch-action,.mobile-gadgets button,.weapon-switch button{border:1px solid #ffffff22;border-radius:9px;color:var(--ink);background:#ffffff10;font-weight:900;touch-action:none;user-select:none}.pad button:active,.touch-action:active,.mobile-gadgets button:active,.weapon-switch button:active{background:#c4f36b44}.pad .up{grid-column:2}.pad .left{grid-column:1;grid-row:2}.pad .down{grid-column:2;grid-row:2}.pad .right{grid-column:3;grid-row:2}.touch-actions{display:flex;gap:7px}.touch-action{min-width:58px;height:48px;color:var(--lime);font-size:9px}.touch-action.dash{color:#8eddf3}.mobile-gadgets{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:5px;margin-top:6px}.mobile-gadgets button{padding:5px 8px;color:var(--gold);font-size:9px}.mobile-gadgets button:disabled{opacity:.4}.weapon-switch{display:flex;gap:6px;margin-top:6px}.weapon-switch button{flex:1;padding:6px;color:var(--muted);font-size:9px}.weapon-switch button.active{border-color:#c4f36b88;color:var(--lime)}.weapon-switch button:disabled{opacity:.45}.mobile-note{display:block;color:var(--muted);font-size:9px}.overlay-box{padding:3px}.shop-grid{gap:6px;margin:8px 0;max-height:38vh}.shop-item{padding:8px}.shop-item small{min-height:38px}.shop-tabs{grid-template-columns:repeat(3,1fr)}}
 .overlay-box{max-height:100%;overflow:hidden}
@@ -66,7 +66,7 @@ h1{margin:0;font-size:clamp(20px,3vw,27px);letter-spacing:-.05em}.eyebrow{color:
 .settings-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
 .settings-head h2{margin:0;font-size:20px;letter-spacing:-.04em}
 .settings-close{width:36px;height:36px;border:1px solid var(--line);border-radius:9px;color:var(--ink);background:#ffffff0b;font-size:18px;cursor:pointer}
-.settings-row{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 0;border-top:1px solid var(--line)}
+.settings-row{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 0;border-top:1px solid var(--line)}.mobile-only-setting{display:none}
 .settings-copy strong{display:block;font-size:12px}.settings-copy small{display:block;margin-top:3px;color:var(--muted);font-size:10px}
 .settings-row select{max-width:155px;padding:9px;border:1px solid var(--line);border-radius:9px;color:var(--ink);background:#111720}
 .settings-row input[type=checkbox]{width:21px;height:21px;accent-color:var(--lime)}
@@ -148,6 +148,63 @@ html[data-touch-size="large"]{--touch-control-size:62px}
   .mobile-gadgets{grid-template-columns:repeat(6,minmax(0,1fr))}
   .mobile-gadgets button{padding:5px 1px;font-size:8px}
 }
+@media(max-width:680px),(max-height:500px) and (max-width:900px),(pointer:coarse){
+  html,body{height:100%;min-height:100%;overflow:hidden}
+  body{min-height:100vh;min-height:100svh;overscroll-behavior:none}
+  .shell{display:flex;width:100%;height:100vh;height:100svh;min-height:0;max-width:none;flex-direction:column;overflow:hidden;padding:max(4px,env(safe-area-inset-top)) 7px max(4px,env(safe-area-inset-bottom))}
+  header{height:34px;flex:none;align-items:center;margin:0 0 5px}
+  .brand{gap:7px}.brand .eyebrow{display:none}.logo{width:28px;height:28px;border-radius:8px;font-size:15px}h1{font-size:15px}
+  .header-tools{gap:0}.header-tools .topstats{display:none}.settings-launch{min-height:28px;padding:0 8px;border-radius:8px;font-size:9px}
+  .layout{display:block;width:100%;min-height:0;flex:1;overflow:hidden}
+  .side{display:none}
+  .arena-card{width:100%;height:100%;min-height:0;overflow:hidden;border-radius:12px}
+  .arena-card canvas{position:absolute;inset:0;width:100%;height:100%;min-height:0;aspect-ratio:auto}
+  .arena-head{top:7px;left:8px;right:8px;z-index:3;gap:6px}.pill{padding:4px 7px;font-size:8px;letter-spacing:.04em}
+  .mobile-hud{position:absolute;z-index:2;top:34px;left:8px;right:8px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;align-items:center;gap:7px;padding:6px 8px;border:1px solid #ffffff20;border-radius:10px;background:#111720dc;backdrop-filter:blur(8px);pointer-events:none}
+  .mobile-only-setting{display:flex}
+  .mobile-meter{display:grid;grid-template-columns:auto minmax(16px,1fr) auto;align-items:center;gap:5px;min-width:0;font-size:8px;font-weight:900}
+  .mobile-meter>span{color:var(--muted);font-size:7px;letter-spacing:.05em}
+  .mobile-meter .meter{height:5px;margin:0}.mobile-meter strong{font-size:8px;white-space:nowrap}
+  .mobile-meter.hp .meter>i{background:linear-gradient(90deg,#ff6472,#ffc078)}
+  .mobile-cash{display:flex;align-items:center;gap:3px;color:var(--gold);font-size:9px;white-space:nowrap}
+  .mobile-cash strong{max-width:65px;overflow:hidden;text-overflow:ellipsis}
+  .mobile-play-controls{position:absolute;z-index:3;right:auto;bottom:6px;left:50%;display:flex;width:min(calc(100% - 12px),560px);flex-direction:column;gap:5px;padding:6px;border:1px solid #ffffff1a;border-radius:14px;background:linear-gradient(180deg,#151c27e8,#111720f5);box-shadow:0 4px 18px #0006;transform:translateX(-50%);touch-action:none}
+  .mobile-primary-controls{display:grid;grid-template-columns:minmax(72px,1fr) minmax(0,1.65fr);align-items:center;gap:8px;min-width:0}
+  .joystick{display:grid;width:clamp(72px,calc(var(--touch-control-size) + 32px),96px);height:clamp(72px,calc(var(--touch-control-size) + 32px),96px);place-items:center;justify-self:center;touch-action:none;user-select:none;-webkit-tap-highlight-color:transparent}
+  .joystick-base{position:relative;display:block;width:100%;height:100%;border:2px solid #ffffff35;border-radius:50%;background:radial-gradient(circle,#ffffff14,#ffffff06 68%,#0002)}
+  .joystick-base:before{position:absolute;inset:23%;border:1px solid #ffffff16;border-radius:50%;content:""}
+  .joystick-thumb{position:absolute;top:50%;left:50%;width:44%;height:44%;border:1px solid #ffffff50;border-radius:50%;background:linear-gradient(145deg,#c4f36bdd,#8db64be0);box-shadow:0 3px 10px #0008;transform:translate(-50%,-50%);pointer-events:none}
+  .mobile-actions-column{display:flex;min-width:0;flex-direction:column;gap:4px}
+  .touch-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+  .touch-action{min-width:0;height:clamp(38px,calc(var(--touch-control-size) - 6px),50px);padding:4px;border:1px solid #ffffff25;border-radius:9px;color:var(--lime);background:#ffffff10;font-size:10px;font-weight:950;touch-action:none;user-select:none;-webkit-tap-highlight-color:transparent}
+  .touch-action.dash{color:#8eddf3}
+  .touch-action:active,.mobile-gadgets button:active,.weapon-switch button:active{background:#c4f36b36}
+  .mobile-weapon-row{display:flex;align-items:center;gap:6px;min-width:0}
+  .weapon-switch{display:flex;flex:1;gap:4px;margin:0}
+  .weapon-switch button{min-width:0;min-height:25px;flex:1;padding:3px 5px;border:1px solid #ffffff20;border-radius:7px;color:var(--muted);background:#ffffff08;font-size:8px;font-weight:900;touch-action:manipulation}
+  .weapon-switch button.active{border-color:#c4f36b88;color:var(--lime)}
+  .weapon-switch button:disabled{opacity:.45}
+  #mobileWeaponStatus{max-width:30%;overflow:hidden;color:var(--muted);font-size:8px;text-overflow:ellipsis;white-space:nowrap}
+  .reload-button{width:26px;height:26px;flex:none;border:1px solid #ffffff20;border-radius:7px;color:var(--ink);background:#ffffff08;font-size:17px;font-weight:900;line-height:1;touch-action:manipulation}
+  .reload-button:disabled{opacity:.35}
+  .mobile-gadgets{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;min-width:0}
+  .mobile-gadgets button{display:flex;min-width:0;height:34px;align-items:center;justify-content:center;gap:2px;padding:2px;border:1px solid #ffffff20;border-radius:8px;color:var(--gold);background:#ffffff0b;touch-action:manipulation;user-select:none;-webkit-tap-highlight-color:transparent}
+  .mobile-gadgets button:disabled{opacity:.38}
+  .utility-icon{font-size:12px;line-height:1}.gadget-count{font-size:8px;font-weight:900;line-height:1}
+  .overlay{z-index:5;padding:8px}
+  .overlay:not(.shop-open) .overlay-box{max-height:calc(100% - 8px);overflow:auto}
+  .overlay.shop-open{z-index:30}
+}
+@media(max-height:500px) and (max-width:900px){
+  header{height:28px;margin-bottom:3px}
+  .shell{padding-top:max(2px,env(safe-area-inset-top));padding-bottom:max(2px,env(safe-area-inset-bottom))}
+  .mobile-hud{top:30px;padding:4px 7px}
+  .mobile-play-controls{gap:4px;padding:4px}
+  .mobile-primary-controls{grid-template-columns:minmax(64px,1fr) minmax(0,1.8fr);gap:6px}
+  .joystick{width:clamp(64px,calc(var(--touch-control-size) + 18px),82px);height:clamp(64px,calc(var(--touch-control-size) + 18px),82px)}
+  .touch-action{height:34px;min-height:0}
+  .mobile-gadgets button{height:28px}
+}
 </style>
 </head>
 <body>
@@ -159,7 +216,31 @@ html[data-touch-size="large"]{--touch-control-size:62px}
   <section class="layout">
     <div class="arena-card">
       <div class="arena-head"><span class="pill" id="status">READY</span><span class="pill" id="enemyCount">NO ENEMIES</span></div>
+      <div class="mobile-hud" aria-label="Player status">
+        <div class="mobile-meter hp"><span>HP</span><div class="meter"><i id="mobileHealthBar"></i></div><strong id="mobileHealthText">100</strong></div>
+        <div class="mobile-meter dash"><span>DASH</span><div class="meter stamina"><i id="mobileDashBar"></i></div><strong id="mobileDashText">100%</strong></div>
+        <div class="mobile-cash"><span>$</span><strong id="mobileCreditsLabel">0</strong></div>
+      </div>
       <canvas id="game" aria-label="Top-down survival game"></canvas>
+      <div class="mobile-play-controls">
+        <div class="mobile-primary-controls">
+          <div class="joystick" id="moveJoystick" role="group" aria-label="Movement joystick">
+            <div class="joystick-base"><span class="joystick-thumb" id="joystickThumb"></span></div>
+          </div>
+          <div class="mobile-actions-column">
+            <div class="touch-actions"><button class="touch-action" id="touchAttack" type="button">ATTACK</button><button class="touch-action dash" id="touchDash" type="button">DASH</button></div>
+            <div class="mobile-weapon-row"><div class="weapon-switch"><button data-slot="close" class="active" type="button">CLOSE</button><button data-slot="long" id="touchLong" disabled type="button">LONG</button></div><span id="mobileWeaponStatus">FISTS · ∞</span><button class="reload-button" id="touchReload" type="button" aria-label="Reload weapon" title="Reload">↻</button></div>
+          </div>
+        </div>
+        <div class="mobile-gadgets" aria-label="Utilities">
+          <button id="touchGrenade" data-gadget="grenade" type="button" aria-label="Use grenade" title="Grenade"><span class="utility-icon">💣</span><small class="gadget-count">0</small></button>
+          <button id="touchWall" data-gadget="wall" type="button" aria-label="Use wall" title="Wall"><span class="utility-icon">▰</span><small class="gadget-count">0</small></button>
+          <button id="touchDecoy" data-gadget="decoy" type="button" aria-label="Use decoy" title="Decoy"><span class="utility-icon">◉</span><small class="gadget-count">0</small></button>
+          <button id="touchFlashbang" data-gadget="flashbang" type="button" aria-label="Use flashbang" title="Flashbang"><span class="utility-icon">✦</span><small class="gadget-count">0</small></button>
+          <button id="touchAdrenaline" data-gadget="adrenaline" type="button" aria-label="Use adrenaline" title="Adrenaline"><span class="utility-icon">⚡</span><small class="gadget-count">0</small></button>
+          <button id="touchShockwave" data-gadget="shockwave" type="button" aria-label="Use shockwave" title="Shockwave"><span class="utility-icon">◎</span><small class="gadget-count">0</small></button>
+        </div>
+      </div>
       <div class="overlay" id="overlay"><div class="overlay-box">
         <div class="eyebrow" id="overlayEyebrow">THE CITY WENT QUIET</div><h2 id="overlayTitle">SURVIVE THE NIGHT</h2>
         <p id="overlayText">Enemies are closing in from every direction. Start with your fists, stay moving, and make it through each wave to earn credits for gear.</p>
@@ -193,15 +274,6 @@ html[data-touch-size="large"]{--touch-control-size:62px}
         <div class="weapon-line" style="margin-top:7px;padding-top:7px"><span>Active ammo</span><strong id="ammoText">∞</strong></div>
         <div class="weapon-line" style="margin-top:7px;padding-top:7px"><span>Gadgets</span><strong id="gadgetInventory">G 0 · E 0 · Q 0</strong></div>
       </div>
-      <div class="mobile-controls">
-        <div class="pad" aria-label="Movement controls">
-          <button class="up" data-move="up" aria-label="Move up">▲</button><button class="left" data-move="left" aria-label="Move left">◀</button><button class="down" data-move="down" aria-label="Move down">▼</button><button class="right" data-move="right" aria-label="Move right">▶</button>
-        </div>
-        <div class="touch-actions"><button class="touch-action" id="touchAttack">ATTACK</button><button class="touch-action dash" id="touchDash">DASH</button></div>
-      </div>
-      <div class="mobile-gadgets"><button id="touchGrenade" data-gadget="grenade">1 · 0</button><button id="touchWall" data-gadget="wall">2 · 0</button><button id="touchDecoy" data-gadget="decoy">3 · 0</button><button id="touchFlashbang" data-gadget="flashbang">4 · 0</button><button id="touchAdrenaline" data-gadget="adrenaline">5 · 0</button><button id="touchShockwave" data-gadget="shockwave">6 · 0</button></div>
-      <div class="weapon-switch"><button data-slot="close" class="active">CLOSE</button><button data-slot="long" id="touchLong" disabled>LONG</button></div>
-      <div class="mobile-note">Touch: tap arena to aim · hold attack to auto-fire when enabled</div>
       <div class="divider"></div>
       <div class="help" id="help"><strong>Controls</strong><p><span class="key">WASD</span> / <span class="key">↑←↓→</span> move · <span class="key">SHIFT</span> dash</p><p>Tap dash to burst in your movement direction, or toward your aim if standing still. The whole charge is spent and must fully recharge.</p><p>Left-click/hold: long range · right-click: one close swing (0.18s cooldown)</p><p><span class="key">1</span> grenade · <span class="key">2</span> wall · <span class="key">3</span> decoy · <span class="key">4</span> flashbang · <span class="key">5</span> adrenaline · <span class="key">6</span> shockwave</p><p><span class="key">R</span> reload · <span class="key">V</span> +500 credits</p></div>
       <div class="feed" id="feed">You have fists, grit, and a whole lot of trouble.</div>
@@ -210,7 +282,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
   <div class="settings-shade hidden" id="settingsShade" aria-hidden="true">
     <section class="settings-sheet" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
       <div class="settings-head"><h2 id="settingsTitle">SETTINGS</h2><button class="settings-close" id="settingsClose" type="button" aria-label="Close settings">×</button></div>
-      <label class="settings-row" for="touchSizeSetting"><span class="settings-copy"><strong>Touch control size</strong><small>Resize the movement pad and action buttons.</small></span><select id="touchSizeSetting"><option value="compact">Compact</option><option value="comfortable">Comfortable</option><option value="large">Large</option></select></label>
+      <label class="settings-row mobile-only-setting" for="touchSizeSetting"><span class="settings-copy"><strong>Touch control size</strong><small>Resize the joystick and action buttons.</small></span><select id="touchSizeSetting"><option value="compact">Compact</option><option value="comfortable">Comfortable</option><option value="large">Large</option></select></label>
       <label class="settings-row" for="holdFireSetting"><span class="settings-copy"><strong>Hold attack to auto-fire</strong><small>For ranged weapons on touchscreen.</small></span><input id="holdFireSetting" type="checkbox"></label>
       <label class="settings-row" for="hintsSetting"><span class="settings-copy"><strong>Show control hints</strong><small>Keep the keyboard and gameplay guide visible.</small></span><input id="hintsSetting" type="checkbox"></label>
       <button class="fullscreen-button" id="fullscreenToggle" type="button">ENTER FULLSCREEN</button>
@@ -422,11 +494,12 @@ html[data-touch-size="large"]{--touch-control-size:62px}
   const SKILL_PRICE_GROWTH=1.5;
   const SAVE_KEY="last-stand-save-v1";
   const SAVE_VERSION=1;
+  const BASE_WORLD_WIDTH=800,BASE_WORLD_HEIGHT=500;
   const state = {
     phase:"ready", wave:1, credits:0, kills:0, spawned:0, spawnTotal:0, spawnTimer:0,
     enemies:[], bullets:[], particles:[], grenades:[], barriers:[], decoy:null,
-    keys:new Set(), blockedKeys:new Set(), mouse:{x:0,y:0,longDown:false},
-    last:0, dpr:1, aim:0, attackCooldowns:{close:0,long:0}, attackFlash:0, reloadTime:0,reloadingWeaponId:null,
+    keys:new Set(), blockedKeys:new Set(), mouse:{x:0,y:0,longDown:false},touchMove:{x:0,y:0},
+    last:0, dpr:1, gameScale:1,worldWidth:BASE_WORLD_WIDTH,worldHeight:BASE_WORLD_HEIGHT,aim:0, attackCooldowns:{close:0,long:0}, attackFlash:0, reloadTime:0,reloadingWeaponId:null,
     closeWeapon:"fists", longWeapon:null, activeSlot:"close", ownedWeapons:new Set(), ammoByWeapon:{}, ammo:0, maxHealth:100,
     skillLevels:{speed:0,armor:0,dash:0}, speed:1, damageReduction:0,
     stamina:100, maxStamina:100, staminaRegen:22, dashing:false,dashTime:0,dashDuration:.2,dashDirection:{x:1,y:0},dashRequested:false,
@@ -438,6 +511,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
   };
   const enemyDefs = {walker:{hp:34,speed:47,damage:7,color:"#ff6977",r:13,reward:9},runner:{hp:26,speed:77,damage:5,color:"#ffb35f",r:11,reward:8},brute:{hp:100,speed:32,damage:15,color:"#b78cff",r:18,reward:18}};
   let canvasRect = null;
+  let joystickPointerId=null;
   let lastSaveAt=0,saveErrorReported=false;
 
   function saveGame(){
@@ -455,6 +529,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     const hasRun=state.phase==="fight"||state.phase==="shop"||state.wave>1||state.credits>0||state.kills>0||state.ownedSkins.size>1||state.ownedWeapons.size>0;
     const run=hasRun&&state.phase!=="gameover"?{
       phase:state.phase,wave:state.wave,credits:state.credits,kills:state.kills,spawned:state.spawned,
+      worldScale:state.gameScale,worldWidth:state.worldWidth,worldHeight:state.worldHeight,
       spawnTotal:state.spawnTotal,spawnTimer:state.spawnTimer,enemies:state.enemies,bullets:state.bullets,
       particles:state.particles,grenades:state.grenades,barriers:state.barriers,decoy:state.decoy,
       closeWeapon:state.closeWeapon,longWeapon:state.longWeapon,activeSlot:state.activeSlot,
@@ -506,14 +581,33 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     if(!run)return false;
     const number=(value,fallback,min=0,max=Number.MAX_SAFE_INTEGER)=>Number.isFinite(value)?Math.max(min,Math.min(max,value)):fallback;
     const array=(value,fallback=[])=>Array.isArray(value)?value:fallback;
+    const hasSavedWorld=Number.isFinite(run.worldWidth)&&run.worldWidth>0&&Number.isFinite(run.worldHeight)&&run.worldHeight>0;
+    const scaleX=hasSavedWorld?state.worldWidth/run.worldWidth:1/state.gameScale;
+    const scaleY=hasSavedWorld?state.worldHeight/run.worldHeight:1/state.gameScale;
+    const legacySizeScale=hasSavedWorld?1:1/state.gameScale;
+    const scaleSavedObject=item=>{
+      if(!item||typeof item!=="object")return item;
+      const scaled={...item};
+      if(Number.isFinite(item.x))scaled.x=item.x*scaleX;
+      if(Number.isFinite(item.y))scaled.y=item.y*scaleY;
+      if(Number.isFinite(item.vx))scaled.vx=item.vx*scaleX;
+      if(Number.isFinite(item.vy))scaled.vy=item.vy*scaleY;
+      if(Number.isFinite(item.r))scaled.r=item.r*legacySizeScale;
+      if(Number.isFinite(item.size))scaled.size=item.size*legacySizeScale;
+      if(Number.isFinite(item.speed))scaled.speed=item.speed*legacySizeScale;
+      if(Number.isFinite(item.w))scaled.w=item.w*legacySizeScale;
+      if(Number.isFinite(item.h))scaled.h=item.h*legacySizeScale;
+      return scaled;
+    };
+    const savedObjects=value=>array(value).map(scaleSavedObject);
     state.wave=Math.floor(number(run.wave,1,1,100000));
     state.credits=Math.floor(number(run.credits,0));
     state.kills=Math.floor(number(run.kills,0));
     state.spawned=Math.floor(number(run.spawned,0));
     state.spawnTotal=Math.floor(number(run.spawnTotal,0));
     state.spawnTimer=number(run.spawnTimer,0,0,60);
-    state.enemies=array(run.enemies);state.bullets=array(run.bullets);state.particles=array(run.particles);
-    state.grenades=array(run.grenades);state.barriers=array(run.barriers);state.decoy=run.decoy&&typeof run.decoy==="object"?run.decoy:null;
+    state.enemies=savedObjects(run.enemies);state.bullets=savedObjects(run.bullets);state.particles=savedObjects(run.particles);
+    state.grenades=savedObjects(run.grenades);state.barriers=savedObjects(run.barriers);state.decoy=run.decoy&&typeof run.decoy==="object"?scaleSavedObject(run.decoy):null;
     state.closeWeapon=weaponById(run.closeWeapon)&&run.closeWeapon!=="fists"?run.closeWeapon:"fists";
     state.longWeapon=weaponById(run.longWeapon)&&run.longWeapon!=="fists"?run.longWeapon:null;
     state.activeSlot=run.activeSlot==="long"&&state.longWeapon?"long":"close";
@@ -524,7 +618,10 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     syncSkills();state.stamina=number(run.stamina,state.maxStamina,0,state.maxStamina);
     for(const id of Object.keys(gadgetInfo))state.gadgets[id]=Math.floor(number(run.gadgets&&run.gadgets[id],0,0,MAX_GADGET_CHARGES));
     state.dashing=run.dashing===true;state.dashTime=number(run.dashTime,0,0,10);
-    state.dashDirection=run.dashDirection&&Number.isFinite(run.dashDirection.x)&&Number.isFinite(run.dashDirection.y)?run.dashDirection:{x:1,y:0};
+    if(run.dashDirection&&Number.isFinite(run.dashDirection.x)&&Number.isFinite(run.dashDirection.y)){
+      const directionX=run.dashDirection.x*scaleX,directionY=run.dashDirection.y*scaleY,directionLength=Math.hypot(directionX,directionY)||1;
+      state.dashDirection={x:directionX/directionLength,y:directionY/directionLength};
+    }else state.dashDirection={x:1,y:0};
     state.invulnerable=number(run.invulnerable,0,0,10);state.adrenaline=number(run.adrenaline,0,0,60);
     state.ownedSkins=new Set(["classic",...array(run.ownedSkins).filter(id=>skinInfo.some(skin=>skin.id===id))]);
     state.skin=state.ownedSkins.has(run.skin)?run.skin:"classic";
@@ -542,16 +639,16 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     state.shopTab=shopTabs.includes(run.shopTab)?run.shopTab:"skills";
     state.shopPage=Math.floor(number(run.shopPage,0));
     stats.runWavesCleared=Math.floor(number(run.runWavesCleared,0));
-    state.player.x=number(run.player&&run.player.x,canvas.clientWidth/2,0,canvas.clientWidth);
-    state.player.y=number(run.player&&run.player.y,canvas.clientHeight/2,0,canvas.clientHeight);
-    state.player.vx=number(run.player&&run.player.vx,0,-10000,10000);
-    state.player.vy=number(run.player&&run.player.vy,0,-10000,10000);
+    state.player.x=Math.max(0,Math.min(state.worldWidth,number(run.player&&run.player.x,state.worldWidth/(2*scaleX),0)*scaleX));
+    state.player.y=Math.max(0,Math.min(state.worldHeight,number(run.player&&run.player.y,state.worldHeight/(2*scaleY),0)*scaleY));
+    state.player.vx=number(run.player&&run.player.vx,0,-10000,10000)*scaleX;
+    state.player.vy=number(run.player&&run.player.vy,0,-10000,10000)*scaleY;
     state.player.hp=number(run.player&&run.player.hp,state.maxHealth,0,state.maxHealth);
     state.attackCooldowns={close:number(run.attackCooldowns&&run.attackCooldowns.close,0,0,10),long:number(run.attackCooldowns&&run.attackCooldowns.long,0,0,10)};
     state.attackFlash=number(run.attackFlash,0,0,1);state.aim=number(run.aim,0,-Math.PI*2,Math.PI*2);
     state.reloadTime=number(run.reloadTime,0,0,60);
     state.reloadingWeaponId=typeof run.reloadingWeaponId==="string"?run.reloadingWeaponId:null;
-    state.keys.clear();state.mouse={x:0,y:0,longDown:false};state.dashRequested=false;state.last=0;
+    state.keys.clear();state.mouse={x:0,y:0,longDown:false};state.touchMove={x:0,y:0};resetJoystick();state.dashRequested=false;state.last=0;
     state.phase=run.phase==="shop"?"shop":run.phase==="fight"?"fight":"ready";
     if(state.phase==="shop"){
       $("overlayEyebrow").textContent="RUN RESTORED";$("overlayTitle").textContent="PICK UP WHERE YOU LEFT OFF";
@@ -569,11 +666,34 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     return true;
   }
 
+  function scaleWorldObject(item,scaleX,scaleY){
+    if(!item||typeof item!=="object")return item;
+    return {
+      ...item,
+      ...(Number.isFinite(item.x)?{x:item.x*scaleX}:{}),
+      ...(Number.isFinite(item.y)?{y:item.y*scaleY}:{}),
+      ...(Number.isFinite(item.vx)?{vx:item.vx*scaleX}:{}),
+      ...(Number.isFinite(item.vy)?{vy:item.vy*scaleY}:{})
+    };
+  }
   function resize(){
-    const box=canvas.getBoundingClientRect();canvasRect=box;state.dpr=Math.min(window.devicePixelRatio||1,2);
+    const box=canvas.getBoundingClientRect();
+    if(box.width<=0||box.height<=0)return;
+    canvasRect=box;state.dpr=Math.min(window.devicePixelRatio||1,2);
+    const gameScale=Math.min(box.width/BASE_WORLD_WIDTH,box.height/BASE_WORLD_HEIGHT);
+    const worldWidth=box.width/gameScale,worldHeight=box.height/gameScale;
+    if(state.worldWidth>0&&state.worldHeight>0&&state.phase!=="ready"){
+      const scaleX=worldWidth/state.worldWidth,scaleY=worldHeight/state.worldHeight;
+      state.player=scaleWorldObject(state.player,scaleX,scaleY);
+      for(const key of ["enemies","bullets","particles","grenades","barriers"])state[key]=state[key].map(item=>scaleWorldObject(item,scaleX,scaleY));
+      if(state.decoy)state.decoy=scaleWorldObject(state.decoy,scaleX,scaleY);
+      const directionX=state.dashDirection.x*scaleX,directionY=state.dashDirection.y*scaleY,directionLength=Math.hypot(directionX,directionY)||1;
+      state.dashDirection={x:directionX/directionLength,y:directionY/directionLength};
+    }
+    state.gameScale=gameScale;state.worldWidth=worldWidth;state.worldHeight=worldHeight;
     canvas.width=Math.round(box.width*state.dpr);canvas.height=Math.round(box.height*state.dpr);
-    ctx.setTransform(state.dpr,0,0,state.dpr,0,0);
-    if(state.phase==="ready"){state.player.x=box.width/2;state.player.y=box.height/2}
+    ctx.setTransform(state.dpr*gameScale,0,0,state.dpr*gameScale,0,0);
+    if(state.phase==="ready"){state.player.x=worldWidth/2;state.player.y=worldHeight/2}
     draw();
     if(state.phase==="shop")renderShop();
   }
@@ -608,16 +728,23 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     $("waveLabel").textContent=String(state.wave).padStart(2,"0");
     $("killsLabel").textContent=state.kills;
     $("creditsLabel").textContent=state.credits;
+    $("mobileCreditsLabel").textContent=state.credits;
     $("healthText").textContent=`${Math.ceil(p.hp)} / ${state.maxHealth} HP`;
     $("healthBar").style.width=`${Math.max(0,p.hp/state.maxHealth*100)}%`;
+    $("mobileHealthText").textContent=`${Math.ceil(p.hp)}`;
+    $("mobileHealthBar").style.width=`${Math.max(0,p.hp/state.maxHealth*100)}%`;
     $("staminaText").textContent=`${Math.round(state.stamina)}/${state.maxStamina}`;
     $("staminaBar").style.width=`${Math.max(0,state.stamina/state.maxStamina*100)}%`;
+    $("mobileDashText").textContent=`${Math.round(state.stamina)}%`;
+    $("mobileDashBar").style.width=`${Math.max(0,state.stamina/state.maxStamina*100)}%`;
     $("closeWeaponName").textContent=close.name.toUpperCase();
     $("longWeaponName").textContent=long?long.name.toUpperCase():"EMPTY";
     $("closeSlot").classList.toggle("active",state.activeSlot==="close");
     $("longSlot").classList.toggle("active",state.activeSlot==="long");
     const reloadingActive=state.reloadTime>0&&state.reloadingWeaponId===w.id;
     $("ammoText").textContent=w.kind==="melee"?"∞":reloadingActive?"RELOADING…":`${state.ammo} / ${w.mag}`;
+    $("mobileWeaponStatus").textContent=`${w.name.toUpperCase()} · ${w.kind==="melee"?"∞":reloadingActive?"RELOAD":`${state.ammo}/${w.mag}`}`;
+    $("touchReload").disabled=state.phase!=="fight"||w.kind!=="gun"||reloadingActive||state.ammoByWeapon[w.id]===w.mag;
     document.querySelectorAll("[data-slot]").forEach(button=>{
       button.classList.toggle("active",button.dataset.slot===state.activeSlot);
       button.disabled=button.dataset.slot==="long"&&!state.longWeapon;
@@ -626,7 +753,8 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     $("gadgetInventory").textContent=Object.keys(gadgetInfo).map(id=>`${gadgetKeys[id]} ${state.gadgets[id]}/${MAX_GADGET_CHARGES}`).join(" · ");
     for(const id of Object.keys(gadgetInfo)){
       const button=$(`touch${id[0].toUpperCase()+id.slice(1)}`);
-      button.textContent=`${gadgetKeys[id]} · ${state.gadgets[id]}/${MAX_GADGET_CHARGES}`;
+      button.querySelector(".gadget-count").textContent=state.gadgets[id];
+      button.setAttribute("aria-label",`${gadgetInfo[id].name}, ${state.gadgets[id]} charges`);
       button.disabled=state.phase!=="fight"||state.gadgets[id]===0;
     }
   }
@@ -640,7 +768,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     for(const key of state.keys){
       if(["KeyW","KeyA","KeyS","KeyD","ArrowUp","ArrowDown","ArrowLeft","ArrowRight","ShiftLeft","ShiftRight"].includes(key))state.blockedKeys.add(key);
     }
-    state.keys.clear();state.mouse.longDown=false;state.dashRequested=false;
+    state.keys.clear();state.mouse.longDown=false;state.touchMove={x:0,y:0};resetJoystick();state.dashRequested=false;
     state.phase="fight";state.spawned=0;state.spawnTotal=6+state.wave*3;state.spawnTimer=.25;
     state.achievementStats.highestWave=Math.max(state.achievementStats.highestWave,state.wave);
     state.enemies=[];state.bullets=[];state.player.hp=Math.min(state.maxHealth,state.player.hp);
@@ -983,7 +1111,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     saveGame();
   }
   function spawnEnemy(){
-    const w=canvas.clientWidth,h=canvas.clientHeight,side=Math.floor(Math.random()*4),pad=28;
+    const w=state.worldWidth,h=state.worldHeight,side=Math.floor(Math.random()*4),pad=28;
     let x,y;if(side===0){x=Math.random()*w;y=-pad}else if(side===1){x=w+pad;y=Math.random()*h}else if(side===2){x=Math.random()*w;y=h+pad}else{x=-pad;y=Math.random()*h}
     const n=state.spawned+1,wave=state.wave;
     let type=n%6===0?"brute":n%4===0?"runner":"walker",base=enemyDefs[type];
@@ -1141,7 +1269,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     state.reloadTime=w.reload;state.reloadingWeaponId=w.id;$("feed").textContent="Reloading… keep moving!";
   }
   function setAim(clientX,clientY){
-    canvasRect=canvas.getBoundingClientRect();state.mouse.x=clientX-canvasRect.left;state.mouse.y=clientY-canvasRect.top;
+    canvasRect=canvas.getBoundingClientRect();state.mouse.x=(clientX-canvasRect.left)/state.gameScale;state.mouse.y=(clientY-canvasRect.top)/state.gameScale;
     state.aim=Math.atan2(state.mouse.y-state.player.y,state.mouse.x-state.player.x);
   }
   function applySettings(){
@@ -1157,7 +1285,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     $("settingsOpen").focus();
   }
   function openSettings(){
-    state.keys.clear();state.mouse.longDown=false;state.dashRequested=false;
+    state.keys.clear();state.mouse.longDown=false;state.dashRequested=false;resetJoystick();
     $("settingsShade").classList.remove("hidden");
     $("settingsShade").setAttribute("aria-hidden","false");
     $("settingsClose").focus();
@@ -1170,6 +1298,20 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     }else{
       attack(state.activeSlot);
     }
+  }
+  function moveJoystick(e){
+    const joystick=$("moveJoystick"),thumb=$("joystickThumb"),rect=joystick.getBoundingClientRect();
+    const radius=Math.max(1,rect.width*.27),dx=e.clientX-(rect.left+rect.width/2),dy=e.clientY-(rect.top+rect.height/2);
+    const distance=Math.hypot(dx,dy),scale=Math.min(1,radius/(distance||1)),x=dx*scale,y=dy*scale;
+    thumb.style.left=`calc(50% + ${x}px)`;
+    thumb.style.top=`calc(50% + ${y}px)`;
+    state.touchMove={x:x/radius,y:y/radius};
+  }
+  function resetJoystick(){
+    joystickPointerId=null;
+    state.touchMove={x:0,y:0};
+    $("joystickThumb").style.left="50%";
+    $("joystickThumb").style.top="50%";
   }
   async function toggleFullscreen(){
     const button=$("fullscreenToggle"),status=$("settingsStatus");
@@ -1204,8 +1346,8 @@ html[data-touch-size="large"]{--touch-control-size:62px}
       }
     }
     if(state.phase==="fight"){
-      let ix=(state.keys.has("KeyD")||state.keys.has("ArrowRight")?1:0)-(state.keys.has("KeyA")||state.keys.has("ArrowLeft")?1:0);
-      let iy=(state.keys.has("KeyS")||state.keys.has("ArrowDown")?1:0)-(state.keys.has("KeyW")||state.keys.has("ArrowUp")?1:0);
+      let ix=(state.keys.has("KeyD")||state.keys.has("ArrowRight")?1:0)-(state.keys.has("KeyA")||state.keys.has("ArrowLeft")?1:0)+state.touchMove.x;
+      let iy=(state.keys.has("KeyS")||state.keys.has("ArrowDown")?1:0)-(state.keys.has("KeyW")||state.keys.has("ArrowUp")?1:0)+state.touchMove.y;
       for(const key of state.keys){if(key.startsWith("touch:")){const d=key.slice(6);if(d==="left")ix--;if(d==="right")ix++;if(d==="up")iy--;if(d==="down")iy++}}
       const len=Math.hypot(ix,iy)||1,moving=ix!==0||iy!==0;
       if(moving){ix/=len;iy/=len}
@@ -1238,7 +1380,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
         if(moving){p.vx+=ix*780*pace*dt;p.vy+=iy*780*pace*dt}
         p.vx*=Math.pow(.001,dt);p.vy*=Math.pow(.001,dt);p.x+=p.vx*dt;p.y+=p.vy*dt;
       }
-      p.x=Math.max(p.r,Math.min(canvas.clientWidth-p.r,p.x));p.y=Math.max(p.r,Math.min(canvas.clientHeight-p.r,p.y));
+      p.x=Math.max(p.r,Math.min(state.worldWidth-p.r,p.x));p.y=Math.max(p.r,Math.min(state.worldHeight-p.r,p.y));
       if(!state.dashing)for(const barrier of state.barriers)keepActorOutOfBarrier(p,barrier);
       if(state.mouse.longDown)attack("long");
       for(const barrier of state.barriers)barrier.life-=dt;
@@ -1258,13 +1400,13 @@ html[data-touch-size="large"]{--touch-control-size:62px}
         for(const barrier of state.barriers)keepActorOutOfBarrier(e,barrier);
         if(e.knockback<=0&&!state.decoy&&d<p.r+e.r+5&&e.attack<=0){takeDamage(e.damage);e.attack=Math.max(.48,1.0-(state.wave-1)*.025);const push=Math.atan2(e.y-p.y,e.x-p.x);e.vx+=Math.cos(push)*95;e.vy+=Math.sin(push)*95}
         else if(e.knockback<=0&&state.decoy&&d<e.r+18&&e.attack<=0)e.attack=.8;
-        e.x=Math.max(-30,Math.min(canvas.clientWidth+30,e.x));e.y=Math.max(-30,Math.min(canvas.clientHeight+30,e.y));
+        e.x=Math.max(-30,Math.min(state.worldWidth+30,e.x));e.y=Math.max(-30,Math.min(state.worldHeight+30,e.y));
       }
       for(const b of state.bullets){
         b.x+=b.vx*dt;b.y+=b.vy*dt;b.life-=dt;
         for(const e of [...state.enemies]){if(Math.hypot(b.x-e.x,b.y-e.y)<e.r+b.r){e.hp-=b.damage;e.flash=.1;addBurst(b.x,b.y,b.color,3);b.life=0;if(e.hp<=0)killEnemy(e);break}}
       }
-      state.bullets=state.bullets.filter(b=>b.life>0&&b.x>-20&&b.x<canvas.clientWidth+20&&b.y>-20&&b.y<canvas.clientHeight+20);
+      state.bullets=state.bullets.filter(b=>b.life>0&&b.x>-20&&b.x<state.worldWidth+20&&b.y>-20&&b.y<state.worldHeight+20);
       for(const grenade of state.grenades){
         grenade.x+=grenade.vx*dt;grenade.y+=grenade.vy*dt;grenade.vx*=Math.pow(.08,dt);grenade.vy*=Math.pow(.08,dt);grenade.fuse-=dt;
         if(grenade.fuse<=0){explode(grenade);grenade.fuse=-1}
@@ -1395,7 +1537,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     for(const grenade of state.grenades){ctx.fillStyle="#ffb45e";ctx.beginPath();ctx.arc(grenade.x,grenade.y,5,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#fff0b0";ctx.lineWidth=2;ctx.stroke()}
   }
   function draw(){
-    const w=canvas.clientWidth,h=canvas.clientHeight;if(!w||!h)return;
+    const w=state.worldWidth,h=state.worldHeight;if(!w||!h)return;
     ctx.clearRect(0,0,w,h);drawBackground(w,h);
     drawGadgets();
     for(const b of state.bullets){ctx.fillStyle=b.color;ctx.shadowColor=b.color;ctx.shadowBlur=9;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0}
@@ -1437,15 +1579,17 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     for(const [id,key] of Object.entries(gadgetKeys))if(!e.repeat&&(e.code===`Digit${key}`||e.code===`Numpad${key}`))useGadget(id);
   });
   window.addEventListener("keyup",e=>{state.keys.delete(e.code);state.blockedKeys.delete(e.code)});
-  window.addEventListener("blur",()=>{state.keys.clear();state.mouse.longDown=false});
-  document.querySelectorAll("[data-move]").forEach(button=>{
-    const dir=button.dataset.move,key=`touch:${dir}`;
-    button.addEventListener("pointerdown",e=>{e.preventDefault();button.setPointerCapture(e.pointerId);state.keys.add(key)});
-    for(const type of ["pointerup","pointercancel","lostpointercapture"])button.addEventListener(type,()=>state.keys.delete(key));
+  window.addEventListener("blur",()=>{state.keys.clear();state.mouse.longDown=false;resetJoystick()});
+  $("moveJoystick").addEventListener("pointerdown",e=>{
+    if(state.phase!=="fight")return;
+    e.preventDefault();joystickPointerId=e.pointerId;$("moveJoystick").setPointerCapture(e.pointerId);moveJoystick(e);
   });
+  $("moveJoystick").addEventListener("pointermove",e=>{if(e.pointerId===joystickPointerId)moveJoystick(e)});
+  for(const type of ["pointerup","pointercancel","lostpointercapture"])$("moveJoystick").addEventListener(type,e=>{if(e.pointerId===joystickPointerId)resetJoystick()});
   $("touchAttack").addEventListener("pointerdown",e=>{e.preventDefault();$("touchAttack").setPointerCapture(e.pointerId);attackFromTouch()});
   for(const type of ["pointerup","pointercancel","lostpointercapture"])$("touchAttack").addEventListener(type,()=>{state.mouse.longDown=false});
   $("touchDash").addEventListener("click",()=>{if(state.phase==="fight")state.dashRequested=true});
+  $("touchReload").addEventListener("click",reload);
   document.querySelectorAll("[data-gadget]").forEach(button=>button.addEventListener("click",()=>useGadget(button.dataset.gadget)));
   document.querySelectorAll("[data-slot]").forEach(button=>button.addEventListener("click",()=>setActiveSlot(button.dataset.slot)));
   document.querySelectorAll("[data-shop-tab]").forEach(button=>button.addEventListener("click",()=>{state.shopTab=button.dataset.shopTab;state.shopPage=0;renderShop();saveGame()}));
@@ -1471,11 +1615,11 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     state.closeWeapon="fists";state.longWeapon=null;state.activeSlot="close";state.ownedWeapons.clear();state.ammoByWeapon={};state.ammo=0;state.maxHealth=100;
     state.skillLevels={speed:0,armor:0,dash:0};syncSkills();state.stamina=state.maxStamina;
     state.gadgets={grenade:0,wall:0,decoy:0,flashbang:0,adrenaline:0,shockwave:0};
-    state.dashing=false;state.dashTime=0;state.dashDirection={x:1,y:0};state.dashRequested=false;
+    state.dashing=false;state.dashTime=0;state.dashDirection={x:1,y:0};state.dashRequested=false;state.touchMove={x:0,y:0};resetJoystick();
     state.invulnerable=0;state.adrenaline=0;state.attackFlash=0;state.aim=0;
     state.skin="classic";state.ownedSkins=new Set(["classic"]);state.lastCaseDrop=null;state.caseOpening=false;state.caseRoll=null;
     state.achievementStats.runWavesCleared=0;
-    state.player.hp=100;state.player.vx=0;state.player.vy=0;state.player.x=canvas.clientWidth/2;state.player.y=canvas.clientHeight/2;
+    state.player.hp=100;state.player.vx=0;state.player.vy=0;state.player.x=state.worldWidth/2;state.player.y=state.worldHeight/2;
     state.attackCooldowns={close:0,long:0};state.reloadTime=0;state.reloadingWeaponId=null;state.last=0;state.mouse={x:0,y:0,longDown:false};
     $("mainButton").classList.remove("hidden");$("continueButton").disabled=false;$("status").textContent="READY";
     state.shopTab="skills";state.shopPage=0;showOverlay("THE CITY WENT QUIET","SURVIVE THE NIGHT","Enemies are closing in from every direction. Start with your fists, stay moving, and make it through each wave to earn credits for gear.","START WAVE 1 →");updateUI();draw();saveGame();
@@ -1483,7 +1627,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
   window.addEventListener("pagehide",saveGame);
   document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")saveGame()});
   window.addEventListener("resize",resize);
-  restoreGame();applySettings();resize();updateUI();requestAnimationFrame(frame);
+  resize();restoreGame();applySettings();updateUI();requestAnimationFrame(frame);
 })();
 </script>
 </body>
