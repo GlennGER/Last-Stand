@@ -150,7 +150,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
   .mobile-gadgets button{padding:5px 1px;font-size:8px}
 }
 @media(max-width:680px),(max-height:500px) and (max-width:900px),(pointer:coarse){
-  html,body{height:100%;min-height:100%;overflow:hidden;touch-action:manipulation}
+  html,body{height:100%;min-height:100%;overflow:hidden;touch-action:pan-x pan-y}
   body{min-height:100vh;min-height:100svh;overscroll-behavior:none}
   .mobile-play-controls,.mobile-play-controls *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
   .shell{display:flex;width:100%;height:100vh;height:100svh;min-height:0;max-width:none;flex-direction:column;overflow:hidden;padding:max(4px,env(safe-area-inset-top)) 7px max(4px,env(safe-area-inset-bottom))}
@@ -170,7 +170,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
   .mobile-meter.hp .meter>i{background:linear-gradient(90deg,#ff6472,#ffc078)}
   .mobile-cash{display:flex;align-items:center;gap:3px;color:var(--gold);font-size:9px;white-space:nowrap}
   .mobile-cash strong{max-width:65px;overflow:hidden;text-overflow:ellipsis}
-  .mobile-play-controls{position:absolute;z-index:3;right:auto;bottom:6px;left:50%;display:flex;width:min(calc(100% - 12px),560px);flex-direction:column;gap:5px;padding:6px;border:1px solid #ffffff1a;border-radius:14px;background:linear-gradient(180deg,#151c27e8,#111720f5);box-shadow:0 4px 18px #0006;transform:translateX(-50%);touch-action:manipulation}
+  .mobile-play-controls{position:absolute;z-index:3;right:auto;bottom:6px;left:50%;display:flex;width:min(calc(100% - 12px),560px);flex-direction:column;gap:5px;padding:6px;border:1px solid #ffffff1a;border-radius:14px;background:linear-gradient(180deg,#151c27e8,#111720f5);box-shadow:0 4px 18px #0006;transform:translateX(-50%);touch-action:pan-x pan-y}
   .mobile-primary-controls{display:grid;grid-template-columns:minmax(72px,1fr) minmax(0,1.65fr);align-items:center;gap:8px;min-width:0}
   .joystick{display:grid;width:clamp(72px,calc(var(--touch-control-size) + 32px),96px);height:clamp(72px,calc(var(--touch-control-size) + 32px),96px);place-items:center;justify-self:center;touch-action:none;user-select:none;-webkit-tap-highlight-color:transparent}
   .joystick-base{position:relative;display:block;width:100%;height:100%;border:2px solid #ffffff35;border-radius:50%;background:radial-gradient(circle,#ffffff14,#ffffff06 68%,#0002)}
@@ -1633,10 +1633,14 @@ html[data-touch-size="large"]{--touch-control-size:62px}
   let lastTapAt=0,lastTapX=0,lastTapY=0;
   document.addEventListener("touchend",event=>{
     if(event.touches.length||event.changedTouches.length!==1)return;
+    if(event.target instanceof Element&&event.target.closest("button,a,input,select,textarea")){
+      lastTapAt=0;return;
+    }
     const touch=event.changedTouches[0],now=performance.now();
-    if(now-lastTapAt<350&&Math.hypot(touch.clientX-lastTapX,touch.clientY-lastTapY)<30)event.preventDefault();
+    if(lastTapAt>0&&now-lastTapAt<800&&Math.hypot(touch.clientX-lastTapX,touch.clientY-lastTapY)<40)event.preventDefault();
     lastTapAt=now;lastTapX=touch.clientX;lastTapY=touch.clientY;
   },{passive:false});
+  document.addEventListener("touchstart",event=>{if(event.touches.length>1)event.preventDefault()},{passive:false});
   document.addEventListener("touchmove",event=>{if(event.touches.length>1)event.preventDefault()},{passive:false});
   for(const type of ["gesturestart","gesturechange","gestureend"])document.addEventListener(type,event=>event.preventDefault(),{passive:false});
   document.addEventListener("dblclick",event=>event.preventDefault());
