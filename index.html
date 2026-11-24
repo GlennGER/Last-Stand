@@ -37,6 +37,7 @@ h1{margin:0;font-size:clamp(20px,3vw,27px);letter-spacing:-.05em}.eyebrow{color:
 .shop-item small{min-height:0}
 .skin-item{position:relative;padding-left:44px}.skin-swatch{position:absolute;top:11px;left:11px;width:24px;height:24px;border:2px solid #ffffff55;border-radius:50%;box-shadow:0 0 12px #ffffff22}.case-item{grid-column:1/-1;border-color:#ffcf7055;background:linear-gradient(135deg,#ffcf7010,#ffffff0b)}
 .case-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:5px}.case-buttons .shop-btn{padding:8px 4px;font-size:9px}
+.shop-btn.reset-skins-btn{margin-top:7px;border:1px solid #ff667755;color:#ffc2c9;background:#512832}
 .background-item{grid-column:1/-1}.background-presets{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:10px 0}.background-preset{padding:7px 3px;border:1px solid var(--line);border-radius:9px;color:var(--muted);background:#ffffff08;font-size:8px;font-weight:850;cursor:pointer}.background-preset.active{border-color:var(--lime);color:var(--ink);background:#c4f36b12}.background-preset i{display:block;width:23px;height:23px;margin:0 auto 4px;border:1px solid #ffffff66;border-radius:50%;background:var(--preset-color)}.background-picker-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:8px;border-top:1px solid var(--line);color:var(--muted);font-size:10px;font-weight:800}.background-picker-row input{width:44px;height:32px;padding:2px;border:1px solid var(--line);border-radius:7px;background:#ffffff10;cursor:pointer}.background-picker-row strong{color:var(--ink);font-size:10px}
 .achievement-item.achieved{border-color:#c4f36b66;background:#c4f36b0d}.achievement-category{color:var(--lime);font-size:8px;font-weight:900;letter-spacing:.1em}.achievement-progress{display:flex;align-items:center;gap:7px;margin-top:8px}.achievement-progress>span{height:5px;flex:1;overflow:hidden;border-radius:8px;background:#ffffff14}.achievement-progress i{display:block;height:100%;border-radius:inherit;background:var(--lime)}.achievement-progress b{min-width:52px;color:var(--muted);font-size:8px;text-align:right}
 .shop-pagination{display:flex;justify-content:center;align-items:center;gap:12px;margin:0 0 2px}
@@ -448,7 +449,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     base:flag[3][0],swatch:`linear-gradient(${flag[2]==="v"?"90deg":"180deg"},${flag[3].join(",")})`,
     style:"flag",tier:"pink",flag:{type:flag[2],colors:flag[3],bands:flag[4]}
   })));
-  const SKIN_CASE_PRICE=150;
+  const SKIN_CASE_PRICE=100;
   const skinTierInfo={
     blue:{name:"BLUE",color:"#55b9ff",duplicateCredits:100},
     purple:{name:"PURPLE",color:"#ba8cff",duplicateCredits:175},
@@ -519,6 +520,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     const profile={
       arenaColor:state.arenaColor,
       settings:{...state.settings},
+      skin:state.skin,ownedSkins:[...state.ownedSkins],
       unlockedAchievements:[...state.unlockedAchievements],
       achievementStats:{
         totalKills:stats.totalKills,highestWave:stats.highestWave,casesOpened:stats.casesOpened,
@@ -577,6 +579,8 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     stats.uniqueSkinCount=stats.uniqueSkins.size;
     for(const tier of Object.keys(skinTierInfo))stats.tierDrops[tier]=Number.isFinite(savedStats.tierDrops&&savedStats.tierDrops[tier])?Math.max(0,Math.floor(savedStats.tierDrops[tier])):0;
     if(typeof profile.arenaColor==="string"&&/^#[0-9a-f]{6}$/i.test(profile.arenaColor))state.arenaColor=profile.arenaColor;
+    state.ownedSkins=new Set(["classic",...(Array.isArray(profile.ownedSkins)?profile.ownedSkins:[]).filter(id=>skinInfo.some(skin=>skin.id===id))]);
+    state.skin=state.ownedSkins.has(profile.skin)?profile.skin:"classic";
     const run=data.run;
     if(!run)return false;
     const number=(value,fallback,min=0,max=Number.MAX_SAFE_INTEGER)=>Number.isFinite(value)?Math.max(min,Math.min(max,value)):fallback;
@@ -623,8 +627,8 @@ html[data-touch-size="large"]{--touch-control-size:62px}
       state.dashDirection={x:directionX/directionLength,y:directionY/directionLength};
     }else state.dashDirection={x:1,y:0};
     state.invulnerable=number(run.invulnerable,0,0,10);state.adrenaline=number(run.adrenaline,0,0,60);
-    state.ownedSkins=new Set(["classic",...array(run.ownedSkins).filter(id=>skinInfo.some(skin=>skin.id===id))]);
-    state.skin=state.ownedSkins.has(run.skin)?run.skin:"classic";
+    for(const id of array(run.ownedSkins).filter(id=>skinInfo.some(skin=>skin.id===id)))state.ownedSkins.add(id);
+    state.skin=state.ownedSkins.has(run.skin)?run.skin:state.ownedSkins.has(profile.skin)?profile.skin:"classic";
     const lastDropSkin=run.lastCaseDrop&&skinInfo.find(skin=>skin.id===run.lastCaseDrop.skinId);
     state.lastCaseDrop=lastDropSkin?{
       tier:lastDropSkin.tier,name:lastDropSkin.name,skinId:lastDropSkin.id,duplicate:run.lastCaseDrop.duplicate===true,
@@ -872,9 +876,11 @@ html[data-touch-size="large"]{--touch-control-size:62px}
         ?state.lastCaseDrop.duplicate?`Duplicate: ${state.lastCaseDrop.name} · +${state.lastCaseDrop.refund} credits.`:`Last drop: ${skinTierInfo[state.lastCaseDrop.tier].name} · ${state.lastCaseDrop.name}.`
         :"No case opened yet.";
       const caseButtonsDisabled=state.caseOpening||state.credits<SKIN_CASE_PRICE;
-      caseCard.innerHTML=`<strong>🎁 Mystery Skin Case · ◈ ${SKIN_CASE_PRICE}</strong><small title="${skinCaseOddsText}">Collection: ${state.ownedSkins.size}/${skinInfo.length} · Equipped: ${currentSkin.name}. ${caseSummary}<br>${skinCaseOddsText}</small><div class="case-buttons"><button class="shop-btn case-open-button" ${caseButtonsDisabled?"disabled":""}>${state.caseOpening?"CASE OPENING…":`OPEN CASE · ◈ ${SKIN_CASE_PRICE}`}</button><button class="shop-btn case-quick-button" ${caseButtonsDisabled?"disabled":""}>QUICK OPEN · ◈ ${SKIN_CASE_PRICE}</button></div>`;
+      caseCard.innerHTML=`<strong>🎁 Mystery Skin Case · ◈ ${SKIN_CASE_PRICE}</strong><small title="${skinCaseOddsText}">Collection: ${state.ownedSkins.size}/${skinInfo.length} · Equipped: ${currentSkin.name}. ${caseSummary}<br>${skinCaseOddsText}</small><div class="case-buttons"><button class="shop-btn case-open-button" ${caseButtonsDisabled?"disabled":""}>${state.caseOpening?"CASE OPENING…":`OPEN CASE · ◈ ${SKIN_CASE_PRICE}`}</button><button class="shop-btn case-quick-button" ${caseButtonsDisabled?"disabled":""}>QUICK OPEN · ◈ ${SKIN_CASE_PRICE}</button></div><button class="shop-btn reset-skins-btn" type="button" ${state.caseOpening?"disabled":""}>RESET UNLOCKED SKINS</button>`;
       caseCard.querySelector(".case-open-button").addEventListener("click",()=>openSkinCase(true));
-      caseCard.querySelector(".case-quick-button").addEventListener("click",()=>openSkinCase(false));box.appendChild(caseCard);
+      caseCard.querySelector(".case-quick-button").addEventListener("click",()=>openSkinCase(false));
+      caseCard.querySelector(".reset-skins-btn").addEventListener("click",resetSkins);
+      box.appendChild(caseCard);
       if(state.caseOpening)renderCaseRoll(box);
       else if(state.lastCaseDrop)renderCaseResult(box);
     }else if(state.shopTab==="museum"){
@@ -1059,6 +1065,15 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     $("feed").innerHTML=`<span class="flash">${skin.name} equipped.</span>`;
     renderShop();updateUI();draw();
     saveGame();
+  }
+  function resetSkins(){
+    if(state.phase!=="shop"||state.caseOpening)return;
+    if(!window.confirm("Reset your unlocked skins? This keeps the default skin but removes your other unlocked skins."))return;
+    state.ownedSkins=new Set(["classic"]);
+    state.skin="classic";
+    state.lastCaseDrop=null;
+    $("feed").innerHTML='<span class="flash">Skin collection reset.</span> The default skin is equipped.';
+    renderShop();updateUI();draw();saveGame();
   }
   function rollCaseDrop(){
     const roll=Math.random();
@@ -1364,6 +1379,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
       }
       state.dashing=state.dashTime>0;
       if(state.dashing){
+        if(moving)state.dashDirection={x:ix,y:iy};
         const dashStep=Math.min(dt,state.dashTime),dashPace=state.speed*(state.adrenaline>0?1.5:1);
         const nextX=p.x+state.dashDirection.x*520*dashPace*dashStep;
         const nextY=p.y+state.dashDirection.y*520*dashPace*dashStep;
@@ -1588,7 +1604,12 @@ html[data-touch-size="large"]{--touch-control-size:62px}
   for(const type of ["pointerup","pointercancel","lostpointercapture"])$("moveJoystick").addEventListener(type,e=>{if(e.pointerId===joystickPointerId)resetJoystick()});
   $("touchAttack").addEventListener("pointerdown",e=>{e.preventDefault();$("touchAttack").setPointerCapture(e.pointerId);attackFromTouch()});
   for(const type of ["pointerup","pointercancel","lostpointercapture"])$("touchAttack").addEventListener(type,()=>{state.mouse.longDown=false});
-  $("touchDash").addEventListener("click",()=>{if(state.phase==="fight")state.dashRequested=true});
+  $("touchDash").addEventListener("pointerdown",e=>{
+    if(e.pointerType==="mouse"&&e.button!==0)return;
+    e.preventDefault();
+    if(state.phase==="fight")state.dashRequested=true;
+  });
+  $("touchDash").addEventListener("click",e=>{if(e.detail===0&&state.phase==="fight")state.dashRequested=true});
   $("touchReload").addEventListener("click",reload);
   document.querySelectorAll("[data-gadget]").forEach(button=>button.addEventListener("click",()=>useGadget(button.dataset.gadget)));
   document.querySelectorAll("[data-slot]").forEach(button=>button.addEventListener("click",()=>setActiveSlot(button.dataset.slot)));
@@ -1617,7 +1638,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     state.gadgets={grenade:0,wall:0,decoy:0,flashbang:0,adrenaline:0,shockwave:0};
     state.dashing=false;state.dashTime=0;state.dashDirection={x:1,y:0};state.dashRequested=false;state.touchMove={x:0,y:0};resetJoystick();
     state.invulnerable=0;state.adrenaline=0;state.attackFlash=0;state.aim=0;
-    state.skin="classic";state.ownedSkins=new Set(["classic"]);state.lastCaseDrop=null;state.caseOpening=false;state.caseRoll=null;
+    state.lastCaseDrop=null;state.caseOpening=false;state.caseRoll=null;
     state.achievementStats.runWavesCleared=0;
     state.player.hp=100;state.player.vx=0;state.player.vy=0;state.player.x=state.worldWidth/2;state.player.y=state.worldHeight/2;
     state.attackCooldowns={close:0,long:0};state.reloadTime=0;state.reloadingWeaponId=null;state.last=0;state.mouse={x:0,y:0,longDown:false};
