@@ -37,7 +37,6 @@ h1{margin:0;font-size:clamp(20px,3vw,27px);letter-spacing:-.05em}.eyebrow{color:
 .shop-item small{min-height:0}
 .skin-item{position:relative;padding-left:44px}.skin-swatch{position:absolute;top:11px;left:11px;width:24px;height:24px;border:2px solid #ffffff55;border-radius:50%;box-shadow:0 0 12px #ffffff22}.case-item{grid-column:1/-1;border-color:#ffcf7055;background:linear-gradient(135deg,#ffcf7010,#ffffff0b)}
 .case-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:5px}.case-buttons .shop-btn{padding:8px 4px;font-size:9px}
-.shop-btn.reset-skins-btn{margin-top:7px;border:1px solid #ff667755;color:#ffc2c9;background:#512832}
 .background-item{grid-column:1/-1}.background-presets{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:10px 0}.background-preset{padding:7px 3px;border:1px solid var(--line);border-radius:9px;color:var(--muted);background:#ffffff08;font-size:8px;font-weight:850;cursor:pointer}.background-preset.active{border-color:var(--lime);color:var(--ink);background:#c4f36b12}.background-preset i{display:block;width:23px;height:23px;margin:0 auto 4px;border:1px solid #ffffff66;border-radius:50%;background:var(--preset-color)}.background-picker-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:8px;border-top:1px solid var(--line);color:var(--muted);font-size:10px;font-weight:800}.background-picker-row input{width:44px;height:32px;padding:2px;border:1px solid var(--line);border-radius:7px;background:#ffffff10;cursor:pointer}.background-picker-row strong{color:var(--ink);font-size:10px}
 .achievement-item.achieved{border-color:#c4f36b66;background:#c4f36b0d}.achievement-category{color:var(--lime);font-size:8px;font-weight:900;letter-spacing:.1em}.achievement-progress{display:flex;align-items:center;gap:7px;margin-top:8px}.achievement-progress>span{height:5px;flex:1;overflow:hidden;border-radius:8px;background:#ffffff14}.achievement-progress i{display:block;height:100%;border-radius:inherit;background:var(--lime)}.achievement-progress b{min-width:52px;color:var(--muted);font-size:8px;text-align:right}
 .shop-pagination{display:flex;justify-content:center;align-items:center;gap:12px;margin:0 0 2px}
@@ -71,6 +70,7 @@ h1{margin:0;font-size:clamp(20px,3vw,27px);letter-spacing:-.05em}.eyebrow{color:
 .settings-copy strong{display:block;font-size:12px}.settings-copy small{display:block;margin-top:3px;color:var(--muted);font-size:10px}
 .settings-row select{max-width:155px;padding:9px;border:1px solid var(--line);border-radius:9px;color:var(--ink);background:#111720}
 .settings-row input[type=checkbox]{width:21px;height:21px;accent-color:var(--lime)}
+.reset-skins-button{flex:none;padding:9px 11px;border:1px solid #ff667755;border-radius:9px;color:#ffc2c9;background:#512832;font-size:10px;font-weight:900;cursor:pointer}.reset-skins-button:hover:not(:disabled){border-color:#ff6677aa;background:#67303b}.reset-skins-button:disabled{opacity:.45;cursor:not-allowed}
 .fullscreen-button{width:100%;margin-top:12px;padding:11px;border:1px solid var(--line);border-radius:10px;color:var(--ink);background:#ffffff0b;font-size:11px;font-weight:900;cursor:pointer}
 .settings-hint{margin:14px 0 0;color:var(--muted);font-size:10px;line-height:1.5}
 html[data-touch-size="compact"]{--touch-control-size:42px}
@@ -286,6 +286,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
       <label class="settings-row mobile-only-setting" for="touchSizeSetting"><span class="settings-copy"><strong>Touch control size</strong><small>Resize the joystick and action buttons.</small></span><select id="touchSizeSetting"><option value="compact">Compact</option><option value="comfortable">Comfortable</option><option value="large">Large</option></select></label>
       <label class="settings-row" for="holdFireSetting"><span class="settings-copy"><strong>Hold attack to auto-fire</strong><small>For ranged weapons on touchscreen.</small></span><input id="holdFireSetting" type="checkbox"></label>
       <label class="settings-row" for="hintsSetting"><span class="settings-copy"><strong>Show control hints</strong><small>Keep the keyboard and gameplay guide visible.</small></span><input id="hintsSetting" type="checkbox"></label>
+      <div class="settings-row"><span class="settings-copy"><strong>Reset unlocked skins</strong><small>Keep only the default skin. This cannot be undone.</small></span><button class="reset-skins-button" id="resetSkinsButton" type="button">RESET</button></div>
       <button class="fullscreen-button" id="fullscreenToggle" type="button">ENTER FULLSCREEN</button>
       <p class="settings-hint" id="settingsStatus" aria-live="polite"></p>
       <p class="settings-hint">Settings are saved on this device. All shops, skins, gadgets, achievements, and wave progress remain available on mobile.</p>
@@ -876,10 +877,9 @@ html[data-touch-size="large"]{--touch-control-size:62px}
         ?state.lastCaseDrop.duplicate?`Duplicate: ${state.lastCaseDrop.name} · +${state.lastCaseDrop.refund} credits.`:`Last drop: ${skinTierInfo[state.lastCaseDrop.tier].name} · ${state.lastCaseDrop.name}.`
         :"No case opened yet.";
       const caseButtonsDisabled=state.caseOpening||state.credits<SKIN_CASE_PRICE;
-      caseCard.innerHTML=`<strong>🎁 Mystery Skin Case · ◈ ${SKIN_CASE_PRICE}</strong><small title="${skinCaseOddsText}">Collection: ${state.ownedSkins.size}/${skinInfo.length} · Equipped: ${currentSkin.name}. ${caseSummary}<br>${skinCaseOddsText}</small><div class="case-buttons"><button class="shop-btn case-open-button" ${caseButtonsDisabled?"disabled":""}>${state.caseOpening?"CASE OPENING…":`OPEN CASE · ◈ ${SKIN_CASE_PRICE}`}</button><button class="shop-btn case-quick-button" ${caseButtonsDisabled?"disabled":""}>QUICK OPEN · ◈ ${SKIN_CASE_PRICE}</button></div><button class="shop-btn reset-skins-btn" type="button" ${state.caseOpening?"disabled":""}>RESET UNLOCKED SKINS</button>`;
+      caseCard.innerHTML=`<strong>🎁 Mystery Skin Case · ◈ ${SKIN_CASE_PRICE}</strong><small title="${skinCaseOddsText}">Collection: ${state.ownedSkins.size}/${skinInfo.length} · Equipped: ${currentSkin.name}. ${caseSummary}<br>${skinCaseOddsText}</small><div class="case-buttons"><button class="shop-btn case-open-button" ${caseButtonsDisabled?"disabled":""}>${state.caseOpening?"CASE OPENING…":`OPEN CASE · ◈ ${SKIN_CASE_PRICE}`}</button><button class="shop-btn case-quick-button" ${caseButtonsDisabled?"disabled":""}>QUICK OPEN · ◈ ${SKIN_CASE_PRICE}</button></div>`;
       caseCard.querySelector(".case-open-button").addEventListener("click",()=>openSkinCase(true));
       caseCard.querySelector(".case-quick-button").addEventListener("click",()=>openSkinCase(false));
-      caseCard.querySelector(".reset-skins-btn").addEventListener("click",resetSkins);
       box.appendChild(caseCard);
       if(state.caseOpening)renderCaseRoll(box);
       else if(state.lastCaseDrop)renderCaseResult(box);
@@ -1067,13 +1067,14 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     saveGame();
   }
   function resetSkins(){
-    if(state.phase!=="shop"||state.caseOpening)return;
+    if($("settingsShade").classList.contains("hidden")||state.caseOpening)return;
     if(!window.confirm("Reset your unlocked skins? This keeps the default skin but removes your other unlocked skins."))return;
     state.ownedSkins=new Set(["classic"]);
     state.skin="classic";
     state.lastCaseDrop=null;
     $("feed").innerHTML='<span class="flash">Skin collection reset.</span> The default skin is equipped.';
-    renderShop();updateUI();draw();saveGame();
+    if(state.phase==="shop")renderShop();
+    updateUI();draw();saveGame();
   }
   function rollCaseDrop(){
     const roll=Math.random();
@@ -1301,6 +1302,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
   }
   function openSettings(){
     state.keys.clear();state.mouse.longDown=false;state.dashRequested=false;resetJoystick();
+    $("resetSkinsButton").disabled=state.caseOpening;
     $("settingsShade").classList.remove("hidden");
     $("settingsShade").setAttribute("aria-hidden","false");
     $("settingsClose").focus();
@@ -1622,6 +1624,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
   $("holdFireSetting").addEventListener("change",()=>{state.settings.holdFire=$("holdFireSetting").checked;saveGame()});
   $("hintsSetting").addEventListener("change",()=>{state.settings.showHints=$("hintsSetting").checked;applySettings();saveGame()});
   $("fullscreenToggle").addEventListener("click",toggleFullscreen);
+  $("resetSkinsButton").addEventListener("click",resetSkins);
   document.addEventListener("fullscreenchange",()=>{$("fullscreenToggle").textContent=document.fullscreenElement?"EXIT FULLSCREEN":"ENTER FULLSCREEN"});
   $("shopPrev").addEventListener("click",()=>{if(state.shopPage>0){state.shopPage--;renderShop();saveGame()}});
   $("shopNext").addEventListener("click",()=>{state.shopPage++;renderShop();saveGame()});
