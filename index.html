@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
 <title>Last Stand — Nightfall</title>
 <style>
 :root{color-scheme:dark;--bg:#0e1118;--panel:#171d28;--line:#ffffff16;--ink:#f4f6fb;--muted:#9ba6b7;--lime:#c4f36b;--red:#ff6677;--gold:#ffcf70}
@@ -170,7 +170,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
   .mobile-meter.hp .meter>i{background:linear-gradient(90deg,#ff6472,#ffc078)}
   .mobile-cash{display:flex;align-items:center;gap:3px;color:var(--gold);font-size:9px;white-space:nowrap}
   .mobile-cash strong{max-width:65px;overflow:hidden;text-overflow:ellipsis}
-  .mobile-play-controls{position:absolute;z-index:3;right:auto;bottom:6px;left:50%;display:flex;width:min(calc(100% - 12px),560px);flex-direction:column;gap:5px;padding:6px;border:1px solid #ffffff1a;border-radius:14px;background:linear-gradient(180deg,#151c27e8,#111720f5);box-shadow:0 4px 18px #0006;transform:translateX(-50%);touch-action:none}
+  .mobile-play-controls{position:absolute;z-index:3;right:auto;bottom:6px;left:50%;display:flex;width:min(calc(100% - 12px),560px);flex-direction:column;gap:5px;padding:6px;border:1px solid #ffffff1a;border-radius:14px;background:linear-gradient(180deg,#151c27e8,#111720f5);box-shadow:0 4px 18px #0006;transform:translateX(-50%);touch-action:manipulation}
   .mobile-primary-controls{display:grid;grid-template-columns:minmax(72px,1fr) minmax(0,1.65fr);align-items:center;gap:8px;min-width:0}
   .joystick{display:grid;width:clamp(72px,calc(var(--touch-control-size) + 32px),96px);height:clamp(72px,calc(var(--touch-control-size) + 32px),96px);place-items:center;justify-self:center;touch-action:none;user-select:none;-webkit-tap-highlight-color:transparent}
   .joystick-base{position:relative;display:block;width:100%;height:100%;border:2px solid #ffffff35;border-radius:50%;background:radial-gradient(circle,#ffffff14,#ffffff06 68%,#0002)}
@@ -206,6 +206,12 @@ html[data-touch-size="large"]{--touch-control-size:62px}
   .joystick{width:clamp(64px,calc(var(--touch-control-size) + 18px),82px);height:clamp(64px,calc(var(--touch-control-size) + 18px),82px)}
   .touch-action{height:34px;min-height:0}
   .mobile-gadgets button{height:28px}
+}
+@media(min-width:681px) and (pointer:coarse){
+  .mobile-play-controls{right:auto;left:6px;width:min(calc(100% - 12px),560px);transform:none}
+  .mobile-primary-controls{grid-template-columns:minmax(84px,1fr) minmax(0,1.8fr)}
+  .joystick{grid-column:1;grid-row:1;justify-self:start}
+  .mobile-actions-column{grid-column:2;grid-row:1}
 }
 </style>
 </head>
