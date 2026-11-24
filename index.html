@@ -78,7 +78,7 @@ html[data-touch-size="comfortable"]{--touch-control-size:52px}
 html[data-touch-size="large"]{--touch-control-size:62px}
 html[data-joystick-size="compact"]{--joystick-size:72px}
 html[data-joystick-size="comfortable"]{--joystick-size:84px}
-html[data-joystick-size="large"]{--joystick-size:96px}
+html[data-joystick-size="large"]{--joystick-size:104px}
 @media(max-width:680px){
   .shell{padding:10px 9px max(16px,env(safe-area-inset-bottom))}
   header{align-items:center;gap:6px;margin-bottom:9px}
@@ -206,7 +206,7 @@ html[data-joystick-size="large"]{--joystick-size:96px}
   .mobile-hud{top:30px;padding:4px 7px}
   .mobile-play-controls{gap:4px;padding:4px}
   .mobile-primary-controls{grid-template-columns:minmax(64px,1fr) minmax(0,1.8fr);gap:6px}
-  .joystick{width:min(var(--joystick-size),82px);height:min(var(--joystick-size),82px)}
+  .joystick{width:min(var(--joystick-size),90px);height:min(var(--joystick-size),90px)}
   .touch-action{height:34px;min-height:0}
   .mobile-gadgets button{height:28px}
 }
@@ -298,7 +298,7 @@ html[data-joystick-size="large"]{--joystick-size:96px}
       <label class="settings-row" for="holdFireSetting"><span class="settings-copy"><strong>Hold attack to auto-fire</strong><small>For ranged weapons on touchscreen.</small></span><input id="holdFireSetting" type="checkbox"></label>
       <label class="settings-row" for="hintsSetting"><span class="settings-copy"><strong>Show control hints</strong><small>Keep the keyboard and gameplay guide visible.</small></span><input id="hintsSetting" type="checkbox"></label>
       <div class="settings-row"><span class="settings-copy"><strong>Reset unlocked skins</strong><small>Keep only the default skin. This cannot be undone.</small></span><button class="reset-skins-button" id="resetSkinsButton" type="button">RESET</button></div>
-      <div class="settings-row"><span class="settings-copy"><strong>Reset skin achievements</strong><small>Clear case and collection achievements. Unlocked skins stay safe.</small></span><button class="reset-skins-button" id="resetSkinAchievementsButton" type="button">RESET</button></div>
+      <div class="settings-row"><span class="settings-copy"><strong>Reset skin achievements and progress</strong><small>Clear all case and collection achievements. Unlocked skins stay safe.</small></span><button class="reset-skins-button" id="resetSkinAchievementsButton" type="button">RESET</button></div>
       <button class="fullscreen-button" id="fullscreenToggle" type="button">ENTER FULLSCREEN</button>
       <p class="settings-hint" id="settingsStatus" aria-live="polite"></p>
       <p class="settings-hint">Settings are saved on this device. All shops, skins, gadgets, achievements, and wave progress remain available on mobile.</p>
@@ -788,7 +788,6 @@ html[data-joystick-size="large"]{--joystick-size:96px}
     }
     state.keys.clear();state.mouse.longDown=false;state.touchMove={x:0,y:0};resetJoystick();state.dashRequested=false;
     state.phase="fight";state.spawned=0;state.spawnTotal=6+state.wave*3;state.spawnTimer=.25;
-    state.achievementStats.highestWave=Math.max(state.achievementStats.highestWave,state.wave);
     state.enemies=[];state.bullets=[];state.player.hp=Math.min(state.maxHealth,state.player.hp);
     $("overlay").classList.add("hidden");$("status").textContent=`WAVE ${state.wave} · INCOMING`;
     $("feed").innerHTML=`<span class="flash">Wave ${state.wave}</span> — they're coming from every side!`;
@@ -799,6 +798,7 @@ html[data-joystick-size="large"]{--joystick-size:96px}
   function enterShop(){
     if(state.phase!=="fight")return;
     state.phase="shop";state.achievementStats.runWavesCleared++;const bonus=18+state.wave*7;state.credits+=bonus;
+    state.achievementStats.highestWave=Math.max(state.achievementStats.highestWave,state.wave);
     state.shopPage=0;
     $("status").textContent="WAVE CLEARED";$("overlayEyebrow").textContent="WAVE COMPLETE · BONUS +"+bonus;
     $("overlayTitle").textContent="CATCH YOUR BREATH";
@@ -975,14 +975,17 @@ html[data-joystick-size="large"]{--joystick-size:96px}
     stats.weaponsBought=0;stats.gadgetUses=0;stats.dashUses=0;stats.bruteKills=0;
     stats.runWavesCleared=0;
   }
-  function resetSkinAchievements(){
-    if($("settingsShade").classList.contains("hidden"))return;
-    if(!window.confirm("Reset case and skin collection achievements and progress? Your unlocked skins and other achievements will stay safe."))return;
+  function clearSkinAchievementProgress(){
     const skinAchievementIds=new Set(achievementInfo.filter(item=>item.category==="CASES"||item.category==="COLLECTION").map(item=>item.id));
     state.unlockedAchievements=new Set([...state.unlockedAchievements].filter(id=>!skinAchievementIds.has(id)));
     const stats=state.achievementStats;
     stats.casesOpened=0;stats.uniqueSkins.clear();stats.uniqueSkinCount=0;
     stats.tierDrops={blue:0,purple:0,pink:0,red:0,gold:0};stats.duplicateDrops=0;
+  }
+  function resetSkinAchievements(){
+    if($("settingsShade").classList.contains("hidden"))return;
+    if(!window.confirm("Reset case and skin collection achievements and progress? Your unlocked skins and other achievements will stay safe."))return;
+    clearSkinAchievementProgress();
     if(state.phase==="shop"&&state.shopTab==="achievements")renderShop();
     $("feed").textContent="Skin achievements and progress reset. Your unlocked skins are safe.";
     saveGame();
@@ -1167,7 +1170,7 @@ html[data-joystick-size="large"]{--joystick-size:96px}
     let type=n%6===0?"brute":n%4===0?"runner":"walker",base=enemyDefs[type];
     const hpScale=1+(wave-1)*.16,speedScale=1+(wave-1)*.075;
     state.enemies.push({x,y,vx:0,vy:0,r:base.r,hp:base.hp*hpScale,maxHp:base.hp*hpScale,stun:0,knockback:0,
-      speed:base.speed*speedScale,damage:base.damage*(1+(wave-1)*.1),color:base.color,type,
+      speed:base.speed*speedScale,damage:base.damage*1.4*(1+(wave-1)*.1),color:base.color,type,
       reward:base.reward+Math.floor(wave*.8),attack:Math.random()*.7,flash:0,id:Math.random()});
     state.spawned++;
   }
