@@ -276,7 +276,7 @@ html[data-touch-size="large"]{--touch-control-size:62px}
         <div class="weapon-line" style="margin-top:7px;padding-top:7px"><span>Gadgets</span><strong id="gadgetInventory">G 0 · E 0 · Q 0</strong></div>
       </div>
       <div class="divider"></div>
-      <div class="help" id="help"><strong>Controls</strong><p><span class="key">WASD</span> / <span class="key">↑←↓→</span> move · <span class="key">SHIFT</span> dash</p><p>Tap dash to burst in your movement direction, or toward your aim if standing still. The whole charge is spent and must fully recharge.</p><p>Left-click/hold: long range · right-click: one close swing (0.18s cooldown)</p><p><span class="key">1</span> grenade · <span class="key">2</span> wall · <span class="key">3</span> decoy · <span class="key">4</span> flashbang · <span class="key">5</span> adrenaline · <span class="key">6</span> shockwave</p><p><span class="key">R</span> reload · <span class="key">V</span> +500 credits</p></div>
+      <div class="help" id="help"><strong>Controls</strong><p><span class="key">WASD</span> / <span class="key">↑←↓→</span> move · <span class="key">SHIFT</span> dash</p><p>Tap dash to burst in your movement direction, or toward your aim if standing still. The whole charge is spent and must fully recharge.</p><p>Left-click/hold: long range · right-click: one close swing (0.18s cooldown)</p><p><span class="key">1</span> grenade · <span class="key">2</span> wall · <span class="key">3</span> decoy · <span class="key">4</span> flashbang · <span class="key">5</span> adrenaline · <span class="key">6</span> shockwave</p><p><span class="key">R</span> reload</p></div>
       <div class="feed" id="feed">You have fists, grit, and a whole lot of trouble.</div>
     </aside>
   </section>
@@ -1587,13 +1587,6 @@ html[data-touch-size="large"]{--touch-control-size:62px}
     state.keys.add(e.code);
     if(!e.repeat&&(e.code==="ShiftLeft"||e.code==="ShiftRight")&&state.phase==="fight")state.dashRequested=true;
     if(e.code==="KeyR")reload();
-    if(e.code==="KeyV"&&!e.repeat&&state.phase!=="gameover"&&!state.caseOpening){
-      state.credits+=500;
-      $("feed").innerHTML='<span class="flash">+500 credits</span> added.';
-      updateUI();
-      if(state.phase==="shop")renderShop();
-      saveGame();
-    }
     for(const [id,key] of Object.entries(gadgetKeys))if(!e.repeat&&(e.code===`Digit${key}`||e.code===`Numpad${key}`))useGadget(id);
   });
   window.addEventListener("keyup",e=>{state.keys.delete(e.code);state.blockedKeys.delete(e.code)});
